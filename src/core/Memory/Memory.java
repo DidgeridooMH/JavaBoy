@@ -1,4 +1,14 @@
-package gameboy;
+/*
+ * Memory.java
+ * 
+ * This handles reading and writing to the
+ * internal memory. It also handles loading
+ * the rom and bios file on startup.
+ * 
+ */
+
+package core.Memory;
+
 import java.io.*;
 import java.nio.file.*;
 
@@ -29,6 +39,7 @@ public class Memory {
 		internalMemory = new byte[0xFFFF];
 		
 		// Copy the bios in at 0x0-0x0f
+		
 		for(int i = 0; i < 0xFF; i++)
 			internalMemory[i] = biosBank[i];
 		
@@ -49,6 +60,6 @@ public class Memory {
 	
 	public byte Read(int location)
 	{
-		return internalMemory[location];
+		return internalMemory[(location & 0xFFFF)];
 	}
 }

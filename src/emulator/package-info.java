@@ -5,4 +5,4 @@
  * @author daniel
  *
  */
-package gameboy;
+package emulator;
