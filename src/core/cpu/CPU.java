@@ -10,25 +10,26 @@
 package core.cpu;
 
 import emulator.Utils;
+import core.cpu.Load;
 
 import core.Memory.*;
 
 public class CPU 
 {
-	protected boolean m_error = false;
+	boolean m_error = false;
 	
-	private Register m_AF;
-	private Register m_BC;
-	private Register m_DE;
-	private Register m_HL;
-	private Register m_SP;
-	private Register m_PC;
+	Register m_AF;
+	Register m_BC;
+	Register m_DE;
+	Register m_HL;
+	Register m_SP;
+	Register m_PC;
 	
-	private Flags m_flags;
+	Flags m_flags;
 	
-	private Memory m_memory;
+	Memory m_memory;
 	
-	private Parser m_parser;
+	Parser m_parser;
 	
 	/*
 	 * Initialize flags and set the register to
@@ -47,6 +48,14 @@ public class CPU
 		m_flags = new Flags();
 		
 		// For diagnostic reasons
+		DumpRegisters();
+		
+		m_memory = new Memory(biosFile, romName);
+		m_parser = new Parser();
+	}
+	
+	public void DumpRegisters()
+	{
 		System.out.println("m_AF: " + Utils.hex(m_AF.get()));
 		System.out.println("m_BC: " + Utils.hex(m_BC.get()));
 		System.out.println("m_DE: " + Utils.hex(m_DE.get()));
@@ -55,8 +64,7 @@ public class CPU
 		System.out.println("m_PC: " + Utils.hex(m_PC.get()));
 		System.out.println("");
 		
-		m_memory = new Memory(biosFile, romName);
-		m_parser = new Parser();
+		return;
 	}
 	
 	/*
@@ -71,12 +79,10 @@ public class CPU
 		 * - Executes correct CPU function
 		 */
 		
-		/*
 		byte instruction = m_memory.Read(m_PC.get());
-		String decodedIns = Parse(instruction);
+		String decodedIns = m_parser.DecodeIns(instruction);
 		
 		Step(instruction, decodedIns);
-		*/
 		
 		m_error = true;
 	}
@@ -84,6 +90,19 @@ public class CPU
 	public boolean IsError()
 	{
 		return m_error;
+	}
+	
+	public void Step(byte ins, String decodedIns)
+	{
+		switch(decodedIns)
+		{
+		case "LD":
+			Load.LD(this, ins);
+			break;
+		default:
+			System.out.println("Unknown opcode: " + decodedIns + " " + Utils.hex(ins));
+			break;
+		}
 	}
 	
 }

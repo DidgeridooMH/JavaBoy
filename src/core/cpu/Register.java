@@ -45,17 +45,17 @@ public class Register
 		return out;
 	}
 	
-	public void SetHighByte(int in)
+	public void SetHighByte(byte in)
 	{
 		int lowByte = this.GetLowByte();
 		
-		this.Set((in << 8) | lowByte);
+		this.Set(((int) (in | 0xff) << 8) | lowByte);
 	}
 	
-	public void SetLowByte(int in)
+	public void SetLowByte(byte in)
 	{
 		int highByte = this.GetHighByte();
 		
-		this.Set((highByte << 8) | in);
+		this.Set((highByte << 8) | (int) (in | 0xff));
 	}
 }
