@@ -20,7 +20,7 @@ public class Utils {
 		System.out.print(hex(location));
 		System.out.print(": ");
 		System.out.print(decodedIns);
-		System.out.print("(" + hex(ins) + ") ");
+		System.out.print("(" + hex(ins & 0xFF) + ") ");
 		
 		for(int i = 0; i < paramSize; i++)
 			System.out.print(hex(parameters[i] & 0xFF) + " ");

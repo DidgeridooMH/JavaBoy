@@ -5,7 +5,6 @@
  * decode the z80 opcodes.
  * 
  * TODO:
- * 	- Add prefix table
  * 	- Add timing table
  * 
  * Reference - http://pastraiser.com/cpu/gameboy/gameboy_opcodes.html
@@ -18,10 +17,12 @@ import java.util.HashMap;
 public class Parser {
 
 	HashMap<Byte, String> m_opcodes;
+	HashMap<Byte, String> m_prefix;
 	
 	public Parser()
 	{
 		m_opcodes = new HashMap<Byte, String>();
+		m_prefix = new HashMap<Byte, String>();
 		
 		SetHashMap();
 	}
@@ -33,7 +34,7 @@ public class Parser {
 	
 	private void SetHashMap()
 	{
-		// 0x0
+		// 0x00
 		m_opcodes.put((byte) 0x00, "NOP");
 		m_opcodes.put((byte) 0x01, "LD");
 		m_opcodes.put((byte) 0x02, "LD");
@@ -104,60 +105,7 @@ public class Parser {
 		m_opcodes.put((byte) 0x3d, "DEC");
 		m_opcodes.put((byte) 0x3e, "LD");
 		m_opcodes.put((byte) 0x3f, "CCF");
-		// 0x0
-		m_opcodes.put((byte) 0x00, "NOP");
-		m_opcodes.put((byte) 0x01, "NOP");
-		m_opcodes.put((byte) 0x02, "NOP");
-		m_opcodes.put((byte) 0x03, "NOP");
-		m_opcodes.put((byte) 0x04, "NOP");
-		m_opcodes.put((byte) 0x05, "NOP");
-		m_opcodes.put((byte) 0x06, "NOP");
-		m_opcodes.put((byte) 0x07, "NOP");
-		m_opcodes.put((byte) 0x08, "NOP");
-		m_opcodes.put((byte) 0x09, "NOP");
-		m_opcodes.put((byte) 0x0a, "NOP");
-		m_opcodes.put((byte) 0x0b, "NOP");
-		m_opcodes.put((byte) 0x0c, "NOP");
-		m_opcodes.put((byte) 0x0d, "NOP");
-		m_opcodes.put((byte) 0x0e, "NOP");
-		m_opcodes.put((byte) 0x0f, "NOP");
-
-		// 0x0
-		m_opcodes.put((byte) 0x00, "NOP");
-		m_opcodes.put((byte) 0x01, "NOP");
-		m_opcodes.put((byte) 0x02, "NOP");
-		m_opcodes.put((byte) 0x03, "NOP");
-		m_opcodes.put((byte) 0x04, "NOP");
-		m_opcodes.put((byte) 0x05, "NOP");
-		m_opcodes.put((byte) 0x06, "NOP");
-		m_opcodes.put((byte) 0x07, "NOP");
-		m_opcodes.put((byte) 0x08, "NOP");
-		m_opcodes.put((byte) 0x09, "NOP");
-		m_opcodes.put((byte) 0x0a, "NOP");
-		m_opcodes.put((byte) 0x0b, "NOP");
-		m_opcodes.put((byte) 0x0c, "NOP");
-		m_opcodes.put((byte) 0x0d, "NOP");
-		m_opcodes.put((byte) 0x0e, "NOP");
-		m_opcodes.put((byte) 0x0f, "NOP");
-
-		// 0x0
-		m_opcodes.put((byte) 0x00, "NOP");
-		m_opcodes.put((byte) 0x01, "NOP");
-		m_opcodes.put((byte) 0x02, "NOP");
-		m_opcodes.put((byte) 0x03, "NOP");
-		m_opcodes.put((byte) 0x04, "NOP");
-		m_opcodes.put((byte) 0x05, "NOP");
-		m_opcodes.put((byte) 0x06, "NOP");
-		m_opcodes.put((byte) 0x07, "NOP");
-		m_opcodes.put((byte) 0x08, "NOP");
-		m_opcodes.put((byte) 0x09, "NOP");
-		m_opcodes.put((byte) 0x0a, "NOP");
-		m_opcodes.put((byte) 0x0b, "NOP");
-		m_opcodes.put((byte) 0x0c, "NOP");
-		m_opcodes.put((byte) 0x0d, "NOP");
-		m_opcodes.put((byte) 0x0e, "NOP");
-		m_opcodes.put((byte) 0x0f, "NOP");
-
+	
 		// 0x40
 		m_opcodes.put((byte) 0x40, "LD");
 		m_opcodes.put((byte) 0x41, "LD");
@@ -374,11 +322,304 @@ public class Parser {
 		m_opcodes.put((byte) 0x0e, "CP");
 		m_opcodes.put((byte) 0x0f, "RST");
 
+		//0x00
+		m_prefix.put((byte) 0x00, "RLC");
+		m_prefix.put((byte) 0x01, "RLC");
+		m_prefix.put((byte) 0x02, "RLC");
+		m_prefix.put((byte) 0x03, "RLC");
+		m_prefix.put((byte) 0x04, "RLC");
+		m_prefix.put((byte) 0x05, "RLC");
+		m_prefix.put((byte) 0x06, "RLC");
+		m_prefix.put((byte) 0x07, "RLC");
+		m_prefix.put((byte) 0x08, "RRC");
+		m_prefix.put((byte) 0x09, "RRC");
+		m_prefix.put((byte) 0x0A, "RRC");
+		m_prefix.put((byte) 0x0B, "RRC");
+		m_prefix.put((byte) 0x0C, "RRC");
+		m_prefix.put((byte) 0x0D, "RRC");
+		m_prefix.put((byte) 0x0E, "RRC");
+		m_prefix.put((byte) 0x0F, "RRC");
+		
+		//0x10
+		m_prefix.put((byte) 0x10, "RL");
+		m_prefix.put((byte) 0x11, "RL");
+		m_prefix.put((byte) 0x12, "RL");
+		m_prefix.put((byte) 0x13, "RL");
+		m_prefix.put((byte) 0x14, "RL");
+		m_prefix.put((byte) 0x15, "RL");
+		m_prefix.put((byte) 0x16, "RL");
+		m_prefix.put((byte) 0x17, "RL");
+		m_prefix.put((byte) 0x18, "RR");
+		m_prefix.put((byte) 0x19, "RR");
+		m_prefix.put((byte) 0x1A, "RR");
+		m_prefix.put((byte) 0x1B, "RR");
+		m_prefix.put((byte) 0x1C, "RR");
+		m_prefix.put((byte) 0x1D, "RR");
+		m_prefix.put((byte) 0x1E, "RR");
+		m_prefix.put((byte) 0x1F, "RR");
+
+		//0x20
+		m_prefix.put((byte) 0x20, "SLA");
+		m_prefix.put((byte) 0x21, "SLA");
+		m_prefix.put((byte) 0x22, "SLA");
+		m_prefix.put((byte) 0x23, "SLA");
+		m_prefix.put((byte) 0x24, "SLA");
+		m_prefix.put((byte) 0x25, "SLA");
+		m_prefix.put((byte) 0x26, "SLA");
+		m_prefix.put((byte) 0x27, "SLA");
+		m_prefix.put((byte) 0x28, "SRA");
+		m_prefix.put((byte) 0x29, "SRA");
+		m_prefix.put((byte) 0x2A, "SRA");
+		m_prefix.put((byte) 0x2B, "SRA");
+		m_prefix.put((byte) 0x2C, "SRA");
+		m_prefix.put((byte) 0x2D, "SRA");
+		m_prefix.put((byte) 0x2E, "SRA");
+		m_prefix.put((byte) 0x2F, "SRA");
+
+		//0x30
+		m_prefix.put((byte) 0x30, "SWAP");
+		m_prefix.put((byte) 0x31, "SWAP");
+		m_prefix.put((byte) 0x32, "SWAP");
+		m_prefix.put((byte) 0x33, "SWAP");
+		m_prefix.put((byte) 0x34, "SWAP");
+		m_prefix.put((byte) 0x35, "SWAP");
+		m_prefix.put((byte) 0x36, "SWAP");
+		m_prefix.put((byte) 0x37, "SWAP");
+		m_prefix.put((byte) 0x38, "SRL");
+		m_prefix.put((byte) 0x39, "SRL");
+		m_prefix.put((byte) 0x3A, "SRL");
+		m_prefix.put((byte) 0x3B, "SRL");
+		m_prefix.put((byte) 0x3C, "SRL");
+		m_prefix.put((byte) 0x3D, "SRL");
+		m_prefix.put((byte) 0x3E, "SRL");
+		m_prefix.put((byte) 0x3F, "SRL");
+
+		//0x40
+		m_prefix.put((byte) 0x40, "BIT");
+		m_prefix.put((byte) 0x41, "BIT");
+		m_prefix.put((byte) 0x42, "BIT");
+		m_prefix.put((byte) 0x43, "BIT");
+		m_prefix.put((byte) 0x44, "BIT");
+		m_prefix.put((byte) 0x45, "BIT");
+		m_prefix.put((byte) 0x46, "BIT");
+		m_prefix.put((byte) 0x47, "BIT");
+		m_prefix.put((byte) 0x48, "BIT");
+		m_prefix.put((byte) 0x49, "BIT");
+		m_prefix.put((byte) 0x4A, "BIT");
+		m_prefix.put((byte) 0x4B, "BIT");
+		m_prefix.put((byte) 0x4C, "BIT");
+		m_prefix.put((byte) 0x4D, "BIT");
+		m_prefix.put((byte) 0x4E, "BIT");
+		m_prefix.put((byte) 0x4F, "BIT");
+
+		//0x50
+		m_prefix.put((byte) 0x50, "BIT");
+		m_prefix.put((byte) 0x51, "BIT");
+		m_prefix.put((byte) 0x52, "BIT");
+		m_prefix.put((byte) 0x53, "BIT");
+		m_prefix.put((byte) 0x54, "BIT");
+		m_prefix.put((byte) 0x55, "BIT");
+		m_prefix.put((byte) 0x56, "BIT");
+		m_prefix.put((byte) 0x57, "BIT");
+		m_prefix.put((byte) 0x58, "BIT");
+		m_prefix.put((byte) 0x59, "BIT");
+		m_prefix.put((byte) 0x5A, "BIT");
+		m_prefix.put((byte) 0x5B, "BIT");
+		m_prefix.put((byte) 0x5C, "BIT");
+		m_prefix.put((byte) 0x5D, "BIT");
+		m_prefix.put((byte) 0x5E, "BIT");
+		m_prefix.put((byte) 0x5F, "BIT");
+
+		//0x60
+		m_prefix.put((byte) 0x60, "BIT");
+		m_prefix.put((byte) 0x61, "BIT");
+		m_prefix.put((byte) 0x62, "BIT");
+		m_prefix.put((byte) 0x63, "BIT");
+		m_prefix.put((byte) 0x64, "BIT");
+		m_prefix.put((byte) 0x65, "BIT");
+		m_prefix.put((byte) 0x66, "BIT");
+		m_prefix.put((byte) 0x67, "BIT");
+		m_prefix.put((byte) 0x68, "BIT");
+		m_prefix.put((byte) 0x69, "BIT");
+		m_prefix.put((byte) 0x6A, "BIT");
+		m_prefix.put((byte) 0x6B, "BIT");
+		m_prefix.put((byte) 0x6C, "BIT");
+		m_prefix.put((byte) 0x6D, "BIT");
+		m_prefix.put((byte) 0x6E, "BIT");
+		m_prefix.put((byte) 0x6F, "BIT");
+
+		//0x70
+		m_prefix.put((byte) 0x70, "BIT");
+		m_prefix.put((byte) 0x71, "BIT");
+		m_prefix.put((byte) 0x72, "BIT");
+		m_prefix.put((byte) 0x73, "BIT");
+		m_prefix.put((byte) 0x74, "BIT");
+		m_prefix.put((byte) 0x75, "BIT");
+		m_prefix.put((byte) 0x76, "BIT");
+		m_prefix.put((byte) 0x77, "BIT");
+		m_prefix.put((byte) 0x78, "BIT");
+		m_prefix.put((byte) 0x79, "BIT");
+		m_prefix.put((byte) 0x7A, "BIT");
+		m_prefix.put((byte) 0x7B, "BIT");
+		m_prefix.put((byte) 0x7C, "BIT");
+		m_prefix.put((byte) 0x7D, "BIT");
+		m_prefix.put((byte) 0x7E, "BIT");
+		m_prefix.put((byte) 0x7F, "BIT");
+
+		//0x80
+		m_prefix.put((byte) 0x80, "RES");
+		m_prefix.put((byte) 0x81, "RES");
+		m_prefix.put((byte) 0x82, "RES");
+		m_prefix.put((byte) 0x83, "RES");
+		m_prefix.put((byte) 0x84, "RES");
+		m_prefix.put((byte) 0x85, "RES");
+		m_prefix.put((byte) 0x86, "RES");
+		m_prefix.put((byte) 0x87, "RES");
+		m_prefix.put((byte) 0x88, "RES");
+		m_prefix.put((byte) 0x89, "RES");
+		m_prefix.put((byte) 0x8A, "RES");
+		m_prefix.put((byte) 0x8B, "RES");
+		m_prefix.put((byte) 0x8C, "RES");
+		m_prefix.put((byte) 0x8D, "RES");
+		m_prefix.put((byte) 0x8E, "RES");
+		m_prefix.put((byte) 0x8F, "RES");
+
+		//0x90
+		m_prefix.put((byte) 0x90, "RES");
+		m_prefix.put((byte) 0x91, "RES");
+		m_prefix.put((byte) 0x92, "RES");
+		m_prefix.put((byte) 0x93, "RES");
+		m_prefix.put((byte) 0x94, "RES");
+		m_prefix.put((byte) 0x95, "RES");
+		m_prefix.put((byte) 0x96, "RES");
+		m_prefix.put((byte) 0x97, "RES");
+		m_prefix.put((byte) 0x98, "RES");
+		m_prefix.put((byte) 0x99, "RES");
+		m_prefix.put((byte) 0x9A, "RES");
+		m_prefix.put((byte) 0x9B, "RES");
+		m_prefix.put((byte) 0x9C, "RES");
+		m_prefix.put((byte) 0x9D, "RES");
+		m_prefix.put((byte) 0x9E, "RES");
+		m_prefix.put((byte) 0x9F, "RES");
+		
+		//0xA0
+		m_prefix.put((byte) 0xA0, "RES");
+		m_prefix.put((byte) 0xA1, "RES");
+		m_prefix.put((byte) 0xA2, "RES");
+		m_prefix.put((byte) 0xA3, "RES");
+		m_prefix.put((byte) 0xA4, "RES");
+		m_prefix.put((byte) 0xA5, "RES");
+		m_prefix.put((byte) 0xA6, "RES");
+		m_prefix.put((byte) 0xA7, "RES");
+		m_prefix.put((byte) 0xA8, "RES");
+		m_prefix.put((byte) 0xA9, "RES");
+		m_prefix.put((byte) 0xAA, "RES");
+		m_prefix.put((byte) 0xAB, "RES");
+		m_prefix.put((byte) 0xAC, "RES");
+		m_prefix.put((byte) 0xAD, "RES");
+		m_prefix.put((byte) 0xAE, "RES");
+		m_prefix.put((byte) 0xAF, "RES");
+		
+		//0xB0
+		m_prefix.put((byte) 0xB0, "RES");
+		m_prefix.put((byte) 0xB1, "RES");
+		m_prefix.put((byte) 0xB2, "RES");
+		m_prefix.put((byte) 0xB3, "RES");
+		m_prefix.put((byte) 0xB4, "RES");
+		m_prefix.put((byte) 0xB5, "RES");
+		m_prefix.put((byte) 0xB6, "RES");
+		m_prefix.put((byte) 0xB7, "RES");
+		m_prefix.put((byte) 0xB8, "RES");
+		m_prefix.put((byte) 0xB9, "RES");
+		m_prefix.put((byte) 0xBA, "RES");
+		m_prefix.put((byte) 0xBB, "RES");
+		m_prefix.put((byte) 0xBC, "RES");
+		m_prefix.put((byte) 0xBD, "RES");
+		m_prefix.put((byte) 0xBE, "RES");
+		m_prefix.put((byte) 0xBF, "RES");
+
+		//0xC0
+		m_prefix.put((byte) 0xC0, "SET");
+		m_prefix.put((byte) 0xC1, "SET");
+		m_prefix.put((byte) 0xC2, "SET");
+		m_prefix.put((byte) 0xC3, "SET");
+		m_prefix.put((byte) 0xC4, "SET");
+		m_prefix.put((byte) 0xC5, "SET");
+		m_prefix.put((byte) 0xC6, "SET");
+		m_prefix.put((byte) 0xC7, "SET");
+		m_prefix.put((byte) 0xC8, "SET");
+		m_prefix.put((byte) 0xC9, "SET");
+		m_prefix.put((byte) 0xCA, "SET");
+		m_prefix.put((byte) 0xCB, "SET");
+		m_prefix.put((byte) 0xCC, "SET");
+		m_prefix.put((byte) 0xCD, "SET");
+		m_prefix.put((byte) 0xCE, "SET");
+		m_prefix.put((byte) 0xCF, "SET");
+
+		//0xD0
+		m_prefix.put((byte) 0xD0, "SET");
+		m_prefix.put((byte) 0xD1, "SET");
+		m_prefix.put((byte) 0xD2, "SET");
+		m_prefix.put((byte) 0xD3, "SET");
+		m_prefix.put((byte) 0xD4, "SET");
+		m_prefix.put((byte) 0xD5, "SET");
+		m_prefix.put((byte) 0xD6, "SET");
+		m_prefix.put((byte) 0xD7, "SET");
+		m_prefix.put((byte) 0xD8, "SET");
+		m_prefix.put((byte) 0xD9, "SET");
+		m_prefix.put((byte) 0xDA, "SET");
+		m_prefix.put((byte) 0xDB, "SET");
+		m_prefix.put((byte) 0xDC, "SET");
+		m_prefix.put((byte) 0xDD, "SET");
+		m_prefix.put((byte) 0xDE, "SET");
+		m_prefix.put((byte) 0xDF, "SET");
+
+		//0xE0
+		m_prefix.put((byte) 0xE0, "SET");
+		m_prefix.put((byte) 0xE1, "SET");
+		m_prefix.put((byte) 0xE2, "SET");
+		m_prefix.put((byte) 0xE3, "SET");
+		m_prefix.put((byte) 0xE4, "SET");
+		m_prefix.put((byte) 0xE5, "SET");
+		m_prefix.put((byte) 0xE6, "SET");
+		m_prefix.put((byte) 0xE7, "SET");
+		m_prefix.put((byte) 0xE8, "SET");
+		m_prefix.put((byte) 0xE9, "SET");
+		m_prefix.put((byte) 0xEA, "SET");
+		m_prefix.put((byte) 0xEB, "SET");
+		m_prefix.put((byte) 0xEC, "SET");
+		m_prefix.put((byte) 0xED, "SET");
+		m_prefix.put((byte) 0xEE, "SET");
+		m_prefix.put((byte) 0xEF, "SET");
+
+		//0xF0
+		m_prefix.put((byte) 0xF0, "SET");
+		m_prefix.put((byte) 0xF1, "SET");
+		m_prefix.put((byte) 0xF2, "SET");
+		m_prefix.put((byte) 0xF3, "SET");
+		m_prefix.put((byte) 0xF4, "SET");
+		m_prefix.put((byte) 0xF5, "SET");
+		m_prefix.put((byte) 0xF6, "SET");
+		m_prefix.put((byte) 0xF7, "SET");
+		m_prefix.put((byte) 0xF8, "SET");
+		m_prefix.put((byte) 0xF9, "SET");
+		m_prefix.put((byte) 0xFA, "SET");
+		m_prefix.put((byte) 0xFB, "SET");
+		m_prefix.put((byte) 0xFC, "SET");
+		m_prefix.put((byte) 0xFD, "SET");
+		m_prefix.put((byte) 0xFE, "SET");
+		m_prefix.put((byte) 0xFF, "SET");
+		
 	}
 	
 	public String DecodeIns(byte ins)
 	{
 		return m_opcodes.get(ins);
+	}
+	
+	public String DecodePrefix(byte ins)
+	{
+		return m_prefix.get(ins);
 	}
 	
 }

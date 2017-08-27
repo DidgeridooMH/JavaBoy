@@ -132,8 +132,35 @@ public class CPU
 		case "LD":
 			Load.LD(this, ins);
 			break;
+			
+		case "XOR":
+			ExclusiveOR.XOR(this, ins);
+			break;
+			
+		case "PREFIX":
+			StepPrefix();
+			break;
+			
 		default:
 			System.out.println("Unknown opcode: " + decodedIns + " " + Utils.hex(ins & 0xFF));
+			m_error = true;
+			break;
+		}
+	}
+	
+	public void StepPrefix()
+	{
+		byte instruction = m_memory.Read(m_PC.get()+1);
+		String decodedPrefix = m_parser.DecodePrefix(instruction);
+		
+		switch(decodedPrefix)
+		{
+		case "BIT":
+			BitTest.BIT(this, instruction);
+			break;
+		
+		default:
+			System.out.println("Unknown prefix: " + decodedPrefix + " " + Utils.hex(instruction & 0xFF));
 			m_error = true;
 			break;
 		}
