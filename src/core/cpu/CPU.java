@@ -51,6 +51,40 @@ public class CPU
 		DumpRegisters();
 		
 		m_memory = new Memory(biosFile, romName);
+		
+		// Initialize some registers
+		m_memory.Write((byte) 0x00, 0xFF05);
+		m_memory.Write((byte) 0x00, 0xFF06);
+		m_memory.Write((byte) 0x00, 0xFF07);
+		m_memory.Write((byte) 0x80, 0xFF10);
+		m_memory.Write((byte) 0xBF, 0xFF11);
+		m_memory.Write((byte) 0xF3, 0xFF12);
+		m_memory.Write((byte) 0xBF, 0xFF14);
+		m_memory.Write((byte) 0x3F, 0xFF16);
+		m_memory.Write((byte) 0x00, 0xFF17);
+		m_memory.Write((byte) 0xBF, 0xFF19);
+		m_memory.Write((byte) 0x7F, 0xFF1A);
+		m_memory.Write((byte) 0xFF, 0xFF1B);
+		m_memory.Write((byte) 0x9F, 0xFF1C);
+		m_memory.Write((byte) 0xBF, 0xFF1E);
+		m_memory.Write((byte) 0xFF, 0xFF20);
+		m_memory.Write((byte) 0x00, 0xFF21);
+		m_memory.Write((byte) 0x00, 0xFF22);
+		m_memory.Write((byte) 0xBF, 0xFF23);
+		m_memory.Write((byte) 0x77, 0xFF24);
+		m_memory.Write((byte) 0xF3, 0xFF25);
+		m_memory.Write((byte) 0xF1, 0xFF26);
+		m_memory.Write((byte) 0x91, 0xFF40);
+		m_memory.Write((byte) 0x00, 0xFF42);
+		m_memory.Write((byte) 0x00, 0xFF43);
+		m_memory.Write((byte) 0x00, 0xFF45);
+		m_memory.Write((byte) 0xFC, 0xFF47);
+		m_memory.Write((byte) 0xFF, 0xFF48);
+		m_memory.Write((byte) 0xFF, 0xFF49);
+		m_memory.Write((byte) 0x00, 0xFF4A);
+		m_memory.Write((byte) 0x00, 0xFF4B);
+		m_memory.Write((byte) 0x00, 0xFFFF);
+		
 		m_parser = new Parser();
 	}
 	
@@ -84,7 +118,6 @@ public class CPU
 		
 		Step(instruction, decodedIns);
 		
-		m_error = true;
 	}
 	
 	public boolean IsError()
@@ -100,7 +133,8 @@ public class CPU
 			Load.LD(this, ins);
 			break;
 		default:
-			System.out.println("Unknown opcode: " + decodedIns + " " + Utils.hex(ins));
+			System.out.println("Unknown opcode: " + decodedIns + " " + Utils.hex(ins & 0xFF));
+			m_error = true;
 			break;
 		}
 	}

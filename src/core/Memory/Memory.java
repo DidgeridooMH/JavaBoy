@@ -36,7 +36,7 @@ public class Memory {
 			System.err.println("Caught exception while loading rom: " + e);
 		}
 		
-		internalMemory = new byte[0xFFFF];
+		internalMemory = new byte[0x10000];
 		
 		// Copy the bios in at 0x0-0x0f
 		

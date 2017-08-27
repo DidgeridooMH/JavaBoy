@@ -14,9 +14,6 @@
 package core.cpu;
 
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Iterator;
-import java.util.Set;
 
 public class Parser {
 
@@ -29,7 +26,6 @@ public class Parser {
 		SetHashMap();
 	}
 	
-<<<<<<< HEAD
 	/*
 	 * Set up a search table that contains all
 	 * the opcodes for the gameboy.
@@ -37,12 +33,7 @@ public class Parser {
 	
 	private void SetHashMap()
 	{
-		// 0x00
-=======
-	private void SetHashMap()
-	{
 		// 0x0
->>>>>>> fae6c68f918ee5c7e8e5acf2d0050b164d7ca132
 		m_opcodes.put((byte) 0x00, "NOP");
 		m_opcodes.put((byte) 0x01, "LD");
 		m_opcodes.put((byte) 0x02, "LD");
@@ -60,7 +51,6 @@ public class Parser {
 		m_opcodes.put((byte) 0x0e, "LD");
 		m_opcodes.put((byte) 0x0f, "RRCA");
 
-<<<<<<< HEAD
 		// 0x10
 		m_opcodes.put((byte) 0x10, "STOP");
 		m_opcodes.put((byte) 0x11, "LD");
@@ -114,7 +104,6 @@ public class Parser {
 		m_opcodes.put((byte) 0x3d, "DEC");
 		m_opcodes.put((byte) 0x3e, "LD");
 		m_opcodes.put((byte) 0x3f, "CCF");
-=======
 		// 0x0
 		m_opcodes.put((byte) 0x00, "NOP");
 		m_opcodes.put((byte) 0x01, "NOP");
@@ -168,7 +157,6 @@ public class Parser {
 		m_opcodes.put((byte) 0x0d, "NOP");
 		m_opcodes.put((byte) 0x0e, "NOP");
 		m_opcodes.put((byte) 0x0f, "NOP");
->>>>>>> fae6c68f918ee5c7e8e5acf2d0050b164d7ca132
 
 		// 0x40
 		m_opcodes.put((byte) 0x40, "LD");
