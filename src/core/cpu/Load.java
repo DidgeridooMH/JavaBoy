@@ -10,9 +10,9 @@ package core.cpu;
 
 import emulator.Utils;
 
-public class Load {
+public interface Load {
 	
-	public static void LD(CPU r_cpu, byte ins)
+	static void LD(CPU r_cpu, byte ins)
 	{
 		byte parameters[] = { 0x0, 0x0 };
 		int address = 0x0;

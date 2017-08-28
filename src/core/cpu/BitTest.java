@@ -9,977 +9,108 @@ package core.cpu;
 
 import emulator.Utils;
 
-public class BitTest {
-
-	public static void BIT(CPU r_cpu, byte ins)
+public interface BitTest {
+	
+	static void BIT(CPU r_cpu, byte ins)
 	{
-		switch(ins)
+		byte regValue = 0x0;
+		byte bitValue = 0x0;
+		byte regNibble = 0x0;
+		byte bitNibble = 0x0;
+		String regName = "";
+		String testBit = "";
+		
+		regNibble = (byte) (ins & 0x0F);
+		bitNibble = (byte) ((ins >> 4) & 0xF);
+		
+		switch(regNibble)
 		{
-		case (byte) 0x40:
-			if(r_cpu.m_BC.GetHighByte() > 0x0)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 0, B", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x41:
-			if(r_cpu.m_BC.GetLowByte() > 0x0)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 0, C", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x42:
-			if(r_cpu.m_DE.GetHighByte() > 0x0)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 0, D", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x43:
-			if(r_cpu.m_DE.GetLowByte() > 0x0)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 0, E", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x44:
-			if(r_cpu.m_HL.GetHighByte() > 0x0)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 0, H", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x45:
-			if(r_cpu.m_HL.GetLowByte() > 0x0)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 0, L", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x46:
-			if(r_cpu.m_memory.Read(r_cpu.m_HL.get()) > 0x0)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 0, (HL)", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x47:
-			if(r_cpu.m_AF.GetHighByte() > 0x0)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 0, A", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
+		case 0x0:
+		case 0x8:
+			regValue = (byte) r_cpu.m_BC.GetHighByte();
+			regName = "B";
 			break;
 			
-		case (byte) 0x48:
-			if(r_cpu.m_BC.GetHighByte() >= 0x02)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 1, B", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x49:
-			if(r_cpu.m_BC.GetLowByte() >= 0x02)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 1, C", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x4A:
-			if(r_cpu.m_DE.GetHighByte() >= 0x02)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 1, D", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x4B:
-			if(r_cpu.m_DE.GetLowByte() >= 0x02)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 1, E", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x4C:
-			if(r_cpu.m_HL.GetHighByte() >= 0x02)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 1, H", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x4D:
-			if(r_cpu.m_HL.GetLowByte() >= 0x02)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 1, L", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x4E:
-			if(r_cpu.m_memory.Read(r_cpu.m_HL.get()) >= 0x02)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 1, (HL)", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x4F:
-			if(r_cpu.m_AF.GetHighByte() >= 0x02)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 1, A", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
+		case 0x1:
+		case 0x9:
+			regValue = (byte) r_cpu.m_BC.GetLowByte();
+			regName = "C";
 			break;
 			
-		case (byte) 0x50:
-			if(r_cpu.m_BC.GetHighByte() >= 0x04)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 2, B", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x51:
-			if(r_cpu.m_BC.GetLowByte() >= 0x04)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 2, C", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x52:
-			if(r_cpu.m_DE.GetHighByte() >= 0x04)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 2, D", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x53:
-			if(r_cpu.m_DE.GetLowByte() >= 0x04)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 2, E", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x54:
-			if(r_cpu.m_HL.GetHighByte() >= 0x04)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 2, H", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x55:
-			if(r_cpu.m_HL.GetLowByte() >= 0x04)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 2, L", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x56:
-			if(r_cpu.m_memory.Read(r_cpu.m_HL.get()) >= 0x04)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 2, (HL)", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x57:
-			if(r_cpu.m_AF.GetHighByte() >= 0x04)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 2, A", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
+		case 0x2:
+		case 0xA:
+			regValue = (byte) r_cpu.m_DE.GetHighByte();
+			regName = "D";
 			break;
 			
-		case (byte) 0x58:
-			if(r_cpu.m_BC.GetHighByte() >= 0x08)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 3, B", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x59:
-			if(r_cpu.m_BC.GetLowByte() >= 0x08)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 3, C", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x5A:
-			if(r_cpu.m_DE.GetHighByte() >= 0x08)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 3, D", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x5B:
-			if(r_cpu.m_DE.GetLowByte() >= 0x08)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 3, E", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x5C:
-			if(r_cpu.m_HL.GetHighByte() >= 0x08)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 3, H", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x5D:
-			if(r_cpu.m_HL.GetLowByte() >= 0x08)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 3, L", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x5E:
-			if(r_cpu.m_memory.Read(r_cpu.m_HL.get()) >= 0x08)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 3, (HL)", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x5F:
-			if(r_cpu.m_AF.GetHighByte() >= 0x08)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 3, A", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x60:
-			if(r_cpu.m_BC.GetHighByte() >= 0x10)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 4, B", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x61:
-			if(r_cpu.m_BC.GetLowByte() >= 0x10)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 4, C", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x62:
-			if(r_cpu.m_DE.GetHighByte() >= 0x10)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 4, D", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x63:
-			if(r_cpu.m_DE.GetLowByte() >= 0x10)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 4, E", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x64:
-			if(r_cpu.m_HL.GetHighByte() >= 0x10)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 4, H", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x65:
-			if(r_cpu.m_HL.GetLowByte() >= 0x10)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 4, L", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x66:
-			if(r_cpu.m_memory.Read(r_cpu.m_HL.get()) >= 0x10)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 4, (HL)", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x67:
-			if(r_cpu.m_AF.GetHighByte() >= 0x10)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 4, A", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
+		case 0x3:
+		case 0xB:
+			regValue = (byte) r_cpu.m_DE.GetLowByte();
+			regName = "E";
 			break;
 			
-		case (byte) 0x68:
-			if(r_cpu.m_BC.GetHighByte() >= 0x20)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 5, B", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x69:
-			if(r_cpu.m_BC.GetLowByte() >= 0x20)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 5, C", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x6A:
-			if(r_cpu.m_DE.GetHighByte() >= 0x20)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 5, D", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x6B:
-			if(r_cpu.m_DE.GetLowByte() >= 0x20)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 5, E", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x6C:
-			if(r_cpu.m_HL.GetHighByte() >= 0x20)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 5, H", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x6D:
-			if(r_cpu.m_HL.GetLowByte() >= 0x20)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 5, L", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x6E:
-			if(r_cpu.m_memory.Read(r_cpu.m_HL.get()) >= 0x20)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 5, (HL)", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x6F:
-			if(r_cpu.m_AF.GetHighByte() >= 0x20)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 5, A", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x70:
-			if(r_cpu.m_BC.GetHighByte() >= 0x40)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 6, B", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x71:
-			if(r_cpu.m_BC.GetLowByte() >= 0x40)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 6, C", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x72:
-			if(r_cpu.m_DE.GetHighByte() >= 0x40)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 6, D", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x73:
-			if(r_cpu.m_DE.GetLowByte() >= 0x40)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 6, E", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x74:
-			if(r_cpu.m_HL.GetHighByte() >= 0x40)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 6, H", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x75:
-			if(r_cpu.m_HL.GetLowByte() >= 0x40)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 6, L", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x76:
-			if(r_cpu.m_memory.Read(r_cpu.m_HL.get()) >= 0x40)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 6, (HL)", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x77:
-			if(r_cpu.m_AF.GetHighByte() >= 0x40)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 6, A", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
+		case 0x4:
+		case 0xC:
+			regValue = (byte) r_cpu.m_HL.GetHighByte();
+			regName = "H";
 			break;
 			
-		case (byte) 0x78:
-			if(r_cpu.m_BC.GetHighByte() >= 0x80)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 7, B", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x79:
-			if(r_cpu.m_BC.GetLowByte() >= 0x80)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 7, C", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x7A:
-			if(r_cpu.m_DE.GetHighByte() >= 0x80)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 7, D", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x7B:
-			if(r_cpu.m_DE.GetLowByte() >= 0x80)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 7, E", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x7C:
-			if(r_cpu.m_HL.GetHighByte() >= 0x80)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 7, H", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
+		case 0x5:
+		case 0xD:
+			regValue = (byte) r_cpu.m_HL.GetLowByte();
+			regName = "L";
 			break;
 			
-		case (byte) 0x7D:
-			if(r_cpu.m_HL.GetLowByte() >= 0x80)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 7, L", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
+		case 0x6:
+		case 0xE:
+			regValue = (byte) r_cpu.m_memory.Read(r_cpu.m_HL.get());
+			regName = "(HL)";
 			break;
-
-		case (byte) 0x7E:
-			if(r_cpu.m_memory.Read(r_cpu.m_HL.get()) >= 0x80)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
 			
-			Utils.PrintInstruciton("BIT 7, (HL)", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
-			break;
-
-		case (byte) 0x7F:
-			if(r_cpu.m_AF.GetHighByte() >= 0x80)
-				r_cpu.m_flags.setZero(true);
-			else
-				r_cpu.m_flags.setZero(false);
-		
-			r_cpu.m_flags.setSubtract(false);
-			r_cpu.m_flags.setHalfCarry(true);
-			
-			Utils.PrintInstruciton("BIT 7, A", ins, r_cpu.m_PC.get(), null, 0);
-			
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
-			
+		case 0x7:
+		case 0xF:
+			regValue = (byte) r_cpu.m_AF.GetHighByte();
+			regName = "A";
 			break;
 			
 		default:
-			System.out.println("Unknown variant of BIT: " + Utils.hex(ins & 0xFF));
+			System.err.println("Error parsing BIT instruction at: " + Utils.hex(r_cpu.m_PC.get()));
 			r_cpu.m_error = true;
-			break;
+			return;
 		}
+		
+		switch(bitNibble)
+		{
+		case 0x4:
+			bitValue = (regNibble > 0x07) ? (byte) 0x02 : 0x00;
+			testBit = (regNibble > 0x07) ? "1" : "0";
+			break;
+		case 0x5:
+			bitValue = (regNibble > 0x07) ? (byte) 0x08 : 0x04;
+			testBit = (regNibble > 0x07) ? "3" : "2";
+			break;
+		case 0x6:
+			bitValue = (regNibble > 0x07) ? (byte) 0x20 : 0x10;
+			testBit = (regNibble > 0x07) ? "5" : "4";
+			break;
+		case 0x7:
+			bitValue = (regNibble > 0x07) ? (byte) 0x80 : 0x40;
+			testBit = (regNibble > 0x07) ? "7" : "6";
+			break;
+		default:
+			System.err.println("Error parsing BIT instruction at: " + Utils.hex(r_cpu.m_PC.get()));
+			r_cpu.m_error = true;
+			return;
+		}
+		
+		r_cpu.m_flags.setZero((regValue & bitValue) > 0);
+		r_cpu.m_flags.setSubtract(false);
+		r_cpu.m_flags.setHalfCarry(true);
+		
+		Utils.PrintInstruciton("BIT " + testBit + ", " + regName, ins, r_cpu.m_PC.get(), null, 0);
+		
+		r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
+		
 	}
 	
 }

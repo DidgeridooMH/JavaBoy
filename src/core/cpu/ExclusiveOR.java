@@ -8,9 +8,9 @@ package core.cpu;
 
 import emulator.Utils;
 
-public class ExclusiveOR {
-
-	public static void XOR(CPU r_cpu, byte ins)
+public interface ExclusiveOR {
+	
+	static void XOR(CPU r_cpu, byte ins)
 	{
 		byte parameter[] = { 0x0 };
 		
