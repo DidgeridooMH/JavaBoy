@@ -38,18 +38,16 @@ public class Memory {
 		
 		internalMemory = new byte[0x10000];
 		
-		// Copy the bios in at 0x0-0x0f
-		
 		for(int i = 0; i < 0xFF; i++)
 			internalMemory[i] = biosBank[i];
 		
 		// Load home bank
-		/*for(int i = 0x100; i < 0x4000; i++)
-			internalMemory[i] = romBank[i - 0x100];*/
+		for(int i = 0x100; i < 0x4000; i++)
+			internalMemory[i] = romBank[i];
 		
 		// Load switchable bank
-		/*for(int i = 0x4000; i < 0x8000; i++)
-			internalMemory[i] = romBank[i - 0x4000];*/
+		for(int i = 0x4000; i < 0x8000; i++)
+			internalMemory[i] = romBank[i];
 	}
 	
 	public void Write(byte in, int location)

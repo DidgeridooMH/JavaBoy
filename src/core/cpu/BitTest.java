@@ -13,7 +13,7 @@ public interface BitTest {
 	
 	static void BIT(CPU r_cpu, byte ins)
 	{
-		byte regValue = 0x0;
+		int regValue = 0x0;
 		byte bitValue = 0x0;
 		byte regNibble = 0x0;
 		byte bitNibble = 0x0;
@@ -51,7 +51,7 @@ public interface BitTest {
 			
 		case 0x4:
 		case 0xC:
-			regValue = (byte) r_cpu.m_HL.GetHighByte();
+			regValue = r_cpu.m_HL.GetHighByte() & 0x00FF;
 			regName = "H";
 			break;
 			
@@ -103,7 +103,7 @@ public interface BitTest {
 			return;
 		}
 		
-		r_cpu.m_flags.setZero((regValue & bitValue) > 0);
+		r_cpu.m_flags.setZero(!((regValue & (int)(bitValue & 0xFF)) > 0));
 		r_cpu.m_flags.setSubtract(false);
 		r_cpu.m_flags.setHalfCarry(true);
 		

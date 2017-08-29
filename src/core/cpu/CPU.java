@@ -113,10 +113,10 @@ public class CPU
 		 * - Executes correct CPU function
 		 */
 		
-		byte instruction = m_memory.Read(m_PC.get());
+		int instruction = m_memory.Read(m_PC.get());
 		String decodedIns = m_parser.DecodeIns(instruction);
 		
-		Step(instruction, decodedIns);
+		Step((byte) instruction, decodedIns);
 		
 	}
 	
@@ -130,6 +130,7 @@ public class CPU
 		switch(decodedIns)
 		{
 		case "LD":
+		case "LDH":
 			Load.LD(this, ins);
 			break;
 			
@@ -141,8 +142,15 @@ public class CPU
 			StepPrefix();
 			break;
 			
+		case "JR":
+			Jump.JumpSubroutine(this, ins);
+			break;
+			
 		default:
-			System.out.println("Unknown opcode: " + decodedIns + " " + Utils.hex(ins & 0xFF));
+			System.out.println("Unknown opcode: " + 
+								decodedIns + " " + 
+								Utils.hex(ins & 0xFF) + 
+								" at " + Utils.hex(m_PC.get()) );
 			m_error = true;
 			break;
 		}
@@ -160,10 +168,46 @@ public class CPU
 			break;
 		
 		default:
-			System.out.println("Unknown prefix: " + decodedPrefix + " " + Utils.hex(instruction & 0xFF));
+			System.out.println("Unknown prefix: " + 
+								decodedPrefix + " " + 
+								Utils.hex(instruction & 0xFF) + 
+								" at " + Utils.hex(m_PC.get()));
 			m_error = true;
 			break;
 		}
+	}
+	
+	public void Push(byte in)
+	{
+		m_memory.Write(in, m_SP.get());
+		m_SP.Set(m_SP.get() - 1);
+	}
+	
+	public void Push16(short in)
+	{
+		Push((byte) ((in >> 8) & 0xFF));
+		Push((byte) (in & 0xFF));
+	}
+	
+	public byte Pop()
+	{
+		byte out = 0x0;
+		
+		m_SP.Set(m_SP.get() + 1);
+		out = m_memory.Read(m_SP.get());
+		
+		return out;
+	}
+	
+	public short Pop16()
+	{
+		byte highByte = 0x0;
+		byte lowByte = 0x0;
+		
+		lowByte = Pop();
+		highByte = Pop();
+		
+		return (short) (( (short) highByte << 8) | (short) lowByte);
 	}
 	
 }

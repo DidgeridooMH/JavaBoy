@@ -49,13 +49,13 @@ public class Register
 	{
 		int lowByte = this.GetLowByte();
 		
-		this.Set(((int) (in | 0xff) << 8) | lowByte);
+		this.Set(((int) (in & 0xff) << 8) | lowByte);
 	}
 	
 	public void SetLowByte(byte in)
 	{
 		int highByte = this.GetHighByte();
 		
-		this.Set((highByte << 8) | (int) (in | 0xff));
+		this.Set((highByte << 8) | (int) (in & 0xff));
 	}
 }

@@ -305,22 +305,22 @@ public class Parser {
 		m_opcodes.put((byte) 0xef, "RST");
 
 		// 0xf0
-		m_opcodes.put((byte) 0x00, "LDH");
-		m_opcodes.put((byte) 0x01, "POP");
-		m_opcodes.put((byte) 0x02, "LD");
-		m_opcodes.put((byte) 0x03, "DI");
-		m_opcodes.put((byte) 0x04, "NOP");
-		m_opcodes.put((byte) 0x05, "PUSH");
-		m_opcodes.put((byte) 0x06, "OR");
-		m_opcodes.put((byte) 0x07, "RST");
-		m_opcodes.put((byte) 0x08, "LD");
-		m_opcodes.put((byte) 0x09, "LD");
-		m_opcodes.put((byte) 0x0a, "LD");
-		m_opcodes.put((byte) 0x0b, "EI");
-		m_opcodes.put((byte) 0x0c, "NOP");
-		m_opcodes.put((byte) 0x0d, "NOP");
-		m_opcodes.put((byte) 0x0e, "CP");
-		m_opcodes.put((byte) 0x0f, "RST");
+		m_opcodes.put((byte) 0xf0, "LDH");
+		m_opcodes.put((byte) 0xf1, "POP");
+		m_opcodes.put((byte) 0xf2, "LD");
+		m_opcodes.put((byte) 0xf3, "DI");
+		m_opcodes.put((byte) 0xf4, "NOP");
+		m_opcodes.put((byte) 0xf5, "PUSH");
+		m_opcodes.put((byte) 0xf6, "OR");
+		m_opcodes.put((byte) 0xf7, "RST");
+		m_opcodes.put((byte) 0xf8, "LD");
+		m_opcodes.put((byte) 0xf9, "LD");
+		m_opcodes.put((byte) 0xfa, "LD");
+		m_opcodes.put((byte) 0xfb, "EI");
+		m_opcodes.put((byte) 0xfc, "NOP");
+		m_opcodes.put((byte) 0xfd, "NOP");
+		m_opcodes.put((byte) 0xfe, "CP");
+		m_opcodes.put((byte) 0xff, "RST");
 
 		//0x00
 		m_prefix.put((byte) 0x00, "RLC");
@@ -612,9 +612,9 @@ public class Parser {
 		
 	}
 	
-	public String DecodeIns(byte ins)
+	public String DecodeIns(int ins)
 	{
-		return m_opcodes.get(ins);
+		return m_opcodes.get((byte) ins);
 	}
 	
 	public String DecodePrefix(byte ins)

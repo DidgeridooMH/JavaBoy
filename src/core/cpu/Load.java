@@ -219,7 +219,7 @@ public interface Load {
 			break;
 
 		case 0x36:
-			parameters[0] = r_cpu.m_memory.Read(r_cpu.m_SP.get() + 1);
+			parameters[0] = r_cpu.m_memory.Read(r_cpu.m_PC.get() + 1);
 			r_cpu.m_memory.Write(parameters[0], r_cpu.m_HL.get());
 			
 			Utils.PrintInstruciton("LD (HL), d8", ins, r_cpu.m_PC.get(), parameters, 1);
@@ -241,7 +241,7 @@ public interface Load {
 			break;
 
 		case 0x3E:
-			parameters[0] = r_cpu.m_memory.Read(r_cpu.m_SP.get() + 1);
+			parameters[0] = r_cpu.m_memory.Read(r_cpu.m_PC.get() + 1);
 			
 			r_cpu.m_AF.SetHighByte(parameters[0]);
 			
@@ -846,7 +846,7 @@ public interface Load {
 		case (byte) 0xE2:
 			r_cpu.m_memory.Write((byte) r_cpu.m_AF.GetHighByte(), (int) (r_cpu.m_BC.GetLowByte() & 0xFF) | 0xFF00);
 			
-			Utils.PrintInstruciton("LDH (C), A", ins, r_cpu.m_PC.get(), parameters, 2);
+			Utils.PrintInstruciton("LDH (C), A", ins, r_cpu.m_PC.get(), null, 0);
 
 			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
 			
