@@ -126,7 +126,7 @@ public interface Load {
 			
 			Utils.PrintInstruciton("LD A,(DE)", ins, r_cpu.m_PC.get(), parameters, 1);
 
-			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
+			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 1);
 			
 			break;
 			
@@ -885,6 +885,26 @@ public interface Load {
 
 			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
 			
+			break;
+			
+		case (byte) 0xF8:
+			parameters[0] = r_cpu.m_memory.Read(r_cpu.m_PC.get() + 1);
+			
+			r_cpu.m_HL.Set(r_cpu.m_SP.get() + parameters[0]);
+			
+			Utils.PrintInstruciton("LD HL, SP+r8", ins, r_cpu.m_PC.get(), parameters, 1);
+
+			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
+		
+			break;
+		
+		case (byte) 0xF9:
+			r_cpu.m_SP.Set(r_cpu.m_HL.get());
+		
+			Utils.PrintInstruciton("LD SP, HL", ins, r_cpu.m_PC.get(), null, 0);
+	
+			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 1);
+		
 			break;
 
 		case (byte) 0xFA:

@@ -138,6 +138,10 @@ public class CPU
 			ExclusiveOR.XOR(this, ins);
 			break;
 			
+		case "SUB":
+			Subtract.SUB(this, ins);
+			break;
+			
 		case "PREFIX":
 			StepPrefix();
 			break;
@@ -146,8 +150,23 @@ public class CPU
 			Jump.JumpSubroutine(this, ins);
 			break;
 			
+		case "CALL":
+			Jump.Call(this, ins);
+			break;
+			
+		case "PUSH":
+			Stack.Push(this, ins);
+			break;
+			
+		case "POP":
+			Stack.Pop(this, ins);
+			break;
+			
+		case "RLA":
+			
+			
 		default:
-			System.out.println("Unknown opcode: " + 
+			System.err.println("Unknown opcode: " + 
 								decodedIns + " " + 
 								Utils.hex(ins & 0xFF) + 
 								" at " + Utils.hex(m_PC.get()) );
@@ -166,9 +185,13 @@ public class CPU
 		case "BIT":
 			BitTest.BIT(this, instruction);
 			break;
+			
+		case "RL":
+			BitShift.Rotate(this, instruction);
+			break;
 		
 		default:
-			System.out.println("Unknown prefix: " + 
+			System.err.println("Unknown prefix: " + 
 								decodedPrefix + " " + 
 								Utils.hex(instruction & 0xFF) + 
 								" at " + Utils.hex(m_PC.get()));

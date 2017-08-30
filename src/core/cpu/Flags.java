@@ -11,12 +11,12 @@ package core.cpu;
 
 public class Flags
 {
-	final int ZERO = 0x80;
-	final int SIGN = 0x40;
-	final int HALFC = 0x20;
-	final int CARRY = 0x10;
-	final int PARITY = 0x08;
-	final int SUBTRACT = 0x04;
+	static final int ZERO = 0x80;
+	static final int SIGN = 0x40;
+	static final int HALFC = 0x20;
+	static final int CARRY = 0x10;
+	static final int PARITY = 0x08;
+	static final int SUBTRACT = 0x04;
 	
 	private boolean m_Z;
 	private boolean m_S;
@@ -144,5 +144,26 @@ public class Flags
 			else
 				this.setCarry(result > 127 || result < -128);
 		}
+	}
+	
+	public byte GenerateReg()
+	{
+		byte value = 0x0;
+		
+		value = (byte) ((getZero()) ? 0x80 : 0x0);
+		value = (byte) ((getSubtract()) ? (value | 0x40) : value);
+		value = (byte) ((getHalfCarry()) ? (value | 0x20) : value);
+		value = (byte) ((getCarry()) ? (value | 0x10) : value);
+		
+		return value;
+	}
+	
+	public void ByteToFlags(byte in)
+	{
+		setZero((in & 0x80) > 0);
+		setSubtract((in & 0x40) > 0);
+		setHalfCarry((in & 0x20) > 0);
+		setCarry((in & 0x10) > 0);
+		return;
 	}
 }
