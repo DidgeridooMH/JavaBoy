@@ -15,7 +15,7 @@ public interface Utils {
 		return ("$" + Integer.toHexString(0x10000 | num).substring(1));
 	}
 	
-	static void PrintInstruciton(String decodedIns, byte ins, int location, byte parameters[], int paramSize)
+	static void PrintInstruction(String decodedIns, byte ins, int location, byte parameters[], int paramSize)
 	{
 		System.out.print(hex(location));
 		System.out.print(": ");

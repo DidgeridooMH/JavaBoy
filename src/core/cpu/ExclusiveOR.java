@@ -23,7 +23,7 @@ public interface ExclusiveOR {
 			r_cpu.m_flags.setHalfCarry(false);
 			r_cpu.m_flags.setSubtract(false);
 			
-			Utils.PrintInstruciton("XOR B", ins, r_cpu.m_PC.get(), null, 0);
+			Utils.PrintInstruction("XOR B", ins, r_cpu.m_PC.get(), null, 0);
 			
 			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 1);
 			
@@ -36,7 +36,7 @@ public interface ExclusiveOR {
 			r_cpu.m_flags.setHalfCarry(false);
 			r_cpu.m_flags.setSubtract(false);
 			
-			Utils.PrintInstruciton("XOR C", ins, r_cpu.m_PC.get(), null, 0);
+			Utils.PrintInstruction("XOR C", ins, r_cpu.m_PC.get(), null, 0);
 			
 			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 1);
 			
@@ -49,7 +49,7 @@ public interface ExclusiveOR {
 			r_cpu.m_flags.setHalfCarry(false);
 			r_cpu.m_flags.setSubtract(false);
 			
-			Utils.PrintInstruciton("XOR D", ins, r_cpu.m_PC.get(), null, 0);
+			Utils.PrintInstruction("XOR D", ins, r_cpu.m_PC.get(), null, 0);
 			
 			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 1);
 			
@@ -62,7 +62,7 @@ public interface ExclusiveOR {
 			r_cpu.m_flags.setHalfCarry(false);
 			r_cpu.m_flags.setSubtract(false);
 			
-			Utils.PrintInstruciton("XOR E", ins, r_cpu.m_PC.get(), null, 0);
+			Utils.PrintInstruction("XOR E", ins, r_cpu.m_PC.get(), null, 0);
 			
 			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 1);
 			
@@ -75,7 +75,7 @@ public interface ExclusiveOR {
 			r_cpu.m_flags.setHalfCarry(false);
 			r_cpu.m_flags.setSubtract(false);
 			
-			Utils.PrintInstruciton("XOR H", ins, r_cpu.m_PC.get(), null, 0);
+			Utils.PrintInstruction("XOR H", ins, r_cpu.m_PC.get(), null, 0);
 			
 			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 1);
 			
@@ -88,7 +88,7 @@ public interface ExclusiveOR {
 			r_cpu.m_flags.setHalfCarry(false);
 			r_cpu.m_flags.setSubtract(false);
 			
-			Utils.PrintInstruciton("XOR L", ins, r_cpu.m_PC.get(), null, 0);
+			Utils.PrintInstruction("XOR L", ins, r_cpu.m_PC.get(), null, 0);
 			
 			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 1);
 			
@@ -103,7 +103,7 @@ public interface ExclusiveOR {
 			r_cpu.m_flags.setHalfCarry(false);
 			r_cpu.m_flags.setSubtract(false);
 			
-			Utils.PrintInstruciton("XOR (HL)", ins, r_cpu.m_PC.get(), parameter, 1);
+			Utils.PrintInstruction("XOR (HL)", ins, r_cpu.m_PC.get(), parameter, 1);
 			
 			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 1);
 			
@@ -116,7 +116,7 @@ public interface ExclusiveOR {
 			r_cpu.m_flags.setHalfCarry(false);
 			r_cpu.m_flags.setSubtract(false);
 			
-			Utils.PrintInstruciton("XOR A", ins, r_cpu.m_PC.get(), null, 0);
+			Utils.PrintInstruction("XOR A", ins, r_cpu.m_PC.get(), null, 0);
 			
 			r_cpu.m_PC.Set(r_cpu.m_PC.get() + 1);
 			

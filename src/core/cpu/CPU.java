@@ -106,13 +106,7 @@ public class CPU
 	 */
 	
 	public void Execute()
-	{
-		/*
-		 * - Retrieves instruction from memory
-		 * - Translate instruction from an OPCode table
-		 * - Executes correct CPU function
-		 */
-		
+	{	
 		int instruction = m_memory.Read(m_PC.get());
 		String decodedIns = m_parser.DecodeIns(instruction);
 		
@@ -163,7 +157,12 @@ public class CPU
 			break;
 			
 		case "RLA":
+			BitShift.Rotate(this, ins, false);
+			break;
 			
+		case "DEC":
+			Decrement.Dec(this, ins);
+			break;
 			
 		default:
 			System.err.println("Unknown opcode: " + 
@@ -187,7 +186,7 @@ public class CPU
 			break;
 			
 		case "RL":
-			BitShift.Rotate(this, instruction);
+			BitShift.Rotate(this, instruction, true);
 			break;
 		
 		default:
@@ -224,13 +223,13 @@ public class CPU
 	
 	public short Pop16()
 	{
-		byte highByte = 0x0;
-		byte lowByte = 0x0;
+		short highByte = 0x0;
+		short lowByte = 0x0;
 		
-		lowByte = Pop();
+		lowByte = (short) (Pop() & 0xFF);
 		highByte = Pop();
 		
-		return (short) (( (short) highByte << 8) | (short) lowByte);
+		return (short) (((highByte & 0xFFFF) << 8) | (lowByte & 0xFF));
 	}
 	
 }

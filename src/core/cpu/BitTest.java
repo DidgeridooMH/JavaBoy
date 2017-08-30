@@ -107,7 +107,7 @@ public interface BitTest {
 		r_cpu.m_flags.setSubtract(false);
 		r_cpu.m_flags.setHalfCarry(true);
 		
-		Utils.PrintInstruciton("BIT " + testBit + ", " + regName, ins, r_cpu.m_PC.get(), null, 0);
+		Utils.PrintInstruction("BIT " + testBit + ", " + regName, ins, r_cpu.m_PC.get(), null, 0);
 		
 		r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
 		

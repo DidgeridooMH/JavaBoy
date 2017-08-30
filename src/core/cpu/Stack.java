@@ -40,7 +40,7 @@ public interface Stack {
 			break;
 		}
 		
-		Utils.PrintInstruciton("PUSH " + register, ins, r_cpu.m_PC.get(), null, 0);
+		Utils.PrintInstruction("PUSH " + register, ins, r_cpu.m_PC.get(), null, 0);
 		
 		r_cpu.m_PC.Set(r_cpu.m_PC.get() + 1);
 	}
@@ -74,7 +74,7 @@ public interface Stack {
 			break;
 		}
 		
-		Utils.PrintInstruciton("POP " + register, ins, r_cpu.m_PC.get(), null, 0);
+		Utils.PrintInstruction("POP " + register, ins, r_cpu.m_PC.get(), null, 0);
 		
 		r_cpu.m_PC.Set(r_cpu.m_PC.get() + 1);
 	}
