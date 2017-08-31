@@ -36,7 +36,7 @@ public class JavaBoy
 		m_machine = new Machine(m_files[0], m_files[1]);
 		
 		while(m_machine.m_state != 0)
-		{
+		{	
 			m_machine.Execute();
 		}
 	}

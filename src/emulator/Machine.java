@@ -12,6 +12,8 @@
 
 
 package emulator;
+import java.awt.EventQueue;
+
 import core.cpu.CPU;
 
 public class Machine {
@@ -33,6 +35,17 @@ public class Machine {
 	
 	public void Execute()
 	{
+		EventQueue.invokeLater(new Runnable() {
+			
+			@Override
+			public void run()
+			{
+				GUI window = new GUI();
+				window.setVisible(true);
+			}
+			
+		});
+		
 		m_cpu.Execute();
 		
 		if(m_cpu.IsError())
