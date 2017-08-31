@@ -168,6 +168,14 @@ public class CPU
 			Increment.Inc(this, ins);
 			break;
 			
+		case "RET":
+			Jump.Return(this, ins);
+			break;
+			
+		case "CP":
+			Compare.CP(this, ins);
+			break;
+			
 		default:
 			System.err.println("Unknown opcode: " + 
 								decodedIns + " " + 

@@ -6,7 +6,8 @@
  * file path and rom path.
  * 
  * @author Daniel Simpkins
- * @version 0.0.1a
+ * @email <dpsimpkins@gmail.com>
+ * @version 0.0.1a (no releases yet)
  * 
  */
 

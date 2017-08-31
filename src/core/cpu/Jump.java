@@ -109,5 +109,69 @@ public interface Jump {
 		
 		return;
 	}
+
+	static void Return(CPU r_cpu, byte ins)
+	{
+		String condition = "";
+		
+		switch(ins)
+		{
+		case (byte) 0xC0:
+			condition = "NZ";
+			
+			if(!r_cpu.m_flags.getZero())
+				r_cpu.m_PC.Set(r_cpu.Pop16());
+			else
+				r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
+			
+			break;
+			
+		case (byte) 0xC8:
+			condition = "Z";
+		
+			if(r_cpu.m_flags.getZero())
+				r_cpu.m_PC.Set(r_cpu.Pop16());
+			else
+				r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
+			
+			break;
+			
+		case (byte) 0xD0:
+			condition = "NC";
+		
+			if(!r_cpu.m_flags.getCarry())
+				r_cpu.m_PC.Set(r_cpu.Pop16());
+			else
+				r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
+			
+			break;
+			
+		case (byte) 0xD8:
+			condition = "C";
+		
+			if(r_cpu.m_flags.getCarry())
+				r_cpu.m_PC.Set(r_cpu.Pop16());
+			else
+				r_cpu.m_PC.Set(r_cpu.m_PC.get() + 2);
+			
+			break;
+			
+		case (byte) 0xC9:
+			r_cpu.m_PC.Set(r_cpu.Pop16());
+			break;
+			
+		default:
+			System.err.println("Unknown variant of RET: " + 
+								Utils.hex(ins & 0xFF) + 
+								" at " + 
+								Utils.hex(r_cpu.m_PC.get()));
+			r_cpu.m_error = true;
+			return;
+		}
+		
+		Utils.PrintInstruction("RET " + condition, ins, r_cpu.m_PC.get(), null, 0);
+		
+		return;
+	}
 	
 }
