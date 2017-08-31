@@ -13,7 +13,7 @@ public interface BitShift {
 	
 	public static void Rotate(CPU r_cpu, byte ins, boolean isPrefix)
 	{
-		byte highByte = (byte) (ins >> 8);
+		byte highByte = (byte) (ins >> 4);
 		byte lowByte = (byte) (ins & 0xF);
 		byte regByte = (byte) (lowByte & 0x07);
 		boolean fromCarry = highByte > 0;
@@ -101,8 +101,10 @@ public interface BitShift {
 	
 	public static void RotateLeft(Register r_reg, Flags r_flags, boolean highLow, boolean carry, boolean setZero)
 	{
-		byte bit7 = (byte) ((r_reg.get() > 0x80) ? 1 : 0);
-		byte value = (byte) (r_reg.get() << 1);
+		byte regValue = (byte) ((highLow) ? r_reg.GetHighByte() : r_reg.GetLowByte());
+		
+		byte bit7 = (byte) (((regValue & 0x80) > 0) ? 1 : 0);
+		byte value = (byte) (regValue << 1);
 		
 		if(carry)
 		{
@@ -127,13 +129,18 @@ public interface BitShift {
 		if(setZero)
 			r_flags.setZero(value == 0);
 		
-		r_reg.Set(value);
+		if(highLow)
+			r_reg.SetHighByte(value);
+		else
+			r_reg.SetLowByte(value);
 	}
 
 	public static void RotateRight(Register r_reg, Flags r_flags, boolean highLow, boolean carry, boolean setZero)
 	{
-		byte bit0 = (byte) (((r_reg.get() & 0x01) > 0x0) ? 1 : 0);
-		byte value = (byte) (r_reg.get() >> 1);
+		byte regValue = (byte) ((highLow) ? r_reg.GetHighByte() : r_reg.GetLowByte());
+		
+		byte bit0 = (byte) (((regValue & 0x01) > 0x0) ? 1 : 0);
+		byte value = (byte) (regValue >> 1);
 		
 		if(carry)
 		{
@@ -158,6 +165,9 @@ public interface BitShift {
 		if(setZero)
 			r_flags.setZero(value == 0);
 			
-		r_reg.Set(value);
+		if(highLow)
+			r_reg.SetHighByte(value);
+		else
+			r_reg.SetLowByte(value);
 	}
 }

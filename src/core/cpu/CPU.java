@@ -164,6 +164,10 @@ public class CPU
 			Decrement.Dec(this, ins);
 			break;
 			
+		case "INC":
+			Increment.Inc(this, ins);
+			break;
+			
 		default:
 			System.err.println("Unknown opcode: " + 
 								decodedIns + " " + 
