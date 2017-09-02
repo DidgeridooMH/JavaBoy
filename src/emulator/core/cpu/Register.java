@@ -24,60 +24,53 @@
  * 
  */
 
-package emulator;
+package emulator.core.cpu;
 
 /**
- * Collection of commonly used conversions
- * and print statements.
+ * Stores a 16-bit combined register value.
  * 
  * @author Daniel Simpkins
  *
  */
-public interface Utils {
+public class Register
+{
+	int m_value;
 
-	/**
-	 * Converts a decimal value into printable
-	 * hex value.
-	 * 
-	 * @param num Decimal value number.
-	 * @return Printable hex value.
-	 */
-	static String hex(int num) {	
-		return ("$" + 
-				Integer.
-				toHexString(0x10000 | num).
-				substring(1)
-		);
+	public Register() {
+		m_value = 0;
 	}
 	
-	/**
-	 * Prints a formatted readout of the
-	 * executed instruction.
-	 * 
-	 * @param decodedIns Decoded opcode into instruction.
-	 * @param ins Hex value of the opcode.
-	 * @param location Location in memory of the executed instruciton
-	 * @param parameters All parameters the instruction used.
-	 * @param paramSize Number parameters the instruction used.
-	 */
-	static void PrintInstruction(String decodedIns, 
-									byte ins, 
-									int location, 
-									byte parameters[], 
-									int paramSize) {
+	public Register(int defValue) {
+		m_value = defValue;
+	}
+	
+	public void set(int in) {
+		m_value = in;
+	}
+	
+	public int get() {
+		return m_value;
+	}
+	
+	public int getHighByte() {
+		int out = (m_value >> 8) & 0xFF;
+		return out;
+	}
+	
+	public int getLowByte() {
+		int out = (m_value & 0xFF);
+		return out;
+	}
+	
+	public void SetHighByte(byte in) {
+		int lowByte = this.getLowByte();
 		
-		System.out.print(hex(location) +
-							": " +
-							decodedIns + 
-							"(" + 
-							hex(ins & 0xFF) + 
-							") "
-		);
+		this.set(((int) (in & 0xff) << 8) | lowByte);
+	}
+	
+	public void SetLowByte(byte in) {
+		int highByte = this.getHighByte();
 		
-		for(int i = 0; i < paramSize; i++) {
-			System.out.print(hex(parameters[i] & 0xFF) + " ");
-		}
-		
-		System.out.print("\n");
+		this.set((highByte << 8) | (int) (in & 0xff));
 	}
 }
