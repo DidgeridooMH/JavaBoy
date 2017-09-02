@@ -26,7 +26,19 @@
 
 package emulator;
 
+import java.awt.image.BufferedImage;
+import java.awt.Image;
+import java.awt.Toolkit;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /**
  * Creates a window for the program.
@@ -45,8 +57,16 @@ public class GUI extends JFrame {
 	}
 	
 	private void initialize()
-	{
+	{	
 		add( new Screen() );
+		try {
+		  ClassLoader loader = this.getClass().getClassLoader();
+		  ImageIcon programIcon = new ImageIcon(loader.getResource("icon_256.png"));
+		  setIconImage(programIcon.getImage());
+		} catch (Exception e) {
+		    e.printStackTrace();
+		   System.exit(2);
+		}
 		setTitle("JavaBoy - Gameboy Emulator");
 		setSize(160, 144);
 		setLocationRelativeTo(null);
