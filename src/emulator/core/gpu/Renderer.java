@@ -24,42 +24,27 @@
  * 
  */
 
-package emulator;
-
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-
-import javax.swing.JPanel;
-
-import emulator.core.memory.Memory;
+package emulator.core.gpu;
 
 /**
- * Draws to the window.
+ * Rendering window thread.
  * 
  * @author Daniel Simpkins
  *
  */
-public class Screen extends JPanel {
+public class Renderer extends Thread {
 	
-	/**
-	 * Sets a reference to the systems
-	 * memory.
-	 * 
-	 * @param memory Reference to CPU's memory
-	 */
-	public void setMemory(Memory memory) {
-		
-	}
-	
-	private void draw(Graphics gfx) {
-		Graphics2D gfx2d = (Graphics2D) gfx;
-		gfx2d.drawLine(0, 0, 0, 0);
+	GUI gfx = null;
+	Screen surface = null;
+
+	public Renderer(Screen display) {
+			surface = display;
 	}
 	
 	@Override
-	public void paintComponent(Graphics gfx) {
-		super.paintComponent(gfx);
-		draw(gfx);
+	public void run() {
+		gfx = new GUI(surface);
+		gfx.setVisible(true);
 	}
 	
 }

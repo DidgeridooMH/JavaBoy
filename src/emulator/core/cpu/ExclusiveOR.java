@@ -44,6 +44,7 @@ public interface ExclusiveOR {
 	 * @param cpu Reference to CPU object.
 	 * @param instruction Instruction opcode.
 	 */
+	@SuppressWarnings("static-access")
 	static void exclusiveOR(CPU cpu, byte instruction) {
 		byte parameter[] = { 0x0 };
 		

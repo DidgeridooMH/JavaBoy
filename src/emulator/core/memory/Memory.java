@@ -30,6 +30,9 @@ import java.io.IOException;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import emulator.core.gpu.GPU;
+
 import java.nio.file.Files;
 
 /**
@@ -41,8 +44,12 @@ import java.nio.file.Files;
 public class Memory {
 
 	private byte biosBank[];
+	
 	private byte romBank[];
+	
 	private byte internalMemory[];
+	
+	private GPU gpu;
 
 	/**
 	 * Loads the bios into first bank, then loads
@@ -87,7 +94,15 @@ public class Memory {
 	 * @param in Byte to write.
 	 * @param location Location in memory to write the byte.
 	 */
-	public void Write(byte in, int location) {
+	public synchronized void Write(byte in, int location) {
+		/*switch(location) {
+			case 0xFF40:
+				while(gpu == null) {
+					// Do nothing
+				}
+				gpu.setLCDC(in);
+				break;
+		}*/
 		internalMemory[(location & 0xFFFF)] = in;
 	}
 	
@@ -97,7 +112,11 @@ public class Memory {
 	 * @param location Location to read from.
 	 * @return Byte from location in memory.
 	 */
-	public byte Read(int location) {
+	public synchronized byte Read(int location) {
 		return internalMemory[(location & 0xFFFF)];
+	}
+	
+	public void setGPU(GPU gpu) {
+		this.gpu = gpu;
 	}
 }

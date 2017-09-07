@@ -47,7 +47,7 @@ public interface Decrement {
 	public static void decrement(CPU cpu, byte instruction) {
 		int initial = 0;
 		String register = "";
-		
+	 
 		switch(instruction) {
 			case 0x05:
 				initial = cpu.BC.getHighByte();

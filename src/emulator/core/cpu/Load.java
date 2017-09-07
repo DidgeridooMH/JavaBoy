@@ -255,9 +255,8 @@ public interface Load {
 				
 				break;			
 			case 0x2E:
-				parameters[0] = cpu.memory.Read(cpu.HL.get());
-				cpu.HL.m_value++;
-				cpu.AF.SetHighByte(parameters[0]);
+				parameters[0] = cpu.memory.Read(cpu.PC.get()+1);
+				cpu.HL.SetLowByte(parameters[0]);
 				
 				Utils.PrintInstruction("LD L, d8", 
 										instruction, 
@@ -1234,6 +1233,6 @@ public interface Load {
 				
 				cpu.error = true;
 				return;		
-		}
+		}	
 	}
 }

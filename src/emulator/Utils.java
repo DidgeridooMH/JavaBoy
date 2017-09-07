@@ -80,4 +80,15 @@ public interface Utils {
 		
 		System.out.print("\n");
 	}
+	
+	/**
+	 * Gives the state of a bit numbering from 0-7
+	 * 
+	 * @param in
+	 * @param bitNum
+	 * @return State of bitNum in in.
+	 */
+	static boolean getBit(byte in, int bitNum) {
+		return (((in >> bitNum) & 0x01) > 0);
+	}
 }

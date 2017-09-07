@@ -26,9 +26,9 @@
 
 package emulator;
 
-import java.awt.EventQueue;
-
 import emulator.core.cpu.CPU;
+import emulator.core.gpu.GPU;
+import emulator.core.memory.Memory;
 
 /**
  * Handles interactions between the emulation
@@ -39,7 +39,10 @@ import emulator.core.cpu.CPU;
  */
 public class Machine {
 	private CPU cpu;
-	private Renderer windowT;
+	
+	private GPU gpu;
+	
+	private Memory memory;
 	
 	/**
 	 * 0 - Machine is off.
@@ -57,11 +60,16 @@ public class Machine {
 	 */
 	public Machine(String bios, String rom) {
 		System.out.println("Machine Initialized!");
-		cpu = new CPU(bios, rom);
 		
-		windowT = new Renderer();
+		memory = new Memory(bios, rom);
+
+		gpu = new GPU(memory);
 		
-		EventQueue.invokeLater(windowT);
+		memory.setGPU(gpu);
+		
+		cpu = new CPU(memory);
+		
+		gpu.start();
 	}
 	
 	
@@ -74,6 +82,7 @@ public class Machine {
 		
 		if(cpu.isError()) {
 			state = 0;
+			gpu.stop();
 		}
 	}
 	

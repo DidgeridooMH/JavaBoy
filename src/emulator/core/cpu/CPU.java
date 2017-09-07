@@ -67,7 +67,7 @@ public class CPU
 	 * @param biosFile Path to the BIOS binary.
 	 * @param romName Path to the ROM dump.
 	 */
-	public CPU(String biosFile, String romName) {
+	public CPU(Memory memory) {
 		/*
 		 * Initialize 16-bit registers
 		 * IO registers, and memory.
@@ -79,7 +79,7 @@ public class CPU
 		SP = new Register(0xFFFE);
 		PC = new Register(0x0000);
 		
-		memory = new Memory(biosFile, romName);
+		this.memory = memory;
 		
 		/* Initializes hardware IO registers */
 		memory.Write((byte) 0x00, 0xFF05);
