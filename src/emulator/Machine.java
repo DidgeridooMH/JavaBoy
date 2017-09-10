@@ -76,8 +76,7 @@ public class Machine {
 	/**
 	 * Proceeds one machine cycle.
 	 */
-	public void execute()
-	{
+	public void execute() {
 		cpu.execute();
 		
 		if(cpu.isError()) {

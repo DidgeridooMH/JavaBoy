@@ -106,6 +106,7 @@ public class CPU
 		memory.Write((byte) 0x91, 0xFF40);
 		memory.Write((byte) 0x00, 0xFF42);
 		memory.Write((byte) 0x00, 0xFF43);
+		memory.Write((byte) 0x90, 0xFF44);
 		memory.Write((byte) 0x00, 0xFF45);
 		memory.Write((byte) 0xFC, 0xFF47);
 		memory.Write((byte) 0xFF, 0xFF48);

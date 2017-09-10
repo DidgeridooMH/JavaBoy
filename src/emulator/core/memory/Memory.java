@@ -95,14 +95,10 @@ public class Memory {
 	 * @param location Location in memory to write the byte.
 	 */
 	public synchronized void Write(byte in, int location) {
-		/*switch(location) {
-			case 0xFF40:
-				while(gpu == null) {
-					// Do nothing
-				}
-				gpu.setLCDC(in);
-				break;
-		}*/
+		if(location <= 0xFF4F && location >= 0xFF40) {
+			gpu.writeRegister(in, location);
+		}
+		
 		internalMemory[(location & 0xFFFF)] = in;
 	}
 	

@@ -43,7 +43,7 @@ public class GPU {
 	
 	private Screen surface = null;
 	
-	private Memory memory;
+	private Memory memory = null;
 	
 	private byte lcdc;
 	
@@ -74,6 +74,7 @@ public class GPU {
 		this.memory = memory;
 		surface = new Screen();
 		graphicsT = new Renderer(surface);
+		graphicsT.setName("GUI Render");
 		
 		lcdc = memory.Read(0xFF40);
 		stat = memory.Read(0xFF41);

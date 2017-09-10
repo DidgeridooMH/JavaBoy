@@ -107,11 +107,13 @@ public interface Compare {
 							Flags.SUBTRACT
 		);
 		
-		Utils.PrintInstruction("CP " + reg, instruction, 
-								cpu.PC.get(), null, 0
+		Utils.PrintInstruction("CP " + reg, 
+								instruction, 
+								cpu.PC.get(), 
+								null, 0
 		);
 		
-		if(instruction == 0xFE) {
+		if(instruction == (byte) 0xFE) {
 			cpu.PC.set(cpu.PC.get() + 2);
 		} else {
 			cpu.PC.set(cpu.PC.get() + 1);
