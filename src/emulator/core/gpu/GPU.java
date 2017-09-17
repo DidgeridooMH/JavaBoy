@@ -45,12 +45,7 @@ public class GPU {
 	
 	private Memory memory = null;
 	
-	private byte lcdc;
-	
 	private byte stat;
-	
-	private byte scrollY;
-	private byte scrollX;
 	
 	private byte coordY;
 	
@@ -73,13 +68,14 @@ public class GPU {
 	public GPU(Memory memory) {
 		this.memory = memory;
 		surface = new Screen();
+		surface.setMemory(memory);
 		graphicsT = new Renderer(surface);
 		graphicsT.setName("GUI Render");
 		
-		lcdc = memory.Read(0xFF40);
+		surface.lcdc = memory.Read(0xFF40);
 		stat = memory.Read(0xFF41);
-		scrollY = memory.Read(0xFF42);
-		scrollX = memory.Read(0xFF43);
+		surface.scrollY = memory.Read(0xFF42);
+		surface.scrollX = memory.Read(0xFF43);
 		coordY = memory.Read(0xFF44);
 		lyCompare = memory.Read(0xFF45);
 		windowY = memory.Read(0xFF4A);
@@ -107,6 +103,10 @@ public class GPU {
 		}
 	}
 	
+	public boolean isVBlank() {
+		return surface.verticalBlank;
+	}
+	
 	/**
 	 * Retrieves the value of a hardware register
 	 * at a specified address. Returns a 0xFF if there
@@ -118,13 +118,13 @@ public class GPU {
 	public byte readRegister(int address) {
 		switch(address) {
 			case 0xFF40:
-				return lcdc;
+				return (byte) surface.lcdc;
 			case 0xFF41:
 				return stat;
 			case 0xFF42:
-				return scrollY;
+				return (byte) surface.scrollY;
 			case 0xFF43:
-				return scrollX;
+				return (byte) surface.scrollX;
 			case 0xFF44:
 				return coordY;
 			case 0xFF45:
@@ -157,16 +157,16 @@ public class GPU {
 	public void writeRegister(byte in, int address) {
 		switch(address) {
 			case 0xFF40:
-				lcdc = in;
+				surface.lcdc = in;
 				break;
 			case 0xFF41:
 				stat = in;
 				break;
 			case 0xFF42:
-				scrollY = in;
+				surface.scrollY = in;
 				break;
 			case 0xFF43:
-				scrollX = in;
+				surface.scrollX = in;
 				break;
 			case 0xFF44:
 				coordY = in;

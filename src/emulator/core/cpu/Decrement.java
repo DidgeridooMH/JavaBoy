@@ -52,7 +52,7 @@ public interface Decrement {
 			case 0x05:
 				initial = cpu.BC.getHighByte();
 				
-				cpu.BC.SetHighByte((byte) (initial - 1));
+				cpu.BC.setHighByte((byte) (initial - 1));
 				cpu.flags.setFlags(initial, 
 									cpu.BC.getHighByte(), 
 									false, 
@@ -64,7 +64,7 @@ public interface Decrement {
 				break;
 			case 0x0D:
 				initial = (byte) cpu.BC.getLowByte();
-				cpu.BC.SetLowByte((byte) (initial - 1));
+				cpu.BC.setLowByte((byte) (initial - 1));
 				cpu.flags.setFlags(initial, 
 									cpu.BC.getLowByte(), 
 									false, 
@@ -76,7 +76,7 @@ public interface Decrement {
 				break;
 			case 0x15:
 				initial = (byte) cpu.DE.getHighByte();
-				cpu.DE.SetHighByte((byte) (initial - 1));
+				cpu.DE.setHighByte((byte) (initial - 1));
 				cpu.flags.setFlags(initial, 
 									cpu.DE.getHighByte(), 
 									false, 
@@ -88,7 +88,7 @@ public interface Decrement {
 				break;
 			case 0x1D:
 				initial = (byte) cpu.DE.getLowByte();
-				cpu.DE.SetLowByte((byte) (initial - 1));
+				cpu.DE.setLowByte((byte) (initial - 1));
 				cpu.flags.setFlags(initial, 
 									cpu.DE.getLowByte(), 
 									false, 
@@ -100,7 +100,7 @@ public interface Decrement {
 				break;
 			case 0x25:
 				initial = (byte) cpu.HL.getHighByte();
-				cpu.HL.SetHighByte((byte) (initial - 1));
+				cpu.HL.setHighByte((byte) (initial - 1));
 				cpu.flags.setFlags(initial, 
 									cpu.HL.getHighByte(), 
 									false, 
@@ -112,7 +112,7 @@ public interface Decrement {
 				break;
 			case 0x2D:
 				initial = (byte) cpu.HL.getLowByte();
-				cpu.HL.SetLowByte((byte) (initial - 1));
+				cpu.HL.setLowByte((byte) (initial - 1));
 				cpu.flags.setFlags(initial, 
 									cpu.HL.getLowByte(), 
 									false, 
@@ -136,7 +136,7 @@ public interface Decrement {
 				break;
 			case 0x3D:
 				initial = (byte) cpu.AF.getHighByte();
-				cpu.AF.SetHighByte((byte) (initial - 1));
+				cpu.AF.setHighByte((byte) (initial - 1));
 				cpu.flags.setFlags(initial, 
 									cpu.AF.getHighByte(), 
 									false, 

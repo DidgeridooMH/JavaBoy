@@ -112,7 +112,7 @@ public interface Subtract {
 								null, 0
 		);
 		
-		cpu.AF.SetHighByte((byte) (cpu.AF.getHighByte() - value));
+		cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() - value));
 		cpu.flags.setFlags(initial, 
 							cpu.AF.getHighByte(), 
 							false, 

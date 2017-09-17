@@ -26,8 +26,9 @@
 
 package emulator.core.memory;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -48,6 +49,8 @@ public class Memory {
 	private byte romBank[];
 	
 	private byte internalMemory[];
+	
+	public boolean verticalBlank = true;
 	
 	private GPU gpu;
 
@@ -114,5 +117,23 @@ public class Memory {
 	
 	public void setGPU(GPU gpu) {
 		this.gpu = gpu;
+	}
+
+	/**
+	 * Dumps the entire internal memory into a binary
+	 * file.
+	 * 
+	 * @param filename Name of the file to write to.
+	 */
+	public boolean dump(String filename) {
+		try {
+			FileOutputStream out = new FileOutputStream(filename);
+			out.write(internalMemory);
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 }

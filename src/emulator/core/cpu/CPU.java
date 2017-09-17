@@ -26,6 +26,8 @@
 
 package emulator.core.cpu;
 
+import java.util.concurrent.TimeUnit;
+
 import emulator.Utils;
 
 import emulator.core.memory.Memory;
@@ -140,6 +142,10 @@ public class CPU
 	public void execute() {	
 		int instruction = memory.Read(PC.get());
 		String decodedIns = parser.decodeIns(instruction);
+
+		if(PC.get() == 0x85) {
+			int i = 0;
+		}
 		
 		step((byte) instruction, decodedIns);
 	}
@@ -196,6 +202,14 @@ public class CPU
 				break;
 			case "CP":
 				Compare.compare(this, ins);
+				break;
+			case "ADD":
+				Addition.addition(this, ins);
+				break;
+			case "NOP":
+				// No Operation
+				memory.dump("vram_dump.bin");
+				PC.set(PC.get() + 1);
 				break;
 			default:
 				System.err.println("Unknown opcode: " + 

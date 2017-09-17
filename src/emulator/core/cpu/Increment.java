@@ -52,7 +52,7 @@ public interface Increment {
 			case 0x04:
 				initial = cpu.BC.getHighByte();
 				
-				cpu.BC.SetHighByte((byte) (initial + 1));
+				cpu.BC.setHighByte((byte) (initial + 1));
 				cpu.flags.setFlags(initial, cpu.BC.getHighByte(), false, Flags.ZERO | Flags.HALFC);
 				
 				reg = "B";
@@ -60,7 +60,7 @@ public interface Increment {
 				break;
 			case 0x0C:
 				initial = (byte) cpu.BC.getLowByte();
-				cpu.BC.SetLowByte((byte) (initial + 1));
+				cpu.BC.setLowByte((byte) (initial + 1));
 				cpu.flags.setFlags(initial, cpu.BC.getLowByte(), false, Flags.ZERO | Flags.HALFC);
 				
 				reg = "C";
@@ -68,7 +68,7 @@ public interface Increment {
 				break;
 			case 0x14:
 				initial = (byte) cpu.DE.getHighByte();
-				cpu.DE.SetHighByte((byte) (initial + 1));
+				cpu.DE.setHighByte((byte) (initial + 1));
 				cpu.flags.setFlags(initial, cpu.DE.getHighByte(), false, Flags.ZERO | Flags.HALFC);
 				
 				reg = "D";
@@ -76,7 +76,7 @@ public interface Increment {
 				break;
 			case 0x1C:
 				initial = (byte) cpu.DE.getLowByte();
-				cpu.DE.SetLowByte((byte) (initial + 1));
+				cpu.DE.setLowByte((byte) (initial + 1));
 				cpu.flags.setFlags(initial, cpu.DE.getLowByte(), false, Flags.ZERO | Flags.HALFC);
 				
 				reg = "E";
@@ -84,7 +84,7 @@ public interface Increment {
 				break;
 			case 0x24:
 				initial = (byte) cpu.HL.getHighByte();
-				cpu.HL.SetHighByte((byte) (initial + 1));
+				cpu.HL.setHighByte((byte) (initial + 1));
 				cpu.flags.setFlags(initial, cpu.HL.getHighByte(), false, Flags.ZERO | Flags.HALFC);
 				
 				reg = "H";
@@ -92,7 +92,7 @@ public interface Increment {
 				break;
 			case 0x2C:
 				initial = (byte) cpu.HL.getLowByte();
-				cpu.HL.SetLowByte((byte) (initial + 1));
+				cpu.HL.setLowByte((byte) (initial + 1));
 				cpu.flags.setFlags(initial, cpu.HL.getLowByte(), false, Flags.ZERO | Flags.HALFC);
 				
 				reg = "L";
@@ -108,7 +108,7 @@ public interface Increment {
 				break;
 			case 0x3C:
 				initial = (byte) cpu.AF.getHighByte();
-				cpu.AF.SetHighByte((byte) (initial + 1));
+				cpu.AF.setHighByte((byte) (initial + 1));
 				cpu.flags.setFlags(initial, cpu.AF.getHighByte(), false, Flags.ZERO | Flags.HALFC);
 				
 				reg = "A";

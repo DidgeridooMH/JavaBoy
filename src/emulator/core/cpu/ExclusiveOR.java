@@ -50,7 +50,7 @@ public interface ExclusiveOR {
 		
 		switch(instruction) {
 			case (byte) 0xA8:
-				cpu.AF.SetHighByte((byte) (cpu.AF.getHighByte() ^ cpu.BC.getHighByte()));
+				cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() ^ cpu.BC.getHighByte()));
 				cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, cpu.flags.ZERO);
 				cpu.flags.setCarry(false);
 				cpu.flags.setHalfCarry(false);
@@ -62,7 +62,7 @@ public interface ExclusiveOR {
 				
 				break;
 			case (byte) 0xA9:
-				cpu.AF.SetHighByte((byte) (cpu.AF.getHighByte() ^ cpu.BC.getLowByte()));
+				cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() ^ cpu.BC.getLowByte()));
 				cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, cpu.flags.ZERO);
 				cpu.flags.setCarry(false);
 				cpu.flags.setHalfCarry(false);
@@ -74,7 +74,7 @@ public interface ExclusiveOR {
 				
 				break;
 			case (byte) 0xAA:
-				cpu.AF.SetHighByte((byte) (cpu.AF.getHighByte() ^ cpu.DE.getHighByte()));
+				cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() ^ cpu.DE.getHighByte()));
 				cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, cpu.flags.ZERO);
 				cpu.flags.setCarry(false);
 				cpu.flags.setHalfCarry(false);
@@ -86,7 +86,7 @@ public interface ExclusiveOR {
 				
 				break;
 			case (byte) 0xAB:
-				cpu.AF.SetHighByte((byte) (cpu.AF.getHighByte() ^ cpu.DE.getLowByte()));
+				cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() ^ cpu.DE.getLowByte()));
 				cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, cpu.flags.ZERO);
 				cpu.flags.setCarry(false);
 				cpu.flags.setHalfCarry(false);
@@ -98,7 +98,7 @@ public interface ExclusiveOR {
 				
 				break;
 			case (byte) 0xAC:
-				cpu.AF.SetHighByte((byte) (cpu.AF.getHighByte() ^ cpu.HL.getHighByte()));
+				cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() ^ cpu.HL.getHighByte()));
 				cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, cpu.flags.ZERO);
 				cpu.flags.setCarry(false);
 				cpu.flags.setHalfCarry(false);
@@ -110,7 +110,7 @@ public interface ExclusiveOR {
 				
 				break;
 			case (byte) 0xAD:
-				cpu.AF.SetHighByte((byte) (cpu.AF.getHighByte() ^ cpu.HL.getLowByte()));
+				cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() ^ cpu.HL.getLowByte()));
 				cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, cpu.flags.ZERO);
 				cpu.flags.setCarry(false);
 				cpu.flags.setHalfCarry(false);
@@ -124,7 +124,7 @@ public interface ExclusiveOR {
 			case (byte) 0xAE:
 				parameter[0] = cpu.memory.Read(cpu.HL.get());
 				
-				cpu.AF.SetHighByte((byte) (cpu.AF.getHighByte() ^ parameter[0]));
+				cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() ^ parameter[0]));
 				cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, cpu.flags.ZERO);
 				cpu.flags.setCarry(false);
 				cpu.flags.setHalfCarry(false);
@@ -136,7 +136,7 @@ public interface ExclusiveOR {
 				
 				break;
 			case (byte) 0xAF:
-				cpu.AF.SetHighByte((byte) (cpu.AF.getHighByte() ^ cpu.AF.getHighByte()));
+				cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() ^ cpu.AF.getHighByte()));
 				cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, cpu.flags.ZERO);
 				cpu.flags.setCarry(false);
 				cpu.flags.setHalfCarry(false);

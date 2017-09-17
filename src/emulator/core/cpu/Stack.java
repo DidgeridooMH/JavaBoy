@@ -111,7 +111,7 @@ public interface Stack {
 				break;
 			case (byte) 0xF1:
 				cpu.flags.byteToFlags(cpu.pop());
-				cpu.AF.SetHighByte(cpu.pop());
+				cpu.AF.setHighByte(cpu.pop());
 				register = "AF";
 				break;
 			default:

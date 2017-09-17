@@ -203,9 +203,9 @@ public interface BitShift {
 		}
 		
 		if(highLow) {
-			register.SetHighByte(value);
+			register.setHighByte(value);
 		} else {
-			register.SetLowByte(value);
+			register.setLowByte(value);
 		}
 	}
 
@@ -257,9 +257,9 @@ public interface BitShift {
 		}
 		
 		if(highLow) {
-			register.SetHighByte(value);
+			register.setHighByte(value);
 		} else {
-			register.SetLowByte(value);
+			register.setLowByte(value);
 		}
 	}
 }

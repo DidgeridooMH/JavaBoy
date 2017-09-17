@@ -53,8 +53,8 @@ public interface Load {
 				parameters[0] = cpu.memory.Read(cpu.PC.get()+1);
 				parameters[1] = cpu.memory.Read(cpu.PC.get()+2);
 				
-				cpu.BC.SetLowByte(parameters[0]);
-				cpu.BC.SetHighByte(parameters[1]);
+				cpu.BC.setLowByte(parameters[0]);
+				cpu.BC.setHighByte(parameters[1]);
 				Utils.PrintInstruction("LD BC, d16", 
 										instruction, 
 										cpu.PC.get(), 
@@ -77,7 +77,7 @@ public interface Load {
 			case 0x06:
 				parameters[0] = cpu.memory.Read(cpu.PC.get()+1);
 				
-				cpu.BC.SetHighByte(parameters[0]);
+				cpu.BC.setHighByte(parameters[0]);
 				
 				Utils.PrintInstruction("LD B, d8", 
 										instruction, 
@@ -109,7 +109,7 @@ public interface Load {
 			case 0x0A:
 				parameters[0] = cpu.memory.Read(cpu.BC.get());
 				
-				cpu.AF.SetHighByte(parameters[0]);
+				cpu.AF.setHighByte(parameters[0]);
 	
 				Utils.PrintInstruction("LD A, (BC)", 
 										instruction, 
@@ -123,7 +123,7 @@ public interface Load {
 			case 0x0E:
 				parameters[0] = cpu.memory.Read(cpu.PC.get() + 1);
 				
-				cpu.BC.SetLowByte(parameters[0]);
+				cpu.BC.setLowByte(parameters[0]);
 	
 				Utils.PrintInstruction("LD C, d8", 
 										instruction, 
@@ -137,8 +137,8 @@ public interface Load {
 				parameters[0] = cpu.memory.Read(cpu.PC.get() + 1);
 				parameters[1] = cpu.memory.Read(cpu.PC.get() + 2);
 	
-				cpu.DE.SetLowByte(parameters[0]);
-				cpu.DE.SetHighByte(parameters[1]);
+				cpu.DE.setLowByte(parameters[0]);
+				cpu.DE.setHighByte(parameters[1]);
 				Utils.PrintInstruction("LD DE, d16", 
 										instruction, 
 										cpu.PC.get(), 
@@ -162,7 +162,7 @@ public interface Load {
 			case 0x16:
 				parameters[0] = cpu.memory.Read(cpu.PC.get() + 1);
 				
-				cpu.DE.SetHighByte(parameters[0]);
+				cpu.DE.setHighByte(parameters[0]);
 				
 				Utils.PrintInstruction("LD D,d8", 
 										instruction, 
@@ -174,7 +174,7 @@ public interface Load {
 				
 				break;			case 0x1A:
 				parameters[0] = cpu.memory.Read(cpu.DE.get());
-				cpu.AF.SetHighByte(parameters[0]);
+				cpu.AF.setHighByte(parameters[0]);
 				
 				Utils.PrintInstruction("LD A,(DE)", 
 										instruction, 
@@ -187,7 +187,7 @@ public interface Load {
 				break;			
 			case 0x1E:
 				parameters[0] = cpu.memory.Read(cpu.PC.get() + 1);
-				cpu.DE.SetLowByte(parameters[0]);
+				cpu.DE.setLowByte(parameters[0]);
 				
 				Utils.PrintInstruction("LD E, d8", 
 										instruction, 
@@ -202,8 +202,8 @@ public interface Load {
 				parameters[0] = cpu.memory.Read(cpu.PC.get() + 1);
 				parameters[1] = cpu.memory.Read(cpu.PC.get() + 2);
 				
-				cpu.HL.SetHighByte(parameters[1]);
-				cpu.HL.SetLowByte(parameters[0]);
+				cpu.HL.setHighByte(parameters[1]);
+				cpu.HL.setLowByte(parameters[0]);
 				
 				Utils.PrintInstruction("LD HL, d16", 
 										instruction, 
@@ -229,7 +229,7 @@ public interface Load {
 				break;			
 			case 0x26:
 				parameters[0] = cpu.memory.Read(cpu.PC.get() + 1);
-				cpu.HL.SetHighByte(parameters[0]);
+				cpu.HL.setHighByte(parameters[0]);
 				
 				Utils.PrintInstruction("LD H, d8", 
 										instruction, 
@@ -243,7 +243,7 @@ public interface Load {
 			case 0x2A:
 				parameters[0] = cpu.memory.Read(cpu.HL.get());
 				cpu.HL.m_value++;
-				cpu.AF.SetHighByte(parameters[0]);
+				cpu.AF.setHighByte(parameters[0]);
 				
 				Utils.PrintInstruction("LD A, (HL+)", 
 										instruction, 
@@ -256,7 +256,7 @@ public interface Load {
 				break;			
 			case 0x2E:
 				parameters[0] = cpu.memory.Read(cpu.PC.get()+1);
-				cpu.HL.SetLowByte(parameters[0]);
+				cpu.HL.setLowByte(parameters[0]);
 				
 				Utils.PrintInstruction("LD L, d8", 
 										instruction, 
@@ -271,8 +271,8 @@ public interface Load {
 				parameters[0] = cpu.memory.Read(cpu.PC.get() + 1);
 				parameters[1] = cpu.memory.Read(cpu.PC.get() + 2);
 				
-				cpu.SP.SetHighByte(parameters[1]);
-				cpu.SP.SetLowByte(parameters[0]);
+				cpu.SP.setHighByte(parameters[1]);
+				cpu.SP.setLowByte(parameters[0]);
 				
 				Utils.PrintInstruction("LD SP, d16", 
 										instruction, 
@@ -310,7 +310,7 @@ public interface Load {
 				break;	
 			case 0x3A:
 				parameters[0] = cpu.memory.Read(cpu.HL.get());
-				cpu.AF.SetHighByte(parameters[0]);
+				cpu.AF.setHighByte(parameters[0]);
 				
 				cpu.HL.m_value--;
 				
@@ -326,7 +326,7 @@ public interface Load {
 			case 0x3E:
 				parameters[0] = cpu.memory.Read(cpu.PC.get() + 1);
 				
-				cpu.AF.SetHighByte(parameters[0]);
+				cpu.AF.setHighByte(parameters[0]);
 				
 				Utils.PrintInstruction("LD A, d8",
 										instruction, 
@@ -338,7 +338,7 @@ public interface Load {
 				
 				break;				
 			case 0x40:
-				cpu.BC.SetHighByte((byte) cpu.BC.getHighByte());
+				cpu.BC.setHighByte((byte) cpu.BC.getHighByte());
 				
 				Utils.PrintInstruction("LD B, B",
 										instruction, 
@@ -350,7 +350,7 @@ public interface Load {
 				
 				break;	
 			case 0x41:
-				cpu.BC.SetHighByte((byte) cpu.BC.getLowByte());
+				cpu.BC.setHighByte((byte) cpu.BC.getLowByte());
 				
 				Utils.PrintInstruction("LD B, C",
 										instruction, 
@@ -362,7 +362,7 @@ public interface Load {
 				
 				break;	
 			case 0x42:
-				cpu.BC.SetHighByte((byte) cpu.DE.getHighByte());
+				cpu.BC.setHighByte((byte) cpu.DE.getHighByte());
 				
 				Utils.PrintInstruction("LD B, D",
 										instruction, 
@@ -374,7 +374,7 @@ public interface Load {
 				
 				break;	
 			case 0x43:
-				cpu.BC.SetHighByte((byte) cpu.DE.getLowByte());
+				cpu.BC.setHighByte((byte) cpu.DE.getLowByte());
 				
 				Utils.PrintInstruction("LD B, E",
 										instruction, 
@@ -386,7 +386,7 @@ public interface Load {
 				
 				break;	
 			case 0x44:
-				cpu.BC.SetHighByte((byte) cpu.HL.getHighByte());
+				cpu.BC.setHighByte((byte) cpu.HL.getHighByte());
 				
 				Utils.PrintInstruction("LD B, H",
 										instruction, 
@@ -398,7 +398,7 @@ public interface Load {
 				
 				break;	
 			case 0x45:
-				cpu.BC.SetHighByte((byte) cpu.HL.getLowByte());
+				cpu.BC.setHighByte((byte) cpu.HL.getLowByte());
 				
 				Utils.PrintInstruction("LD B, L",
 										instruction, 
@@ -412,7 +412,7 @@ public interface Load {
 			case 0x46:
 				parameters[0] = cpu.memory.Read(cpu.HL.get());
 				
-				cpu.BC.SetHighByte(parameters[0]);
+				cpu.BC.setHighByte(parameters[0]);
 				
 				Utils.PrintInstruction("LD B, (HL)",
 										instruction, 
@@ -424,7 +424,7 @@ public interface Load {
 				
 				break;				
 			case 0x47:
-				cpu.BC.SetHighByte((byte) cpu.AF.getHighByte());
+				cpu.BC.setHighByte((byte) cpu.AF.getHighByte());
 				
 				Utils.PrintInstruction("LD B, A",
 										instruction, 
@@ -436,7 +436,7 @@ public interface Load {
 				
 				break;				
 			case 0x48:
-				cpu.BC.SetLowByte((byte) cpu.BC.getHighByte());
+				cpu.BC.setLowByte((byte) cpu.BC.getHighByte());
 				
 				Utils.PrintInstruction("LD C, B",
 										instruction, 
@@ -448,7 +448,7 @@ public interface Load {
 				
 				break;	
 			case 0x49:
-				cpu.BC.SetLowByte((byte) cpu.BC.getLowByte());
+				cpu.BC.setLowByte((byte) cpu.BC.getLowByte());
 				
 				Utils.PrintInstruction("LD C, C",
 										instruction, 
@@ -460,7 +460,7 @@ public interface Load {
 				
 				break;	
 			case 0x4A:
-				cpu.BC.SetLowByte((byte) cpu.DE.getHighByte());
+				cpu.BC.setLowByte((byte) cpu.DE.getHighByte());
 				
 				Utils.PrintInstruction("LD C, D",
 										instruction, 
@@ -472,7 +472,7 @@ public interface Load {
 				
 				break;	
 			case 0x4B:
-				cpu.BC.SetLowByte((byte) cpu.DE.getLowByte());
+				cpu.BC.setLowByte((byte) cpu.DE.getLowByte());
 				
 				Utils.PrintInstruction("LD C, E",
 										instruction, 
@@ -484,7 +484,7 @@ public interface Load {
 				
 				break;	
 			case 0x4C:
-				cpu.BC.SetLowByte((byte) cpu.HL.getHighByte());
+				cpu.BC.setLowByte((byte) cpu.HL.getHighByte());
 				
 				Utils.PrintInstruction("LD C, H",
 										instruction, 
@@ -496,7 +496,7 @@ public interface Load {
 				
 				break;	
 			case 0x4D:
-				cpu.BC.SetLowByte((byte) cpu.HL.getLowByte());
+				cpu.BC.setLowByte((byte) cpu.HL.getLowByte());
 				
 				Utils.PrintInstruction("LD C, L",
 										instruction, 
@@ -510,7 +510,7 @@ public interface Load {
 			case 0x4E:
 				parameters[0] = cpu.memory.Read(cpu.HL.get());
 				
-				cpu.BC.SetLowByte(parameters[0]);
+				cpu.BC.setLowByte(parameters[0]);
 				
 				Utils.PrintInstruction("LD C, (HL)",
 										instruction, 
@@ -522,7 +522,7 @@ public interface Load {
 				
 				break;				
 			case 0x4F:
-				cpu.BC.SetLowByte((byte) cpu.AF.getHighByte());
+				cpu.BC.setLowByte((byte) cpu.AF.getHighByte());
 				
 				Utils.PrintInstruction("LD C, A",
 										instruction, 
@@ -534,7 +534,7 @@ public interface Load {
 				
 				break;				
 			case 0x50:
-				cpu.DE.SetHighByte((byte) cpu.BC.getHighByte());
+				cpu.DE.setHighByte((byte) cpu.BC.getHighByte());
 				
 				Utils.PrintInstruction("LD D, B",
 										instruction, 
@@ -546,7 +546,7 @@ public interface Load {
 				
 				break;	
 			case 0x51:
-				cpu.DE.SetHighByte((byte) cpu.BC.getLowByte());
+				cpu.DE.setHighByte((byte) cpu.BC.getLowByte());
 				
 				Utils.PrintInstruction("LD D, C",
 										instruction, 
@@ -558,7 +558,7 @@ public interface Load {
 				
 				break;	
 			case 0x52:
-				cpu.DE.SetHighByte((byte) cpu.DE.getHighByte());
+				cpu.DE.setHighByte((byte) cpu.DE.getHighByte());
 				
 				Utils.PrintInstruction("LD D, D",
 										instruction, 
@@ -570,7 +570,7 @@ public interface Load {
 				
 				break;	
 			case 0x53:
-				cpu.DE.SetHighByte((byte) cpu.DE.getLowByte());
+				cpu.DE.setHighByte((byte) cpu.DE.getLowByte());
 				
 				Utils.PrintInstruction("LD D, E",
 										instruction, 
@@ -582,7 +582,7 @@ public interface Load {
 				
 				break;	
 			case 0x54:
-				cpu.DE.SetHighByte((byte) cpu.HL.getHighByte());
+				cpu.DE.setHighByte((byte) cpu.HL.getHighByte());
 				
 				Utils.PrintInstruction("LD D, H",
 										instruction, 
@@ -594,7 +594,7 @@ public interface Load {
 				
 				break;	
 			case 0x55:
-				cpu.DE.SetHighByte((byte) cpu.HL.getLowByte());
+				cpu.DE.setHighByte((byte) cpu.HL.getLowByte());
 				
 				Utils.PrintInstruction("LD D, L",
 										instruction, 
@@ -608,7 +608,7 @@ public interface Load {
 			case 0x56:
 				parameters[0] = cpu.memory.Read(cpu.HL.get());
 				
-				cpu.DE.SetHighByte(parameters[0]);
+				cpu.DE.setHighByte(parameters[0]);
 				
 				Utils.PrintInstruction("LD D, (HL)",
 										instruction, 
@@ -620,7 +620,7 @@ public interface Load {
 				
 				break;				
 			case 0x57:
-				cpu.DE.SetHighByte((byte) cpu.AF.getHighByte());
+				cpu.DE.setHighByte((byte) cpu.AF.getHighByte());
 				
 				Utils.PrintInstruction("LD D, A",
 										instruction, 
@@ -632,7 +632,7 @@ public interface Load {
 				
 				break;				
 			case 0x58:
-				cpu.DE.SetLowByte((byte) cpu.BC.getHighByte());
+				cpu.DE.setLowByte((byte) cpu.BC.getHighByte());
 				
 				Utils.PrintInstruction("LD E, B",
 										instruction, 
@@ -644,7 +644,7 @@ public interface Load {
 				
 				break;	
 			case 0x59:
-				cpu.DE.SetLowByte((byte) cpu.BC.getLowByte());
+				cpu.DE.setLowByte((byte) cpu.BC.getLowByte());
 				
 				Utils.PrintInstruction("LD E, C",
 										instruction, 
@@ -656,7 +656,7 @@ public interface Load {
 				
 				break;	
 			case 0x5A:
-				cpu.DE.SetLowByte((byte) cpu.DE.getHighByte());
+				cpu.DE.setLowByte((byte) cpu.DE.getHighByte());
 				
 				Utils.PrintInstruction("LD E, D",
 										instruction, 
@@ -668,7 +668,7 @@ public interface Load {
 				
 				break;	
 			case 0x5B:
-				cpu.DE.SetLowByte((byte) cpu.DE.getLowByte());
+				cpu.DE.setLowByte((byte) cpu.DE.getLowByte());
 				
 				Utils.PrintInstruction("LD E, E",
 										instruction, 
@@ -680,7 +680,7 @@ public interface Load {
 				
 				break;	
 			case 0x5C:
-				cpu.DE.SetLowByte((byte) cpu.HL.getHighByte());
+				cpu.DE.setLowByte((byte) cpu.HL.getHighByte());
 				
 				Utils.PrintInstruction("LD E, H",
 										instruction, 
@@ -692,7 +692,7 @@ public interface Load {
 				
 				break;	
 			case 0x5D:
-				cpu.DE.SetLowByte((byte) cpu.HL.getLowByte());
+				cpu.DE.setLowByte((byte) cpu.HL.getLowByte());
 				
 				Utils.PrintInstruction("LD E, L",
 										instruction, 
@@ -706,7 +706,7 @@ public interface Load {
 			case 0x5E:
 				parameters[0] = cpu.memory.Read(cpu.HL.get());
 				
-				cpu.DE.SetLowByte(parameters[0]);
+				cpu.DE.setLowByte(parameters[0]);
 				
 				Utils.PrintInstruction("LD E, (HL)",
 										instruction, 
@@ -718,7 +718,7 @@ public interface Load {
 				
 				break;				
 			case 0x5F:
-				cpu.DE.SetLowByte((byte) cpu.AF.getHighByte());
+				cpu.DE.setLowByte((byte) cpu.AF.getHighByte());
 				
 				Utils.PrintInstruction("LD E, A",
 										instruction,
@@ -730,7 +730,7 @@ public interface Load {
 				
 				break;	
 			case 0x60:
-				cpu.HL.SetHighByte((byte) cpu.BC.getHighByte());
+				cpu.HL.setHighByte((byte) cpu.BC.getHighByte());
 				
 				Utils.PrintInstruction("LD H, B",
 										instruction, 
@@ -742,7 +742,7 @@ public interface Load {
 				
 				break;	
 			case 0x61:
-				cpu.HL.SetHighByte((byte) cpu.BC.getLowByte());
+				cpu.HL.setHighByte((byte) cpu.BC.getLowByte());
 				
 				Utils.PrintInstruction("LD H, C",
 										instruction, 
@@ -754,7 +754,7 @@ public interface Load {
 				
 				break;	
 			case 0x62:
-				cpu.HL.SetHighByte((byte) cpu.DE.getHighByte());
+				cpu.HL.setHighByte((byte) cpu.DE.getHighByte());
 				
 				Utils.PrintInstruction("LD H, D",
 										instruction, 
@@ -766,7 +766,7 @@ public interface Load {
 				
 				break;	
 			case 0x63:
-				cpu.HL.SetHighByte((byte) cpu.DE.getLowByte());
+				cpu.HL.setHighByte((byte) cpu.DE.getLowByte());
 				
 				Utils.PrintInstruction("LD H, E",
 										instruction, 
@@ -778,7 +778,7 @@ public interface Load {
 				
 				break;	
 			case 0x64:
-				cpu.HL.SetHighByte((byte) cpu.HL.getHighByte());
+				cpu.HL.setHighByte((byte) cpu.HL.getHighByte());
 				
 				Utils.PrintInstruction("LD H, H",
 										instruction, 
@@ -790,7 +790,7 @@ public interface Load {
 				
 				break;	
 			case 0x65:
-				cpu.HL.SetHighByte((byte) cpu.HL.getLowByte());
+				cpu.HL.setHighByte((byte) cpu.HL.getLowByte());
 				
 				Utils.PrintInstruction("LD H, L",
 										instruction, 
@@ -804,7 +804,7 @@ public interface Load {
 			case 0x66:
 				parameters[0] = cpu.memory.Read(cpu.HL.get());
 				
-				cpu.HL.SetHighByte(parameters[0]);
+				cpu.HL.setHighByte(parameters[0]);
 				
 				Utils.PrintInstruction("LD H, (HL)",
 										instruction, 
@@ -816,7 +816,7 @@ public interface Load {
 				
 				break;				
 			case 0x67:
-				cpu.HL.SetHighByte((byte) cpu.AF.getHighByte());
+				cpu.HL.setHighByte((byte) cpu.AF.getHighByte());
 				
 				Utils.PrintInstruction("LD H, A",
 										instruction, 
@@ -828,7 +828,7 @@ public interface Load {
 				
 				break;				
 			case 0x68:
-				cpu.HL.SetLowByte((byte) cpu.BC.getHighByte());
+				cpu.HL.setLowByte((byte) cpu.BC.getHighByte());
 				
 				Utils.PrintInstruction("LD L, B",
 										instruction, 
@@ -840,7 +840,7 @@ public interface Load {
 				
 				break;	
 			case 0x69:
-				cpu.HL.SetLowByte((byte) cpu.BC.getLowByte());
+				cpu.HL.setLowByte((byte) cpu.BC.getLowByte());
 				
 				Utils.PrintInstruction("LD L, C",
 										instruction, 
@@ -852,7 +852,7 @@ public interface Load {
 				
 				break;	
 			case 0x6A:
-				cpu.HL.SetLowByte((byte) cpu.DE.getHighByte());
+				cpu.HL.setLowByte((byte) cpu.DE.getHighByte());
 				
 				Utils.PrintInstruction("LD L, D",
 										instruction, 
@@ -864,7 +864,7 @@ public interface Load {
 				
 				break;	
 			case 0x6B:
-				cpu.HL.SetLowByte((byte) cpu.DE.getLowByte());
+				cpu.HL.setLowByte((byte) cpu.DE.getLowByte());
 				
 				Utils.PrintInstruction("LD L, E",
 										instruction, 
@@ -876,7 +876,7 @@ public interface Load {
 				
 				break;	
 			case 0x6C:
-				cpu.HL.SetLowByte((byte) cpu.HL.getHighByte());
+				cpu.HL.setLowByte((byte) cpu.HL.getHighByte());
 				
 				Utils.PrintInstruction("LD L, H",
 										instruction, 
@@ -888,7 +888,7 @@ public interface Load {
 				
 				break;	
 			case 0x6D:
-				cpu.HL.SetLowByte((byte) cpu.HL.getLowByte());
+				cpu.HL.setLowByte((byte) cpu.HL.getLowByte());
 				
 				Utils.PrintInstruction("LD L, L",
 										instruction, 
@@ -902,7 +902,7 @@ public interface Load {
 			case 0x6E:
 				parameters[0] = cpu.memory.Read(cpu.HL.get());
 				
-				cpu.HL.SetLowByte(parameters[0]);
+				cpu.HL.setLowByte(parameters[0]);
 				
 				Utils.PrintInstruction("LD L, (HL)",
 										instruction, 
@@ -914,7 +914,7 @@ public interface Load {
 				
 				break;				
 			case 0x6F:
-				cpu.HL.SetLowByte((byte) cpu.AF.getHighByte());
+				cpu.HL.setLowByte((byte) cpu.AF.getHighByte());
 				
 				Utils.PrintInstruction("LD L, A",
 										instruction, 
@@ -1010,7 +1010,7 @@ public interface Load {
 				
 				break;				
 			case 0x78:
-				cpu.AF.SetHighByte((byte) cpu.BC.getHighByte());
+				cpu.AF.setHighByte((byte) cpu.BC.getHighByte());
 				
 				Utils.PrintInstruction("LD A, B",
 										instruction, 
@@ -1022,7 +1022,7 @@ public interface Load {
 				
 				break;	
 			case 0x79:
-				cpu.AF.SetHighByte((byte) cpu.BC.getLowByte());
+				cpu.AF.setHighByte((byte) cpu.BC.getLowByte());
 				
 				Utils.PrintInstruction("LD A, C",
 										instruction, 
@@ -1034,7 +1034,7 @@ public interface Load {
 				
 				break;	
 			case 0x7A:
-				cpu.AF.SetHighByte((byte) cpu.DE.getHighByte());
+				cpu.AF.setHighByte((byte) cpu.DE.getHighByte());
 				
 				Utils.PrintInstruction("LD A, D",
 										instruction,
@@ -1046,7 +1046,7 @@ public interface Load {
 				
 				break;	
 			case 0x7B:
-				cpu.AF.SetHighByte((byte) cpu.DE.getLowByte());
+				cpu.AF.setHighByte((byte) cpu.DE.getLowByte());
 				
 				Utils.PrintInstruction("LD A, E",
 										instruction, 
@@ -1058,7 +1058,7 @@ public interface Load {
 				
 				break;	
 			case 0x7C:
-				cpu.AF.SetHighByte((byte) cpu.HL.getHighByte());
+				cpu.AF.setHighByte((byte) cpu.HL.getHighByte());
 				
 				Utils.PrintInstruction("LD A, H",
 										instruction, 
@@ -1070,7 +1070,7 @@ public interface Load {
 				
 				break;	
 			case 0x7D:
-				cpu.AF.SetHighByte((byte) cpu.HL.getLowByte());
+				cpu.AF.setHighByte((byte) cpu.HL.getLowByte());
 				
 				Utils.PrintInstruction("LD A, L",
 										instruction, 
@@ -1084,7 +1084,7 @@ public interface Load {
 			case 0x7E:
 				parameters[0] = cpu.memory.Read(cpu.HL.get());
 				
-				cpu.AF.SetHighByte(parameters[0]);
+				cpu.AF.setHighByte(parameters[0]);
 				
 				Utils.PrintInstruction("LD A, (HL)",
 										instruction, 
@@ -1096,7 +1096,7 @@ public interface Load {
 				
 				break;				
 			case 0x7F:
-				cpu.AF.SetHighByte((byte) cpu.AF.getHighByte());
+				cpu.AF.setHighByte((byte) cpu.AF.getHighByte());
 				
 				Utils.PrintInstruction("LD A, A",
 										instruction, 
@@ -1132,7 +1132,7 @@ public interface Load {
 										null, 0
 				);
 	
-				cpu.PC.set(cpu.PC.get() + 2);
+				cpu.PC.set(cpu.PC.get() + 1);
 				
 				break;	
 			case (byte) 0xEA:
@@ -1157,7 +1157,7 @@ public interface Load {
 						(int) (parameters[0] & 0xFF) | 0xFF00
 				);
 				
-				cpu.AF.SetHighByte(parameters[1]);
+				cpu.AF.setHighByte(parameters[1]);
 				
 				Utils.PrintInstruction("LDH A, (a8)",
 										instruction, 
@@ -1173,7 +1173,7 @@ public interface Load {
 						(int) (cpu.BC.getLowByte() & 0xFF) | 0xFF00
 				);
 				
-				cpu.AF.SetHighByte(parameters[0]);
+				cpu.AF.setHighByte(parameters[0]);
 				
 				Utils.PrintInstruction("LDH A, (C)",
 										instruction, 
@@ -1215,7 +1215,7 @@ public interface Load {
 				parameters[1] = cpu.memory.Read(cpu.PC.get() + 2);
 				address = (int) (parameters[1] << 8) | (int) parameters[0];
 				
-				cpu.AF.SetHighByte(cpu.memory.Read(address));
+				cpu.AF.setHighByte(cpu.memory.Read(address));
 				
 				Utils.PrintInstruction("LDH A, (a16)",
 										instruction, 

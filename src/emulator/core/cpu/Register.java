@@ -62,13 +62,13 @@ public class Register
 		return out;
 	}
 	
-	public void SetHighByte(byte in) {
+	public void setHighByte(byte in) {
 		int lowByte = this.getLowByte();
 		
 		this.set(((int) (in & 0xff) << 8) | lowByte);
 	}
 	
-	public void SetLowByte(byte in) {
+	public void setLowByte(byte in) {
 		int highByte = this.getHighByte();
 		
 		this.set((highByte << 8) | (int) (in & 0xff));
