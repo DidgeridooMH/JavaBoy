@@ -26,7 +26,6 @@
 
 package emulator.core.memory;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -124,6 +123,7 @@ public class Memory {
 	 * file.
 	 * 
 	 * @param filename Name of the file to write to.
+	 * @return True if dump was successful.
 	 */
 	public boolean dump(String filename) {
 		try {

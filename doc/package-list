@@ -1,1 +1,4 @@
+emulator
+emulator.core.cpu
 emulator.core.gpu
+emulator.core.memory

@@ -47,6 +47,8 @@ public class GUI extends JFrame {
 	/**
 	 * Initializes window settings and creates
 	 * a surface to draw to.
+	 * 
+	 * @param surface A reference to the Screen object
 	 */
 	public GUI(Screen surface) {
 		initialize(surface);

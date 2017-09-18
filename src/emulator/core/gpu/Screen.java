@@ -56,18 +56,51 @@ public class Screen extends JPanel {
 	
 	private int pixelY = 0;
 	
-	public int scrollX = 0;
+	private int scrollX = 0;
 	
-	public int scrollY = 0;
+	private int scrollY = 0;
 	
-	public int lcdc = 0;
+	private int lcdc = 0;
 	
-	public boolean verticalBlank = false;
+	private boolean verticalBlank = false;
 	
 	public void setMemory(Memory memory) {
 		this.memory = memory;
 	}
 	
+	public void setScrollX(int x) {
+		scrollX = x;
+	}
+	
+	public int getScrollX() {
+		return scrollX;
+	}
+	
+	public void setScrollY(int y) {
+		scrollY = y;
+	}
+	
+	public int getScrollY() {
+		return scrollY;
+	}
+	
+	public void setLCDC(int lcdc) {
+		this.lcdc = lcdc;
+	}
+	
+	public int getLCDC() {
+		return lcdc;
+	}
+	
+	public boolean isVBlank() {
+		return verticalBlank;
+	}
+	
+	/**
+	 * Draw the display if LCD is switched on
+	 * 
+	 * @param gfx Reference to the graphics context.
+	 */
 	private void draw(Graphics gfx) {
 		Graphics2D gfx2d = (Graphics2D) gfx;
 		tileX = 0;
@@ -77,14 +110,25 @@ public class Screen extends JPanel {
 		}
 	}
 	
+	/**
+	 * Draw the background layer.
+	 * 
+	 * @param gfx2d Reference to the 2D graphics context.
+	 */
 	private void drawBackground(Graphics2D gfx2d) {
 		for(int i = 0; i < 1023; i++) {
 			int tileID = memory.Read(BG_RAM + i);
-			drawTile(gfx2d, tileID);
+			drawBackgroundTile(gfx2d, tileID);
 		}
 	}
 
-	private void drawTile(Graphics2D gfx2d, int tileNum) {
+	/**
+	 * Draw a tile from background ram.
+	 * 
+	 * @param gfx2d Reference to the 2D graphics context.
+	 * @param tileNum The ID of the tile in memory.
+	 */
+	private void drawBackgroundTile(Graphics2D gfx2d, int tileNum) {
 		int tileAddress = tileNum * 0x10;
 		pixelX = 0;
 		pixelY = 0;
@@ -133,6 +177,9 @@ public class Screen extends JPanel {
 		}
 	}
 
+	/**
+	 * Moves the coordinate of the pixel to paint within a tile.
+	 */
 	private void forward() {
 		pixelX++;
 		if(pixelX > 7) {
@@ -141,6 +188,9 @@ public class Screen extends JPanel {
 		}
 	}
 	
+	/**
+	 * Moves the coordinate of the tile to be painted.
+	 */
 	private void forwardTile() {
 		tileX++;
 		if(tileX > 31) {

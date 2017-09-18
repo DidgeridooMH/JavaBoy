@@ -43,8 +43,6 @@ public class GPU {
 	
 	private Screen surface = null;
 	
-	private Memory memory = null;
-	
 	private byte stat;
 	
 	private byte coordY;
@@ -66,16 +64,15 @@ public class GPU {
 	 * @param memory A reference to the memory module
 	 */
 	public GPU(Memory memory) {
-		this.memory = memory;
 		surface = new Screen();
 		surface.setMemory(memory);
 		graphicsT = new Renderer(surface);
 		graphicsT.setName("GUI Render");
 		
-		surface.lcdc = memory.Read(0xFF40);
+		surface.setLCDC(memory.Read(0xFF40));
 		stat = memory.Read(0xFF41);
-		surface.scrollY = memory.Read(0xFF42);
-		surface.scrollX = memory.Read(0xFF43);
+		surface.setScrollY(memory.Read(0xFF42));
+		surface.setScrollX(memory.Read(0xFF43));
 		coordY = memory.Read(0xFF44);
 		lyCompare = memory.Read(0xFF45);
 		windowY = memory.Read(0xFF4A);
@@ -104,7 +101,7 @@ public class GPU {
 	}
 	
 	public boolean isVBlank() {
-		return surface.verticalBlank;
+		return surface.isVBlank();
 	}
 	
 	/**
@@ -118,13 +115,13 @@ public class GPU {
 	public byte readRegister(int address) {
 		switch(address) {
 			case 0xFF40:
-				return (byte) surface.lcdc;
+				return (byte) surface.getLCDC();
 			case 0xFF41:
 				return stat;
 			case 0xFF42:
-				return (byte) surface.scrollY;
+				return (byte) surface.getScrollY();
 			case 0xFF43:
-				return (byte) surface.scrollX;
+				return (byte) surface.getScrollX();
 			case 0xFF44:
 				return coordY;
 			case 0xFF45:
@@ -157,16 +154,16 @@ public class GPU {
 	public void writeRegister(byte in, int address) {
 		switch(address) {
 			case 0xFF40:
-				surface.lcdc = in;
+				surface.setLCDC(in);
 				break;
 			case 0xFF41:
 				stat = in;
 				break;
 			case 0xFF42:
-				surface.scrollY = in;
+				surface.setScrollY(in);
 				break;
 			case 0xFF43:
-				surface.scrollX = in;
+				surface.setScrollX(in);
 				break;
 			case 0xFF44:
 				coordY = in;

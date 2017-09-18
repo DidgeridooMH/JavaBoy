@@ -84,8 +84,8 @@ public interface Utils {
 	/**
 	 * Gives the state of a bit numbering from 0-7
 	 * 
-	 * @param in
-	 * @param bitNum
+	 * @param in Byte to parse.
+	 * @param bitNum Bit position to return
 	 * @return State of bitNum in in.
 	 */
 	static boolean getBit(byte in, int bitNum) {

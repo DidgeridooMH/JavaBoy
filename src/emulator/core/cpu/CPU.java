@@ -26,8 +26,6 @@
 
 package emulator.core.cpu;
 
-import java.util.concurrent.TimeUnit;
-
 import emulator.Utils;
 
 import emulator.core.memory.Memory;
@@ -66,8 +64,7 @@ public class CPU
 	 * flags, fetch-execute cycles, and memory
 	 * management.
 	 * 
-	 * @param biosFile Path to the BIOS binary.
-	 * @param romName Path to the ROM dump.
+	 * @param memory Reference to the memory object
 	 */
 	public CPU(Memory memory) {
 		/*
@@ -143,10 +140,6 @@ public class CPU
 		int instruction = memory.Read(PC.get());
 		String decodedIns = parser.decodeIns(instruction);
 
-		if(PC.get() == 0x85) {
-			int i = 0;
-		}
-		
 		step((byte) instruction, decodedIns);
 	}
 	
