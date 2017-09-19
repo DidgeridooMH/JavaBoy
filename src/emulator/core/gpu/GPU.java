@@ -86,22 +86,21 @@ public class GPU {
 	 * Starts the window thread
 	 */
 	public void start() {
-		graphicsT.run();
+		graphicsT.start();
 	}
 	
 	/**
 	 * Pauses the window thread
 	 */
 	public void stop() {
-		try {
-			graphicsT.wait();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public boolean isVBlank() {
 		return surface.isVBlank();
+	}
+	
+	public void setVBlank(boolean verticalBlank) {
+		surface.setVBlank(verticalBlank);
 	}
 	
 	/**

@@ -49,9 +49,7 @@ public class Memory {
 	
 	private byte internalMemory[];
 	
-	public boolean verticalBlank = true;
-	
-	private GPU gpu;
+	private GPU gpu = null;
 
 	/**
 	 * Loads the bios into first bank, then loads

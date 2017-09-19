@@ -27,7 +27,7 @@
 package emulator.core.cpu;
 
 import emulator.Utils;
-
+import emulator.core.gpu.GPU;
 import emulator.core.memory.Memory;
 
 /**
@@ -37,8 +37,7 @@ import emulator.core.memory.Memory;
  * 
  * @author Daniel Simpkins
  */
-public class CPU 
-{
+public class CPU extends Thread {
 	/** Indicates an error occurred in the CPU. */
 	public boolean error = false;
 	
@@ -54,10 +53,14 @@ public class CPU
 	Flags flags;
 	
 	/** Memory with a size of 0xFFFF */
-	Memory memory;
+	Memory memory = null;
+	
+	GPU gpu = null;
 	
 	/** Decodes opcodes */
 	Parser parser;
+	
+	int cycleCount = 0;
 	
 	/**
 	 * Handles all CPU emulation including registers,
@@ -66,7 +69,7 @@ public class CPU
 	 * 
 	 * @param memory Reference to the memory object
 	 */
-	public CPU(Memory memory) {
+	public CPU(Memory memory, GPU gpu) {
 		/*
 		 * Initialize 16-bit registers
 		 * IO registers, and memory.
@@ -79,6 +82,7 @@ public class CPU
 		PC = new Register(0x0000);
 		
 		this.memory = memory;
+		this.gpu = gpu;
 		
 		/* Initializes hardware IO registers */
 		memory.Write((byte) 0x00, 0xFF05);
@@ -102,7 +106,6 @@ public class CPU
 		memory.Write((byte) 0x77, 0xFF24);
 		memory.Write((byte) 0xF3, 0xFF25);
 		memory.Write((byte) 0xF1, 0xFF26);
-		memory.Write((byte) 0x91, 0xFF40);
 		memory.Write((byte) 0x00, 0xFF42);
 		memory.Write((byte) 0x00, 0xFF43);
 		memory.Write((byte) 0x90, 0xFF44);
@@ -136,11 +139,22 @@ public class CPU
 	 * Reads memory pointed to by Program Counter,
 	 * parses the instruction, and executes it.
 	 */
-	public void execute() {	
+	public void execute() {
 		int instruction = memory.Read(PC.get());
 		String decodedIns = parser.decodeIns(instruction);
 
 		step((byte) instruction, decodedIns);
+		
+		cycleCount += 4;
+		
+		if(cycleCount >= 1000) {
+			try {
+				this.sleep(1000 / 60);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			cycleCount = 0;
+		}
 	}
 	
 	public boolean isError() {
@@ -290,6 +304,13 @@ public class CPU
 		highByte = pop();
 		
 		return (short) (((highByte & 0xFFFF) << 8) | (lowByte & 0xFF));
+	}
+
+	@Override
+	public void run() {
+		while(!error) {
+			execute();	
+		}
 	}
 	
 }

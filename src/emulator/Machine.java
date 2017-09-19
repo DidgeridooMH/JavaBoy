@@ -27,7 +27,9 @@
 package emulator;
 
 import emulator.core.cpu.CPU;
+
 import emulator.core.gpu.GPU;
+
 import emulator.core.memory.Memory;
 
 /**
@@ -38,6 +40,7 @@ import emulator.core.memory.Memory;
  *
  */
 public class Machine {
+	
 	private CPU cpu;
 	
 	private GPU gpu;
@@ -67,7 +70,9 @@ public class Machine {
 		
 		memory.setGPU(gpu);
 		
-		cpu = new CPU(memory);
+		cpu = new CPU(memory, gpu);
+		
+		cpu.start();
 		
 		gpu.start();
 	}
@@ -77,8 +82,6 @@ public class Machine {
 	 * Proceeds one machine cycle.
 	 */
 	public void execute() {
-		cpu.execute();
-		
 		if(cpu.isError()) {
 			state = 0;
 			gpu.stop();

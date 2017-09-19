@@ -28,8 +28,6 @@ package emulator.core.gpu;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.concurrent.TimeUnit;
-
 import javax.swing.JPanel;
 
 import emulator.core.memory.Memory;
@@ -62,7 +60,7 @@ public class Screen extends JPanel {
 	
 	private int lcdc = 0;
 	
-	private boolean verticalBlank = false;
+	private boolean verticalBlank = true;
 	
 	public void setMemory(Memory memory) {
 		this.memory = memory;
@@ -85,15 +83,19 @@ public class Screen extends JPanel {
 	}
 	
 	public void setLCDC(int lcdc) {
-		this.lcdc = lcdc;
+		this.lcdc = (lcdc & 0xFF);
 	}
 	
 	public int getLCDC() {
-		return lcdc;
+		return (lcdc & 0xFF);
 	}
 	
 	public boolean isVBlank() {
 		return verticalBlank;
+	}
+	
+	public void setVBlank(boolean verticalBlank) {
+		this.verticalBlank = verticalBlank;
 	}
 	
 	/**
@@ -199,13 +201,27 @@ public class Screen extends JPanel {
 		}
 	}
 
+	private synchronized void refresh() {
+		//while(verticalBlank);
+		//verticalBlank = true;
+	}
+	
 	@Override
 	public void paintComponent(Graphics gfx) {
+		//long startTime = System.nanoTime();
 		super.paintComponent(gfx);
 		super.invalidate();
 		super.validate();
 		super.repaint();
 		draw(gfx);
+		refresh();
+		//long endTime = System.nanoTime();
+		//long duration = (endTime - startTime);
+		
+		/*try {
+			Thread.sleep((long) ((1000.0/60.0) - (duration/1000000.0)));
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}*/
 	}
-	
 }
