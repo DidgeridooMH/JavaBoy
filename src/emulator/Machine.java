@@ -41,6 +41,8 @@ import emulator.core.memory.Memory;
  */
 public class Machine {
 	
+	private Thread cpuT;
+	
 	private CPU cpu;
 	
 	private GPU gpu;
@@ -72,9 +74,13 @@ public class Machine {
 		
 		cpu = new CPU(memory, gpu);
 		
-		cpu.start();
+		gpu.setCPU(cpu);
+		
+		cpuT = new Thread(cpu);
 		
 		gpu.start();
+		
+		cpuT.start();
 	}
 	
 	

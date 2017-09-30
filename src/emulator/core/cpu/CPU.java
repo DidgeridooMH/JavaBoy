@@ -37,7 +37,7 @@ import emulator.core.memory.Memory;
  * 
  * @author Daniel Simpkins
  */
-public class CPU extends Thread {
+public class CPU implements Runnable {
 	/** Indicates an error occurred in the CPU. */
 	public boolean error = false;
 	
@@ -147,11 +147,9 @@ public class CPU extends Thread {
 		
 		cycleCount += 4;
 		
-		if(cycleCount >= 1000) {
-			try {
-				this.sleep(1000 / 60);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+		if(cycleCount >= 32) {
+			synchronized (gpu.getSurface()) {
+				gpu.getSurface().notifyAll();
 			}
 			cycleCount = 0;
 		}
@@ -215,7 +213,15 @@ public class CPU extends Thread {
 				break;
 			case "NOP":
 				// No Operation
-				memory.dump("vram_dump.bin");
+				Utils.PrintInstruction("NOP", ins, PC.get(), null, 0);
+				PC.set(PC.get() + 1);
+				break;
+			case "JP":
+				Jump.jump(this, ins);
+				break;
+			case "DI":
+				flags.disableInterrupts();
+				Utils.PrintInstruction("DI", ins, PC.get(), null, 0);
 				PC.set(PC.get() + 1);
 				break;
 			default:
@@ -306,6 +312,10 @@ public class CPU extends Thread {
 		return (short) (((highByte & 0xFFFF) << 8) | (lowByte & 0xFF));
 	}
 
+	public synchronized int getCycle() {
+		return cycleCount;
+	}
+	
 	@Override
 	public void run() {
 		while(!error) {

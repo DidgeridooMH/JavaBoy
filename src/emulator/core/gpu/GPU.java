@@ -27,6 +27,7 @@
 package emulator.core.gpu;
 
 import emulator.Utils;
+import emulator.core.cpu.CPU;
 import emulator.core.memory.Memory;
 
 /**
@@ -101,6 +102,10 @@ public class GPU {
 	
 	public void setVBlank(boolean verticalBlank) {
 		surface.setVBlank(verticalBlank);
+	}
+	
+	public void setCPU(CPU cpu) {
+		surface.setCPU(cpu);
 	}
 	
 	/**
@@ -192,6 +197,10 @@ public class GPU {
 				);
 				return;
 		}
+	}
+	
+	public Screen getSurface() {
+		return surface;
 	}
 	
 }

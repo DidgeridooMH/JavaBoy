@@ -26,6 +26,8 @@
 
 package emulator.core.gpu;
 
+import java.awt.Dimension;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
@@ -60,7 +62,9 @@ public class GUI extends JFrame {
 		}
 		
 		setTitle("JavaBoy - Gameboy Emulator");
-		setSize(160, 144);
+		getContentPane().setPreferredSize(new Dimension(160 ,144));
+		pack();
+		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}

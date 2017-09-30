@@ -218,4 +218,56 @@ public interface Jump {
 								null, 0);
 	}
 	
+	/**
+	 * Sets the pointer counter to a specified
+	 * address in memory.
+	 * 
+	 * @param cpu Reference to CPU object.
+	 * @param instruction Instruction opcode.
+	 */
+	static void jump(CPU cpu, byte instruction) {
+		byte parameter[] = { 	cpu.memory.Read(cpu.PC.get() + 1), 
+								cpu.memory.Read(cpu.PC.get() + 2) };
+		boolean jump = false;
+		
+		System.out.print(Utils.hex(cpu.PC.get()) + ": JR ");
+		
+		switch(instruction) {
+			case (byte) 0xC3:
+				jump = true;
+				break;
+			case (byte) 0xC2:
+				jump = (!cpu.flags.getZero());
+				System.out.print("NZ ");
+				break;
+			case (byte) 0xCA:
+				jump = (cpu.flags.getZero());
+				System.out.print("Z ");
+				break;
+			case (byte) 0xD2:
+				jump = (!cpu.flags.getCarry());
+				System.out.print("NC ");
+				break;
+			case (byte) 0xDA:
+				jump = (cpu.flags.getCarry());
+				System.out.print("C ");
+				break;
+			default:
+				System.err.println("Unknown variant of JP: " + 
+									Utils.hex(instruction & 0xFF) + 
+									" at " + 
+									Utils.hex(cpu.PC.get()));
+				cpu.error = true;
+				return;
+		}
+		
+		System.out.print(Utils.hex(cpu.PC.get() + parameter[0] + 2) + "(" + Utils.hex(instruction & 0xFF) + ")\n");
+		
+		if(jump) {
+			cpu.PC.set(((int) (parameter[1]) << 8) | parameter[0]);
+		} else {
+			cpu.PC.set(cpu.PC.get() + 2);
+		}
+	}
+	
 }

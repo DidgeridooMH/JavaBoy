@@ -30,6 +30,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
+import emulator.core.cpu.CPU;
 import emulator.core.memory.Memory;
 
 /**
@@ -41,6 +42,8 @@ import emulator.core.memory.Memory;
 public class Screen extends JPanel {
 
 	private Memory memory = null;
+	
+	private CPU cpu = null;
 	
 	private static final int BG_TILE_RAM = 0x8000;
 	
@@ -96,6 +99,10 @@ public class Screen extends JPanel {
 	
 	public void setVBlank(boolean verticalBlank) {
 		this.verticalBlank = verticalBlank;
+	}
+	
+	public void setCPU(CPU cpu) {
+		this.cpu = cpu;
 	}
 	
 	/**
@@ -200,28 +207,32 @@ public class Screen extends JPanel {
 			tileX = 0;
 		}
 	}
-
-	private synchronized void refresh() {
-		//while(verticalBlank);
-		//verticalBlank = true;
+	
+	private void waitForCycles() {
+		synchronized (this) {
+			try {
+				this.wait();
+			} catch (InterruptedException e) {
+				return;
+			}
+		}
 	}
 	
 	@Override
 	public void paintComponent(Graphics gfx) {
-		//long startTime = System.nanoTime();
 		super.paintComponent(gfx);
 		super.invalidate();
 		super.validate();
 		super.repaint();
 		draw(gfx);
-		refresh();
-		//long endTime = System.nanoTime();
-		//long duration = (endTime - startTime);
+//		synchronized (cpu) {
+//			cpu.notifyAll();
+//		}
+		for(int i = 0; i < 155; i++) {
+			memory.Write((byte) i, 0xFF44);
+			//drawNextLine();
+			waitForCycles();
+		}
 		
-		/*try {
-			Thread.sleep((long) ((1000.0/60.0) - (duration/1000000.0)));
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}*/
 	}
 }
