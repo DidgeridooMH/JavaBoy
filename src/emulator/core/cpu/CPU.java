@@ -146,6 +146,10 @@ public class CPU implements Runnable {
 		int instruction = memory.Read(PC.get());
 		String decodedIns = parser.decodeIns(instruction);
 
+		if(PC.get() == 0x3049) {
+			int i = 0;
+		}
+		
 		step((byte) instruction, decodedIns);
 		
 		cycleCount += 4;
@@ -177,7 +181,10 @@ public class CPU implements Runnable {
 				Load.load(this, ins);
 				break;
 			case "XOR":
-				ExclusiveOR.exclusiveOR(this, ins);
+				BitOperation.exclusiveOR(this, ins);
+				break;
+			case "OR":
+				BitOperation.or(this, ins);
 				break;
 			case "SUB":
 				Subtract.subtract(this, ins);
@@ -198,7 +205,7 @@ public class CPU implements Runnable {
 				Stack.pop(this, ins);
 				break;
 			case "RLA":
-				BitShift.rotate(this, ins, false);
+				BitOperation.rotate(this, ins, false);
 				break;
 			case "DEC":
 				Decrement.decrement(this, ins);
@@ -249,11 +256,11 @@ public class CPU implements Runnable {
 		
 		switch(decodedPrefix) {
 			case "BIT":
-				BitTest.bitTest(this, instruction);
+				BitOperation.bitTest(this, instruction);
 				break;
 				
 			case "RL":
-				BitShift.rotate(this, instruction, true);
+				BitOperation.rotate(this, instruction, true);
 				break;
 			
 			default:

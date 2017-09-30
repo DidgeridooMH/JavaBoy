@@ -38,7 +38,7 @@ public class Flags
 	/**
 	 * Flag constants
 	 */
-	final static int ZERO = 0x80;
+	static final int ZERO = 0x80;
 	static final int SIGN = 0x40;
 	static final int HALFC = 0x20;
 	static final int CARRY = 0x10;

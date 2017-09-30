@@ -220,14 +220,14 @@ public class Screen extends JPanel {
 	
 	@Override
 	public void paintComponent(Graphics gfx) {
-		super.paintComponent(gfx);
-		super.invalidate();
-		super.validate();
-		super.repaint();
-		draw(gfx);
-		
 		// Small hack to prevent the window from locking up
 		if(!cpu.isError() ) {
+			super.paintComponent(gfx);
+			super.invalidate();
+			super.validate();
+			super.repaint();
+			draw(gfx);
+			
 			for(int i = 0; i < 155; i++) {
 				memory.Write((byte) i, 0xFF44);
 				//drawNextLine();
