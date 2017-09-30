@@ -211,7 +211,7 @@ public class Screen extends JPanel {
 	private void waitForCycles() {
 		synchronized (this) {
 			try {
-				this.wait();
+				this.wait(500);
 			} catch (InterruptedException e) {
 				return;
 			}
