@@ -225,13 +225,14 @@ public class Screen extends JPanel {
 		super.validate();
 		super.repaint();
 		draw(gfx);
-//		synchronized (cpu) {
-//			cpu.notifyAll();
-//		}
-		for(int i = 0; i < 155; i++) {
-			memory.Write((byte) i, 0xFF44);
-			//drawNextLine();
-			waitForCycles();
+		
+		// Small hack to prevent the window from locking up
+		if(!cpu.isError() ) {
+			for(int i = 0; i < 155; i++) {
+				memory.Write((byte) i, 0xFF44);
+				//drawNextLine();
+				waitForCycles();
+			}
 		}
 		
 	}

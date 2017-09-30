@@ -38,6 +38,7 @@ import emulator.core.memory.Memory;
  * @author Daniel Simpkins
  */
 public class CPU implements Runnable {
+	
 	/** Indicates an error occurred in the CPU. */
 	public boolean error = false;
 	
@@ -68,6 +69,7 @@ public class CPU implements Runnable {
 	 * management.
 	 * 
 	 * @param memory Reference to the memory object
+	 * @param gpu Reference to the GPU object
 	 */
 	public CPU(Memory memory, GPU gpu) {
 		/*
@@ -140,6 +142,7 @@ public class CPU implements Runnable {
 	 * parses the instruction, and executes it.
 	 */
 	public void execute() {
+		
 		int instruction = memory.Read(PC.get());
 		String decodedIns = parser.decodeIns(instruction);
 
@@ -147,10 +150,11 @@ public class CPU implements Runnable {
 		
 		cycleCount += 4;
 		
-		if(cycleCount >= 32) {
+		if(cycleCount >= 168) {
 			synchronized (gpu.getSurface()) {
 				gpu.getSurface().notifyAll();
 			}
+			
 			cycleCount = 0;
 		}
 	}
