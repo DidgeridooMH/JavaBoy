@@ -14,7 +14,7 @@ JavaBoy is a Gameboy/Gameboy Color emulator written in java using the swing fram
 # Goals
 - [X] CPU instruction interpretation
 
-- [ ] Basic GPU emulation
+- [X] Basic GPU emulation
 
 - [ ] UI integration
 
