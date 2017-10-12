@@ -146,10 +146,6 @@ public class CPU implements Runnable {
 		int instruction = memory.Read(PC.get());
 		String decodedIns = parser.decodeIns(instruction);
 
-		if(PC.get() == 0x3049) {
-			int i = 0;
-		}
-		
 		step((byte) instruction, decodedIns);
 		
 		cycleCount += 4;
