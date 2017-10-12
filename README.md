@@ -1,4 +1,6 @@
-![alt text](https://github.com/didgeridoomh/javaboy/raw/master/resources/icon_256.png "JavaBoy Logo")
+<p align=center>
+<img src="https://github.com/didgeridoomh/javaboy/raw/master/resources/icon_256.png" alt="JavaBoy Logo")
+</p>
 
 [![Build status](https://ci.appveyor.com/api/projects/status/pj05n0rgh67u22pm)](https://ci.appveyor.com/project/DidgeridooMH/javaboy)
 
@@ -14,7 +16,7 @@ JavaBoy is a Gameboy/Gameboy Color emulator written in java using the swing fram
 # Goals
 - [X] CPU instruction interpretation
 
-- [ ] Basic GPU emulation
+- [X] Basic GPU emulation
 
 - [ ] UI integration
 
