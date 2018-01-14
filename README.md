@@ -6,7 +6,7 @@
 [![CircleCI](https://circleci.com/gh/DidgeridooMH/JavaBoy/tree/master.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/DidgeridooMH/JavaBoy/tree/master)
 
 # JavaBoy
-JavaBoy is a Gameboy/Gameboy Color emulator written in java using the swing framework for GUI controls and Java2D to render the image to the virtual screen. JavaBoy can be run on any computer or system with java-1.8.0(or higher) installed and a working graphical desktop evironment.
+JavaBoy is a Gameboy/Gameboy Color emulator written in java using the swing framework for GUI controls and Java2D to render the image to the virtual screen. JavaBoy can be run on any computer or system with java-1.8.0(or higher) installed and a working graphical desktop environment.
 
 # Requirements
 * Windows XP or newer 32-bit/64-bit, or Linux 32-bit/64-bit (MacOS has not been tested)
