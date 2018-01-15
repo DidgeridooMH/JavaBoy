@@ -2,7 +2,6 @@
 <img src="https://github.com/didgeridoomh/javaboy/raw/master/resources/icon_256.png" alt="JavaBoy Logo")
 </p>
 
-[![Build status](https://ci.appveyor.com/api/projects/status/pj05n0rgh67u22pm?svg=true)](https://ci.appveyor.com/project/DidgeridooMH/javaboy)
 [![CircleCI](https://circleci.com/gh/DidgeridooMH/JavaBoy/tree/master.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/DidgeridooMH/JavaBoy/tree/master)
 
 # JavaBoy
