@@ -41,21 +41,19 @@ import emulator.core.memory.Memory;
  */
 public class Machine {
 	
-	private Thread cpuT;
-	
 	private CPU cpu;
 	
 	private GPU gpu;
-	
-	private Memory memory;
-	
+
 	/**
 	 * 0 - Machine is off.
 	 * 1 - Machine is on.
 	 * 2 - Machine is paused.
 	 */
-	public int state = 1;
-	
+	private int state = 1;
+
+    int getState() { return state; }
+
 	/**
 	 * Loads CPU module and sets up GUI
 	 * window.
@@ -66,21 +64,13 @@ public class Machine {
 	public Machine(String bios, String rom) {
 		System.out.println("Machine Initialized!");
 		
-		memory = new Memory(bios, rom);
+		Memory memory = new Memory(bios, rom);
 
 		gpu = new GPU(memory);
-		
-		memory.setGPU(gpu);
-		
-		cpu = new CPU(memory, gpu);
-		
-		gpu.setCPU(cpu);
-		
-		cpuT = new Thread(cpu);
-		
-		gpu.start();
-		
-		cpuT.start();
+
+        memory.setGPU(gpu);
+
+        cpu = new CPU(memory);
 	}
 	
 	
@@ -90,8 +80,12 @@ public class Machine {
 	public void execute() {
 		if(cpu.isError()) {
 			state = 0;
-			gpu.stop();
-		}
+		} else {
+		    cpu.execute();
+		    for(int i = 0; i < 3; i++) {
+                gpu.execute();
+            }
+        }
 	}
 	
 }

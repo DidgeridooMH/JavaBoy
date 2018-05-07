@@ -35,7 +35,7 @@ import emulator.Utils;
  * @author Daniel Simpkins
  *
  */
-public interface Increment {
+public class Increment {
 	
 	/**
 	 * Increments a register or 16-bit
@@ -44,7 +44,7 @@ public interface Increment {
 	 * @param cpu A reference to the CPU object.
 	 * @param instruction Instruction opcode
 	 */
-	public static void increment(CPU cpu, byte instruction) {
+	static void increment(CPU cpu, byte instruction) {
 		int initial = 0;
 		String reg = "";
 		
@@ -99,7 +99,7 @@ public interface Increment {
 				
 				break;
 			case 0x34:
-				initial = (byte) cpu.memory.Read(cpu.HL.get());
+				initial = cpu.memory.read(cpu.HL.get());
 				byte result = (byte) initial++;
 				cpu.flags.setFlags(initial, result, false, Flags.ZERO | Flags.HALFC);
 				

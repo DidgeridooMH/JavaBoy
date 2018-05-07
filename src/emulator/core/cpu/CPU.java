@@ -27,7 +27,6 @@
 package emulator.core.cpu;
 
 import emulator.Utils;
-import emulator.core.gpu.GPU;
 import emulator.core.memory.Memory;
 
 /**
@@ -37,7 +36,7 @@ import emulator.core.memory.Memory;
  * 
  * @author Daniel Simpkins
  */
-public class CPU implements Runnable {
+public class CPU {
 	
 	/** Indicates an error occurred in the CPU. */
 	public boolean error = false;
@@ -51,17 +50,15 @@ public class CPU implements Runnable {
 	Register PC;
 	
 	/** Flags used by CPU */
-	Flags flags;
+	public Flags flags;
 	
 	/** Memory with a size of 0xFFFF */
 	Memory memory = null;
 	
-	GPU gpu = null;
-	
 	/** Decodes opcodes */
-	Parser parser;
-	
-	int cycleCount = 0;
+	private Parser parser;
+
+	private Opcodes opcodes;
 	
 	/**
 	 * Handles all CPU emulation including registers,
@@ -69,72 +66,59 @@ public class CPU implements Runnable {
 	 * management.
 	 * 
 	 * @param memory Reference to the memory object
-	 * @param gpu Reference to the GPU object
 	 */
-	public CPU(Memory memory, GPU gpu) {
+	public CPU(Memory memory) {
 		/*
 		 * Initialize 16-bit registers
 		 * IO registers, and memory.
 		 */
-		AF = new Register(0x01B0);
-		BC = new Register(0x0013);
-		DE = new Register(0x00D8);
-		HL = new Register(0x014D);
-		SP = new Register(0xFFFE);
-		PC = new Register(0x0000);
+		AF = new Register(0x01B0, "AF");
+		BC = new Register(0x0013, "BC");
+		DE = new Register(0x00D8, "DE");
+		HL = new Register(0x014D, "HL");
+		SP = new Register(0xFFFE, "SP");
+		PC = new Register(0x0000, "PC");
 		
 		this.memory = memory;
-		this.gpu = gpu;
 		
 		/* Initializes hardware IO registers */
-		memory.Write((byte) 0x00, 0xFF05);
-		memory.Write((byte) 0x00, 0xFF06);
-		memory.Write((byte) 0x00, 0xFF07);
-		memory.Write((byte) 0x80, 0xFF10);
-		memory.Write((byte) 0xBF, 0xFF11);
-		memory.Write((byte) 0xF3, 0xFF12);
-		memory.Write((byte) 0xBF, 0xFF14);
-		memory.Write((byte) 0x3F, 0xFF16);
-		memory.Write((byte) 0x00, 0xFF17);
-		memory.Write((byte) 0xBF, 0xFF19);
-		memory.Write((byte) 0x7F, 0xFF1A);
-		memory.Write((byte) 0xFF, 0xFF1B);
-		memory.Write((byte) 0x9F, 0xFF1C);
-		memory.Write((byte) 0xBF, 0xFF1E);
-		memory.Write((byte) 0xFF, 0xFF20);
-		memory.Write((byte) 0x00, 0xFF21);
-		memory.Write((byte) 0x00, 0xFF22);
-		memory.Write((byte) 0xBF, 0xFF23);
-		memory.Write((byte) 0x77, 0xFF24);
-		memory.Write((byte) 0xF3, 0xFF25);
-		memory.Write((byte) 0xF1, 0xFF26);
-		memory.Write((byte) 0x00, 0xFF42);
-		memory.Write((byte) 0x00, 0xFF43);
-		memory.Write((byte) 0x90, 0xFF44);
-		memory.Write((byte) 0x00, 0xFF45);
-		memory.Write((byte) 0xFC, 0xFF47);
-		memory.Write((byte) 0xFF, 0xFF48);
-		memory.Write((byte) 0xFF, 0xFF49);
-		memory.Write((byte) 0x00, 0xFF4A);
-		memory.Write((byte) 0x00, 0xFF4B);
-		memory.Write((byte) 0x00, 0xFFFF);
+		memory.write((byte) 0x00, 0xFF05);
+		memory.write((byte) 0x00, 0xFF06);
+		memory.write((byte) 0x00, 0xFF07);
+		memory.write((byte) 0x80, 0xFF10);
+		memory.write((byte) 0xBF, 0xFF11);
+		memory.write((byte) 0xF3, 0xFF12);
+		memory.write((byte) 0xBF, 0xFF14);
+		memory.write((byte) 0x3F, 0xFF16);
+		memory.write((byte) 0x00, 0xFF17);
+		memory.write((byte) 0xBF, 0xFF19);
+		memory.write((byte) 0x7F, 0xFF1A);
+		memory.write((byte) 0xFF, 0xFF1B);
+		memory.write((byte) 0x9F, 0xFF1C);
+		memory.write((byte) 0xBF, 0xFF1E);
+		memory.write((byte) 0xFF, 0xFF20);
+		memory.write((byte) 0x00, 0xFF21);
+		memory.write((byte) 0x00, 0xFF22);
+		memory.write((byte) 0xBF, 0xFF23);
+		memory.write((byte) 0x77, 0xFF24);
+		memory.write((byte) 0xF3, 0xFF25);
+		memory.write((byte) 0xF1, 0xFF26);
+		memory.write((byte) 0x00, 0xFF42);
+		memory.write((byte) 0x00, 0xFF43);
+		memory.write((byte) 0x00, 0xFF44);
+		memory.write((byte) 0x00, 0xFF45);
+		memory.write((byte) 0xFC, 0xFF47);
+		memory.write((byte) 0xFF, 0xFF48);
+		memory.write((byte) 0xFF, 0xFF49);
+		memory.write((byte) 0x00, 0xFF4A);
+		memory.write((byte) 0x00, 0xFF4B);
+		memory.write((byte) 0x00, 0xFFFF);
 
 		flags = new Flags();
 		
 		parser = new Parser();
-	}
-	
-	/**
-	 * Displays 16-bit registers.
-	 */
-	public void dumpRegisters() {
-		System.out.println("AF: " + Utils.hex(AF.get()));
-		System.out.println("BC: " + Utils.hex(BC.get()));
-		System.out.println("DE: " + Utils.hex(DE.get()));
-		System.out.println("HL: " + Utils.hex(HL.get()));
-		System.out.println("SP: " + Utils.hex(SP.get()));
-		System.out.println("PC: " + Utils.hex(PC.get()));
-		System.out.println("");
+
+		opcodes = new Opcodes(this);
 	}
 	
 	/**
@@ -142,21 +126,10 @@ public class CPU implements Runnable {
 	 * parses the instruction, and executes it.
 	 */
 	public void execute() {
-		
-		int instruction = memory.Read(PC.get());
+		int instruction = memory.read(PC.get());
 		String decodedIns = parser.decodeIns(instruction);
 
 		step((byte) instruction, decodedIns);
-		
-		cycleCount += 4;
-		
-		if(cycleCount >= 168) {
-			synchronized (gpu.getSurface()) {
-				gpu.getSurface().notifyAll();
-			}
-			
-			cycleCount = 0;
-		}
 	}
 	
 	public boolean isError() {
@@ -170,84 +143,86 @@ public class CPU implements Runnable {
 	 * @param decodedIns
 	 */
 	private void step(byte ins, String decodedIns) {
-		switch(decodedIns) {
-			case "LD":
-				// fall through
-			case "LDH":
-				Load.load(this, ins);
-				break;
-			case "XOR":
-				BitOperation.exclusiveOR(this, ins);
-				break;
-			case "OR":
-				BitOperation.or(this, ins);
-				break;
-			case "SUB":
-				Subtract.subtract(this, ins);
-				break;
-			case "PREFIX":
-				stepPrefix();
-				break;
-			case "JR":
-				Jump.jumpSubroutine(this, ins);
-				break;
-			case "CALL":
-				Jump.call(this, ins);
-				break;
-			case "PUSH":
-				Stack.push(this, ins);
-				break;
-			case "POP":
-				Stack.pop(this, ins);
-				break;
-			case "RLA":
-				BitOperation.rotate(this, ins, false);
-				break;
-			case "DEC":
-				Decrement.decrement(this, ins);
-				break;
-			case "INC":
-				Increment.increment(this, ins);
-				break;
-			case "RET":
-				Jump.returnFromCall(this, ins);
-				break;
-			case "CP":
-				Compare.compare(this, ins);
-				break;
-			case "ADD":
-				Addition.addition(this, ins);
-				break;
-			case "NOP":
-				// No Operation
-				Utils.PrintInstruction("NOP", ins, PC.get(), null, 0);
-				PC.set(PC.get() + 1);
-				break;
-			case "JP":
-				Jump.jump(this, ins);
-				break;
-			case "DI":
-				flags.disableInterrupts();
-				Utils.PrintInstruction("DI", ins, PC.get(), null, 0);
-				PC.set(PC.get() + 1);
-				break;
-			default:
-				System.err.println("Unknown opcode: " + 
-									decodedIns + " " + 
-									Utils.hex(ins & 0xFF) + 
-									" at " + 
-									Utils.hex(PC.get()) 
-				);
-				error = true;
-				return;
-		}
+	        if(opcodes.isValid(ins)) {
+	            opcodes.execute(ins);
+            } else {
+                switch (decodedIns) {
+                    case "LD":
+                    case "LDH":
+                        Load.load(this, ins);
+                        break;
+                    case "XOR":
+                        BitOperation.exclusiveOR(this, ins);
+                        break;
+                    case "OR":
+                        BitOperation.or(this, ins);
+                        break;
+                    case "SUB":
+                        Subtract.subtract(this, ins);
+                        break;
+                    case "PREFIX":
+                        stepPrefix();
+                        break;
+                    case "JR":
+                        Jump.jumpSubroutine(this, ins);
+                        break;
+                    case "CALL":
+                        Jump.call(this, ins);
+                        break;
+                    case "PUSH":
+                        Stack.push(this, ins);
+                        break;
+                    case "POP":
+                        Stack.pop(this, ins);
+                        break;
+                    case "RLA":
+                        BitOperation.rotate(this, ins, false);
+                        break;
+                    case "DEC":
+                        Decrement.decrement(this, ins);
+                        break;
+                    case "INC":
+                        Increment.increment(this, ins);
+                        break;
+                    case "RET":
+                        Jump.returnFromCall(this, ins);
+                        break;
+                    case "CP":
+                        Compare.compare(this, ins);
+                        break;
+                    case "NOP":
+                        // No Operation
+                        Utils.PrintInstruction("NOP", ins, PC.get(), null, 0);
+                        PC.set(PC.get() + 1);
+                        break;
+                    case "JP":
+                        Jump.jump(this, ins);
+                        break;
+                    case "DI":
+                        flags.disableInterrupts();
+                        Utils.PrintInstruction("DI", ins, PC.get(), null, 0);
+                        PC.set(PC.get() + 1);
+                        break;
+                    case "AND":
+                        BitOperation.and(this, ins);
+                        break;
+                    default:
+                        System.err.println("Unknown opcode: " +
+                                decodedIns + " " +
+                                Utils.hex(ins & 0xFF) +
+                                " at " +
+                                Utils.hex(PC.get())
+                        );
+                        error = true;
+                }
+            }
 	}
 	
 	/** 
 	 * Executes a prefixed instruction.
 	 */
 	public void stepPrefix() {
-		byte instruction = memory.Read(PC.get()+1);
+		byte instruction = memory.read(PC.get()+1);
 		String decodedPrefix = parser.decodePrefix(instruction);
 		
 		switch(decodedPrefix) {
@@ -258,7 +233,11 @@ public class CPU implements Runnable {
 			case "RL":
 				BitOperation.rotate(this, instruction, true);
 				break;
-			
+
+            case "RES":
+                BitOperation.resetBit(this, instruction);
+                break;
+
 			default:
 				System.err.println("Unknown prefix: " + 
 									decodedPrefix + " " + 
@@ -276,7 +255,7 @@ public class CPU implements Runnable {
 	 * @param in Byte to store in stack.
 	 */
 	public void push(byte in) {
-		memory.Write(in, SP.get());
+		memory.write(in, SP.get());
 		SP.set(SP.get() - 1);
 	}
 	
@@ -296,12 +275,8 @@ public class CPU implements Runnable {
 	 * @return Byte from stack.
 	 */
 	public byte pop() {
-		byte out = 0x0;
-		
 		SP.set(SP.get() + 1);
-		out = memory.Read(SP.get());
-		
-		return out;
+		return memory.read(SP.get());
 	}
 	
 	/**
@@ -310,24 +285,10 @@ public class CPU implements Runnable {
 	 * @return Word from stack.
 	 */
 	public short pop16() {
-		short highByte = 0x0;
-		short lowByte = 0x0;
-		
-		lowByte = (short) (pop() & 0xFF);
-		highByte = pop();
+		short lowByte = (short) (pop() & 0xFF);
+		short highByte = pop();
 		
 		return (short) (((highByte & 0xFFFF) << 8) | (lowByte & 0xFF));
-	}
-
-	public synchronized int getCycle() {
-		return cycleCount;
-	}
-	
-	@Override
-	public void run() {
-		while(!error) {
-			execute();	
-		}
 	}
 	
 }

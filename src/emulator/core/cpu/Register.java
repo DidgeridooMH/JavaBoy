@@ -34,43 +34,45 @@ package emulator.core.cpu;
  */
 public class Register
 {
-	int m_value;
+	private int value;
+
+	private String name;
 
 	public Register() {
-		m_value = 0;
+		this.value = 0;
 	}
 	
-	public Register(int defValue) {
-		m_value = defValue;
+	public Register(int defValue, String name) {
+		this.value = defValue;
+		this.name = name;
 	}
 	
 	public void set(int in) {
-		m_value = in;
+		this.value = in & 0xFFFF;
 	}
 	
 	public int get() {
-		return m_value;
+		return this.value;
 	}
 	
 	public int getHighByte() {
-		int out = (m_value >> 8) & 0xFF;
-		return out;
+        return (this.value >> 8) & 0xFF;
 	}
 	
 	public int getLowByte() {
-		int out = (m_value & 0xFF);
-		return out;
+		return (this.value & 0xFF);
 	}
 	
 	public void setHighByte(byte in) {
-		int lowByte = this.getLowByte();
-		
-		this.set(((int) (in & 0xff) << 8) | lowByte);
+		this.set(((in & 0xff) << 8) | this.getLowByte());
 	}
 	
 	public void setLowByte(byte in) {
-		int highByte = this.getHighByte();
-		
-		this.set((highByte << 8) | (int) (in & 0xff));
+		this.set((this.getHighByte() << 8) | in & 0xff);
 	}
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

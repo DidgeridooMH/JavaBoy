@@ -35,7 +35,7 @@ import emulator.Utils;
  * @author Daniel Simpkins
  *
  */
-public interface Jump {
+public class Jump {
 
 	/**
 	 * Pushes Program Counter into the stack
@@ -46,8 +46,8 @@ public interface Jump {
 	 */
 	static void call(CPU cpu, byte instruction) {
 		int address = 0x0;
-		byte parameters[] = { 	cpu.memory.Read(cpu.PC.get() + 1),
-								cpu.memory.Read(cpu.PC.get() + 2) };
+		byte parameters[] = { 	cpu.memory.read(cpu.PC.get() + 1),
+								cpu.memory.read(cpu.PC.get() + 2) };
 		boolean jump = false;
 		
 		System.out.print(Utils.hex(cpu.PC.get()) + ": CALL ");
@@ -104,7 +104,7 @@ public interface Jump {
 	 * @param instruction Instruction opcode.
 	 */
 	static void jumpSubroutine(CPU cpu, byte instruction) {
-		byte parameter[] = { cpu.memory.Read(cpu.PC.get() + 1) };
+		byte parameter[] = { cpu.memory.read(cpu.PC.get() + 1) };
 		boolean jump = false;
 		
 		System.out.print(Utils.hex(cpu.PC.get()) + ": JR ");
@@ -226,11 +226,11 @@ public interface Jump {
 	 * @param instruction Instruction opcode.
 	 */
 	static void jump(CPU cpu, byte instruction) {
-		byte parameter[] = { 	cpu.memory.Read(cpu.PC.get() + 1), 
-								cpu.memory.Read(cpu.PC.get() + 2) };
+		byte parameter[] = { 	cpu.memory.read(cpu.PC.get() + 1),
+								cpu.memory.read(cpu.PC.get() + 2) };
 		boolean jump = false;
 		
-		System.out.print(Utils.hex(cpu.PC.get()) + ": JR ");
+		System.out.print(Utils.hex(cpu.PC.get()) + ": JP ");
 		
 		switch(instruction) {
 			case (byte) 0xC3:
@@ -261,10 +261,13 @@ public interface Jump {
 				return;
 		}
 		
-		System.out.print(Utils.hex(cpu.PC.get() + parameter[0] + 2) + "(" + Utils.hex(instruction & 0xFF) + ")\n");
+		System.out.print(Utils.hex(((parameter[1] << 8) & 0xFF00) | parameter[0]) + "(" + Utils.hex(instruction & 0xFF) + ")\n");
 		
 		if(jump) {
-			cpu.PC.set(((int) (parameter[1]) << 8) | parameter[0]);
+		    int highByte = (parameter[1] << 8) & 0xFF00;
+		    int lowByte = parameter[0];
+		    int address = (highByte & 0xFF00) | (lowByte & 0x00FF);
+			cpu.PC.set(address);
 		} else {
 			cpu.PC.set(cpu.PC.get() + 2);
 		}

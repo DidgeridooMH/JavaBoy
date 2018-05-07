@@ -62,10 +62,12 @@ public class GUI extends JFrame {
 		}
 		
 		setTitle("JavaBoy - Gameboy Emulator");
-		getContentPane().setPreferredSize(new Dimension(160 ,144));
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        surface.setPreferredSize(new Dimension(160, 144));
+        setResizable(false);
+        setLocationRelativeTo(null);
+
 		pack();
-		setResizable(false);
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }

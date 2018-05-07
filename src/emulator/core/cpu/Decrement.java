@@ -35,7 +35,7 @@ import emulator.Utils;
  * @author Daniel Simpkins
  *
  */
-public interface Decrement {
+public class Decrement {
 
 	/**
 	 * Decrements a register or 16-bit
@@ -44,7 +44,7 @@ public interface Decrement {
 	 * @param cpu Reference to CPU object
 	 * @param instruction Instruction opcode
 	 */
-	public static void decrement(CPU cpu, byte instruction) {
+	static void decrement(CPU cpu, byte instruction) {
 		int initial = 0;
 		String register = "";
 	 
@@ -123,7 +123,7 @@ public interface Decrement {
 				register = "L";
 				break;
 			case 0x35:
-				initial = (byte) cpu.memory.Read(cpu.HL.get());
+				initial = cpu.memory.read(cpu.HL.get());
 				byte result = (byte) initial--;
 				cpu.flags.setFlags(initial, 
 									result, 

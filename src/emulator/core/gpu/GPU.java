@@ -27,7 +27,6 @@
 package emulator.core.gpu;
 
 import emulator.Utils;
-import emulator.core.cpu.CPU;
 import emulator.core.memory.Memory;
 
 /**
@@ -40,22 +39,15 @@ import emulator.core.memory.Memory;
  */
 public class GPU {
 	
-	private Renderer graphicsT = null;
+    private Memory memory = null;
+
+    private GUI guiWindow = null;
 	
 	private Screen surface = null;
-	
-	private byte stat;
-	
-	private byte coordY;
-	
-	private byte lyCompare;
-	
-	private byte windowY;
-	private byte windowX;
-	
-	private byte bgPalette;
-	private byte objPalette0;
-	private byte objPalette1;
+
+	private int currentPixel = 0;
+
+	private byte lcdc, stat, coordY, lyCompare, windowY, windowX, bgPalette, objPalette0, objPalette1;
 	
 	/**
 	 * Initializes a display window as well as
@@ -65,49 +57,66 @@ public class GPU {
 	 * @param memory A reference to the memory module
 	 */
 	public GPU(Memory memory) {
-		surface = new Screen();
-		surface.setMemory(memory);
-		graphicsT = new Renderer(surface);
-		graphicsT.setName("GUI Render");
-		
-		surface.setLCDC(memory.Read(0xFF40));
-		stat = memory.Read(0xFF41);
-		surface.setScrollY(memory.Read(0xFF42));
-		surface.setScrollX(memory.Read(0xFF43));
-		coordY = memory.Read(0xFF44);
-		lyCompare = memory.Read(0xFF45);
-		windowY = memory.Read(0xFF4A);
-		windowX = memory.Read(0xFF4B);
-		bgPalette = memory.Read(0xFF47);
-		objPalette0 = memory.Read(0xFF48);
-		objPalette1 = memory.Read(0xFF49);
+	    this.memory = memory;
+		this.surface = new Screen();
+        this.guiWindow = new GUI(surface);
+        this.guiWindow.setVisible(true);
 	}
-	
-	/**
-	 * Starts the window thread
-	 */
-	public void start() {
-		graphicsT.start();
-	}
-	
-	/**
-	 * Pauses the window thread
-	 */
-	public void stop() {
-	}
-	
-	public boolean isVBlank() {
-		return surface.isVBlank();
-	}
-	
-	public void setVBlank(boolean verticalBlank) {
-		surface.setVBlank(verticalBlank);
-	}
-	
-	public void setCPU(CPU cpu) {
-		surface.setCPU(cpu);
-	}
-	
+
+	public void execute() {
+	    drawSliver();
+
+        currentPixel += 8;
+
+	    if(currentPixel >= 256) {
+	        coordY++;
+	        currentPixel = 0;
+        }
+
+        if (((int)(coordY) & 0xFF) > 144) {
+	        surface.update();
+	        coordY = 0;
+        }
+    }
+
+    private int getBackgroundTile() {
+        int tileNumber = ((coordY / 8) * 32) + currentPixel / 8;
+        return memory.read(0x9800 + tileNumber);
+    }
+
+    private void drawPixel(int x, int y, int colorID) {
+        switch(colorID) {
+            case 0:
+                surface.pushPixel(x, y, 0xFF, 0xFF, 0xFF);
+                break;
+            case 1:
+                surface.pushPixel(x, y, 0xAA, 0xAA, 0xAA);
+                break;
+            case 2:
+                surface.pushPixel(x, y, 0x55, 0x55, 0x55);
+                break;
+            case 3:
+                surface.pushPixel(x, y, 0x0, 0x0, 0x0);
+                break;
+        }
+    }
+
+    private void drawSliver() {
+	    int tileNumber = getBackgroundTile();
+
+        int sliver = coordY % 8;
+
+        byte pixelData[] = {memory.read(0x8000 + (tileNumber * 0x10) + (sliver * 2)),
+                        memory.read(0x8000 + (tileNumber * 0x10) + (sliver * 2) + 1)};
+
+        for(int pixel = 7; pixel >= 0; pixel--) {
+            int primary = ((byte) (pixelData[1] & 0xFF >> (pixel - 1))) & 0x02;
+            int secondary = (byte) ((pixelData[0] & 0xFF) >> pixel) & 0x01;
+
+            drawPixel(currentPixel + (7 - pixel), (int)(coordY) & 0xFF, primary | secondary);
+        }
+    }
+
 	/**
 	 * Retrieves the value of a hardware register
 	 * at a specified address. Returns a 0xFF if there
@@ -119,27 +128,27 @@ public class GPU {
 	public byte readRegister(int address) {
 		switch(address) {
 			case 0xFF40:
-				return (byte) surface.getLCDC();
+				return lcdc;
 			case 0xFF41:
 				return stat;
 			case 0xFF42:
-				return (byte) surface.getScrollY();
+				return (byte)(surface.getScrollY());
 			case 0xFF43:
-				return (byte) surface.getScrollX();
+				return (byte)(surface.getScrollX());
 			case 0xFF44:
 				return coordY;
 			case 0xFF45:
 				return lyCompare;
+            case 0xFF47:
+                return bgPalette;
+            case 0xFF48:
+                return objPalette0;
+            case 0xFF49:
+                return objPalette1;
 			case 0xFF4A:
 				return windowY;
 			case 0xFF4B:
 				return windowX;
-			case 0xFF47:
-				return bgPalette;
-			case 0xFF48:
-				return objPalette0;
-			case 0xFF49:
-				return objPalette1;
 			default:
 				System.err.println("GPU read fault: " +
 									"at address " + Utils.hex(address)
@@ -158,7 +167,7 @@ public class GPU {
 	public void writeRegister(byte in, int address) {
 		switch(address) {
 			case 0xFF40:
-				surface.setLCDC(in);
+				lcdc = in;
 				break;
 			case 0xFF41:
 				stat = in;
@@ -169,38 +178,32 @@ public class GPU {
 			case 0xFF43:
 				surface.setScrollX(in);
 				break;
-			case 0xFF44:
-				coordY = in;
-				break;
+            case 0xFF44:
+                coordY = in;
+                break;
 			case 0xFF45:
 				lyCompare = in;
 				break;
+            case 0xFF47:
+                bgPalette = in;
+                break;
+            case 0xFF48:
+                objPalette0 = in;
+                break;
+            case 0xFF49:
+                objPalette1 = in;
+                break;
 			case 0xFF4A:
 				windowY = in;
 				break;
 			case 0xFF4B:
 				windowX = in;
 				break;
-			case 0xFF47:
-				bgPalette = in;
-				break;
-			case 0xFF48:
-				objPalette0 = in;
-				break;
-			case 0xFF49:
-				objPalette1 = in;
-				break;
 			default:
 				System.err.println("GPU write fault: " +
 									"[" + Utils.hex(in) + "] " +
 									"at address " + Utils.hex(address)
 				);
-				return;
 		}
 	}
-	
-	public Screen getSurface() {
-		return surface;
-	}
-	
 }

@@ -34,141 +34,39 @@ import emulator.Utils;
  * @author Daniel Simpkins
  *
  */
-public interface Addition {
+public class Addition {
 
-	/**
-	 * Adds registers, 16-bit combined registers, and memory locations.
-	 * 
-	 * @param cpu A reference to the CPU object.
-	 * @param instruction The opcode of the instruction to execute.
-	 */
-	static void addition(CPU cpu, byte instruction) {
-		int initial = 0x0;
-		int result = 0x0;
-		String register = "";
-		
-		switch(instruction) {
-			case 0x09:
-				initial = cpu.HL.get();
-				result = initial + cpu.BC.get();
-				cpu.HL.set(initial);
-				
-				register = "HL, BC";
-				
-				break;
-			case 0x19:
-				initial = cpu.HL.get();
-				result = initial + cpu.DE.get();
-				cpu.HL.set(initial);
-				
-				register = "HL, DE";
-				
-				break;
-			case 0x29:
-				initial = cpu.HL.get();
-				result = initial + cpu.HL.get();
-				cpu.HL.set(initial);
-				
-				register = "HL, HL";
-				
-				break;
-			case 0x39:
-				initial = cpu.HL.get();
-				result = initial + cpu.SP.get();
-				cpu.HL.set(initial);
-				
-				register = "HL, SP";
-				
-				break;
-			case (byte) 0x80:
-				initial = cpu.AF.getHighByte();
-				result = initial + cpu.BC.getHighByte();
-				cpu.AF.setHighByte((byte) result); 
-				
-				register = "A, B";
-				
-				break;
-			case (byte) 0x81:
-				initial = cpu.AF.getLowByte();
-				result = initial + cpu.BC.getLowByte();
-				cpu.AF.setHighByte((byte) result); 
-				
-				register = "A, C";
-				
-				break;
-			case (byte) 0x82:
-				initial = cpu.AF.getHighByte();
-				result = initial + cpu.DE.getHighByte();
-				cpu.AF.setHighByte((byte) result); 
-				
-				register = "A, D";
-				
-				break;
-			case (byte) 0x83:
-				initial = cpu.AF.getHighByte();
-				result = initial + cpu.DE.getLowByte();
-				cpu.AF.setHighByte((byte) result); 
-				
-				register = "A, E";
-				
-				break;
-			case (byte) 0x84:
-				initial = cpu.AF.getHighByte();
-				result = initial + cpu.HL.getHighByte();
-				cpu.AF.setHighByte((byte) result); 
-				
-				register = "A, H";
-				
-				break;
-			case (byte) 0x85:
-				initial = cpu.AF.getHighByte();
-				result = initial + cpu.HL.getLowByte();
-				cpu.AF.setHighByte((byte) result); 
-				
-				register = "A, L";
-				
-				break;
-			case (byte) 0x86:
-				initial = cpu.AF.getHighByte();
-				result = initial + cpu.memory.Read(cpu.HL.get());
-				cpu.AF.setHighByte((byte) result);
-				
-				register = "A, (HL)";
-				
-				break;
-			case (byte) 0x87:
-				initial = cpu.AF.getHighByte();
-				result = initial + cpu.AF.getHighByte();
-				cpu.AF.setHighByte((byte) result); 
-				
-				register = "A, A";
-				
-				break;
-			default:
-				System.err.println("Error parsing ADD instruction: " + 
-									Utils.hex(instruction) + 
-									" at " + 
-									Utils.hex(cpu.PC.get())
-				);
-				cpu.error = true;
-				return;
-		}
-		
-		if(instruction <= 0x39) {
-			cpu.flags.setFlags(	initial, result, 
-								true, 
-								Flags.HALFC | Flags.CARRY
-			);
-		} else {
-			cpu.flags.setFlags( initial, result, 
-								false, 
-								Flags.HALFC | Flags.CARRY
-			);
-		}
-		
-		Utils.PrintInstruction("ADD " + register, instruction, cpu.PC.get(), null, 0);
-		
-		cpu.PC.set(cpu.PC.get() + 1);
-	}
-	
+    private static void additionLogInstruction(CPU cpu, int initial, int result, boolean bitwidth,
+                                               String input, String operand, byte instruction) {
+        cpu.flags.setFlags(	initial, result,
+                bitwidth,
+                Flags.HALFC | Flags.CARRY
+        );
+
+        Utils.PrintInstruction("ADD " + input + ", " + operand,
+                instruction,
+                cpu.PC.get(),
+                null, 0
+        );
+    }
+
+    public static void addition_8(CPU cpu, Register input, Register operand, byte instruction) {
+        int initial = input.getHighByte();
+        int result = input.get() + operand.get();
+        input.setHighByte((byte)result);
+
+        additionLogInstruction(cpu, initial, result, false, input.toString(), operand.toString(), instruction);
+
+        cpu.PC.set(cpu.PC.get() + 1);
+    }
+
+    public static void addition_16(CPU cpu, Register input, Register operand, byte instruction) {
+        int initial = input.get();
+        int result = input.get() + operand.get();
+        input.set(result);
+
+        additionLogInstruction(cpu, initial, result, true, input.toString(), operand.toString(), instruction);
+
+        cpu.PC.set(cpu.PC.get() + 1);
+    }
 }

@@ -34,7 +34,7 @@ import emulator.Utils;
  * @author Daniel Simpkins
  *
  */
-public interface Subtract {
+public class Subtract {
 	
 	/**
 	 * Subtracts registers and byte of memory.
@@ -85,7 +85,7 @@ public interface Subtract {
 			
 				break;
 			case (byte) 0x96:
-				value = cpu.memory.Read(cpu.PC.get() + 1);
+				value = cpu.memory.read(cpu.PC.get() + 1);
 			
 				register = "d8";
 			

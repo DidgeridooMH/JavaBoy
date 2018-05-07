@@ -34,7 +34,127 @@ import emulator.Utils;
  * @author Daniel Simpkins
  *
  */
-public interface BitOperation {
+public class BitOperation {
+
+    static void and(CPU cpu, byte instruction) {
+        byte parameter[] = { 0x0 };
+
+        switch(instruction) {
+            case (byte) 0xA0:
+                cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() & cpu.BC.getHighByte()));
+                cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
+                cpu.flags.setCarry(false);
+                cpu.flags.setHalfCarry(false);
+                cpu.flags.setSubtract(false);
+
+                Utils.PrintInstruction("AND B", instruction, cpu.PC.get(), null, 0);
+
+                cpu.PC.set(cpu.PC.get() + 1);
+
+                break;
+            case (byte) 0xA1:
+                cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() & cpu.BC.getLowByte()));
+                cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
+                cpu.flags.setCarry(false);
+                cpu.flags.setHalfCarry(false);
+                cpu.flags.setSubtract(false);
+
+                Utils.PrintInstruction("AND C", instruction, cpu.PC.get(), null, 0);
+
+                cpu.PC.set(cpu.PC.get() + 1);
+
+                break;
+            case (byte) 0xA2:
+                cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() & cpu.DE.getHighByte()));
+                cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
+                cpu.flags.setCarry(false);
+                cpu.flags.setHalfCarry(false);
+                cpu.flags.setSubtract(false);
+
+                Utils.PrintInstruction("AND D", instruction, cpu.PC.get(), null, 0);
+
+                cpu.PC.set(cpu.PC.get() + 1);
+
+                break;
+            case (byte) 0xA3:
+                cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() & cpu.DE.getLowByte()));
+                cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
+                cpu.flags.setCarry(false);
+                cpu.flags.setHalfCarry(false);
+                cpu.flags.setSubtract(false);
+
+                Utils.PrintInstruction("AND E", instruction, cpu.PC.get(), null, 0);
+
+                cpu.PC.set(cpu.PC.get() + 1);
+
+                break;
+            case (byte) 0xA4:
+                cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() & cpu.HL.getHighByte()));
+                cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
+                cpu.flags.setCarry(false);
+                cpu.flags.setHalfCarry(false);
+                cpu.flags.setSubtract(false);
+
+                Utils.PrintInstruction("AND H", instruction, cpu.PC.get(), null, 0);
+
+                cpu.PC.set(cpu.PC.get() + 1);
+
+                break;
+            case (byte) 0xA5:
+                cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() & cpu.HL.getLowByte()));
+                cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
+                cpu.flags.setCarry(false);
+                cpu.flags.setHalfCarry(false);
+                cpu.flags.setSubtract(false);
+
+                Utils.PrintInstruction("AND L", instruction, cpu.PC.get(), null, 0);
+
+                cpu.PC.set(cpu.PC.get() + 1);
+
+                break;
+            case (byte) 0xA6:
+                parameter[0] = cpu.memory.read(cpu.HL.get());
+
+                cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() & parameter[0]));
+                cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
+                cpu.flags.setCarry(false);
+                cpu.flags.setHalfCarry(false);
+                cpu.flags.setSubtract(false);
+
+                Utils.PrintInstruction("AND (HL)", instruction, cpu.PC.get(), parameter, 1);
+
+                cpu.PC.set(cpu.PC.get() + 1);
+
+                break;
+            case (byte) 0xA7:
+                cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() & cpu.AF.getHighByte()));
+                cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
+                cpu.flags.setCarry(false);
+                cpu.flags.setHalfCarry(false);
+                cpu.flags.setSubtract(false);
+
+                Utils.PrintInstruction("AND A", instruction, cpu.PC.get(), null, 0);
+
+                cpu.PC.set(cpu.PC.get() + 1);
+
+                break;
+            case (byte) 0xE6:
+                cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() & cpu.memory.read(cpu.PC.get() + 1)));
+                cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
+                cpu.flags.setCarry(false);
+                cpu.flags.setHalfCarry(false);
+                cpu.flags.setSubtract(false);
+
+                Utils.PrintInstruction("AND d8", instruction, cpu.PC.get(), null, 0);
+
+                cpu.PC.set(cpu.PC.get() + 1);
+
+                break;
+            default:
+                System.err.println("Unknown variant of AND: " + Utils.hex(instruction & 0xFF));
+                cpu.error = true;
+        }
+    }
 
 	static void or(CPU cpu, byte instruction) {
 		byte parameter[] = { 0x0 };
@@ -113,7 +233,7 @@ public interface BitOperation {
 				
 				break;
 			case (byte) 0xB6:
-				parameter[0] = cpu.memory.Read(cpu.HL.get());
+				parameter[0] = cpu.memory.read(cpu.HL.get());
 				
 				cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() | parameter[0]));
 				cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
@@ -228,7 +348,7 @@ public interface BitOperation {
 				
 				break;
 			case (byte) 0xAE:
-				parameter[0] = cpu.memory.Read(cpu.HL.get());
+				parameter[0] = cpu.memory.read(cpu.HL.get());
 				
 				cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() ^ parameter[0]));
 				cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
@@ -258,7 +378,6 @@ public interface BitOperation {
 				cpu.error = true;
 		}
 	}
-	
 
 	/**
 	 * Parses instruction and rotates/shifts register or memory.
@@ -267,7 +386,7 @@ public interface BitOperation {
 	 * @param instruction Instruction opcode.
 	 * @param isPrefix States whether the opcode is prefix or standard.
 	 */
-	public static void rotate(CPU cpu, byte instruction, boolean isPrefix) {
+	static void rotate(CPU cpu, byte instruction, boolean isPrefix) {
 		byte highByte = (byte) (instruction >> 4);
 		byte lowByte = (byte) (instruction & 0xF);
 		byte regByte = (byte) (lowByte & 0x07);
@@ -388,11 +507,11 @@ public interface BitOperation {
 	 * @param useCarry Set if carry is to be stored into bit 0
 	 * @param setZero Set if the zero flag is to be set
 	 */
-	public static void rotateLeft(	Register register, 
-									Flags flags, 
-									boolean highLow, 
-									boolean useCarry, 
-									boolean setZero) {
+	static void rotateLeft(Register register,
+                           Flags flags,
+                           boolean highLow,
+                           boolean useCarry,
+                           boolean setZero) {
 		
 		byte regValue = (byte) ((highLow) ? register.getHighByte() : register.getLowByte());
 		
@@ -443,7 +562,7 @@ public interface BitOperation {
 	 * @param useCarry Set if carry is to be stored into bit 0.
 	 * @param setZero Set if the zero flag is to be set.
 	 */
-	public static void rotateRight(	Register register, 
+	static void rotateRight(	Register register,
 									Flags flags, 
 									boolean highLow, 
 									boolean useCarry, 
@@ -488,13 +607,12 @@ public interface BitOperation {
 		}
 	}
 	
-	/**
-	 * Tests if a bit is set in a register or byte of memory.
+	/** Tests if a bit is set in a register or byte of memory.
 	 * 
 	 * @param cpu Reference to CPU object.
 	 * @param instruction Instruction opcode.
 	 */
-	static void bitTest(CPU cpu, byte instruction) {
+    static void bitTest(CPU cpu, byte instruction) {
 		int regValue = 0x0;
 		byte bitValue = 0x0;
 		byte regNibble = 0x0;
@@ -550,7 +668,7 @@ public interface BitOperation {
 			case 0x6:
 				// fall through
 			case 0xE:
-				regValue = (byte) cpu.memory.Read(cpu.HL.get());
+				regValue = cpu.memory.read(cpu.HL.get());
 				regName = "(HL)";
 				break;
 			case 0x7:
@@ -592,7 +710,7 @@ public interface BitOperation {
 				return;
 		}
 		
-		cpu.flags.setZero(!((regValue & (int)(bitValue & 0xFF)) > 0));
+		cpu.flags.setZero(!((regValue & (bitValue & 0xFF)) > 0));
 		cpu.flags.setSubtract(false);
 		cpu.flags.setHalfCarry(true);
 		
@@ -606,4 +724,18 @@ public interface BitOperation {
 		cpu.PC.set(cpu.PC.get() + 2);
 		
 	}
+
+	static void resetBit(CPU cpu, byte instruction) {
+        switch(instruction) {
+            case (byte)0x87:
+                cpu.AF.setHighByte((byte)(cpu.AF.getHighByte() & 0xFE));
+
+                cpu.PC.set(cpu.PC.get() + 2);
+
+                break;
+            default:
+                System.err.println("Unimplemented RES instruction!!!");
+                break;
+        }
+    }
 }

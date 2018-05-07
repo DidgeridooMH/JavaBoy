@@ -144,7 +144,7 @@ public class Flags
 		
 		// More testing needed on testing half-carry
 		if((flagbit & HALFC) > 0) {
-			this.setHalfCarry((initial & 0x10) < 0 
+			this.setHalfCarry((initial & 0x10) == 0
 						&& (result & 0x10) > 0);
 		}
 		
@@ -169,12 +169,10 @@ public class Flags
 	 * @return Generated status flag
 	 */
 	public byte generateReg() {
-		byte value = 0x0;
-		
-		value = (byte) ((getZero()) ? 0x80 : 0x0);
-		value = (byte) ((getSubtract()) ? (value | 0x40) : value);
-		value = (byte) ((getHalfCarry()) ? (value | 0x20) : value);
-		value = (byte) ((getCarry()) ? (value | 0x10) : value);
+		byte value = (byte) ((getZero()) ? 0x80 : 0);
+		value |= (byte) ((getSubtract()) ? 0x40 : 0);
+		value |= (byte) ((getHalfCarry()) ? 0x20 : 0);
+		value |= (byte) ((getCarry()) ? 0x10 : 0);
 		
 		return value;
 	}

@@ -76,16 +76,16 @@ public class Memory {
 		internalMemory = new byte[0x10000];
 		
 		// Loads bios
-		for(int i = 0; i < 0xFF; i++)
-			internalMemory[i] = biosBank[i];
+		for(int i = 0; i < 0xFF; i++) {
+            // TODO: clean code to eliminate DMG rom
+            write(biosBank[i], i);
+            // internalMemory[i] = romBank[i];
+        }
 		
 		// Load home bank
-		for(int i = 0x100; i < 0x4000; i++)
-			internalMemory[i] = romBank[i];
-		
-		// Load switchable bank
-		for(int i = 0x4000; i < 0x8000; i++)
-			internalMemory[i] = romBank[i];
+		for(int i = 0x100; i < 0x8000; i++) {
+            write(romBank[i], i);
+        }
 	}
 	
 	/**
@@ -94,12 +94,12 @@ public class Memory {
 	 * @param in Byte to write.
 	 * @param location Location in memory to write the byte.
 	 */
-	public synchronized void Write(byte in, int location) {
-		if(location <= 0xFF4F && location >= 0xFF40) {
+	public void write(byte in, int location) {
+		if(location >= 0xFF40 && location <= 0xFF49) {
 			gpu.writeRegister(in, location);
-		}
-		
-		internalMemory[(location & 0xFFFF)] = in;
+		} else {
+            internalMemory[(location & 0xFFFF)] = in;
+        }
 	}
 	
 	/**
@@ -108,8 +108,16 @@ public class Memory {
 	 * @param location Location to read from.
 	 * @return Byte from location in memory.
 	 */
-	public synchronized byte Read(int location) {
-		return internalMemory[(location & 0xFFFF)];
+	public byte read(int location) {
+	    byte out;
+
+	    if(location >= 0xFF40 && location <= 0xFF49) {
+	        out = gpu.readRegister(location);
+        } else {
+            out = internalMemory[(location & 0xFFFF)];
+        }
+
+        return out;
 	}
 	
 	public void setGPU(GPU gpu) {

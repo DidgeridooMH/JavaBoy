@@ -36,7 +36,7 @@ import emulator.Utils;
  * @author Daniel Simpkins
  *
  */
-public interface Stack {
+public class Stack {
 	
 	/**
 	 * Stores a 16-bit register in
@@ -45,7 +45,7 @@ public interface Stack {
 	 * @param cpu Reference to CPU object.
 	 * @param instruction Instruction opcode.
 	 */
-	public static void push(CPU cpu, byte instruction) {	
+	static void push(CPU cpu, byte instruction) {
 		String register = "";
 		
 		switch(instruction) {
@@ -93,7 +93,7 @@ public interface Stack {
 	 * @param cpu Reference to CPU object.
 	 * @param instruction Instruction opcode.
 	 */
-	public static void pop(CPU cpu, byte instruction) {	
+	static void pop(CPU cpu, byte instruction) {
 		String register = "";
 		
 		switch(instruction) {

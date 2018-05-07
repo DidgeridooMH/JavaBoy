@@ -34,8 +34,6 @@
 
 package emulator;
 
-import emulator.Machine;
-
 /**
  * A Game Boy emulator written in java
  * using swift for UI, java2D for rendering
@@ -46,8 +44,6 @@ import emulator.Machine;
  *
  */
 public class JavaBoy {
-	static Machine machine = null;
-	
 	/**
 	 * Parses commandline arguments and begins
 	 * the machine loop.
@@ -55,7 +51,7 @@ public class JavaBoy {
 	 * @param args Path to ROM file and BIOS file.
 	 */
 	public static void main(String[] args) {
-		String files[] = {"", "" };
+		String files[];
 		
 		if(args.length > 2) {
 			files = parseArguments(args);
@@ -66,9 +62,9 @@ public class JavaBoy {
 			return;
 		}
 		
-		machine = new Machine(files[0], files[1]);
+		Machine machine = new Machine(files[0], files[1]);
 		
-		while(machine.state != 0) {	
+		while(machine.getState() != 0) {
 			machine.execute();
 		}
 	}
@@ -82,7 +78,7 @@ public class JavaBoy {
 	 * @param args Commandline arguments.
 	 * @return Array of rom and bios paths.
 	 */
-	public static String[] parseArguments(String args[]) {
+	private static String[] parseArguments(String args[]) {
 		String files[] = {"", ""};
 		
 		for(int i = 0; i < args.length; i++) {

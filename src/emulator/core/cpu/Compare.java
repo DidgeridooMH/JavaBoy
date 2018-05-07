@@ -34,7 +34,7 @@ import emulator.Utils;
  * @author Daniel Simpkins
  *
  */
-public interface Compare {
+public class Compare {
 
 	/**
 	 * Subtracts a register or byte in memory from register A
@@ -43,7 +43,7 @@ public interface Compare {
 	 * @param cpu Reference to the CPU object.
 	 * @param instruction Instruction opcode
 	 */
-	public static void compare(CPU cpu, byte instruction) {
+	static void compare(CPU cpu, byte instruction) {
 		byte value = 0x0;
 		byte initial = (byte) cpu.AF.getHighByte();
 		byte result = 0x0;
@@ -76,7 +76,7 @@ public interface Compare {
 				reg = "L";
 				break;
 			case (byte) 0xBE:
-				value = cpu.memory.Read(cpu.HL.get());
+				value = cpu.memory.read(cpu.HL.get());
 				reg = "(HL)";
 				break;
 			case (byte) 0xBF:
@@ -84,7 +84,7 @@ public interface Compare {
 				reg = "A";
 				break;
 			case (byte) 0xFE:
-				value = (byte) cpu.memory.Read(cpu.PC.get() + 1);
+				value = cpu.memory.read(cpu.PC.get() + 1);
 				reg = "d8";
 				break;
 			default:
