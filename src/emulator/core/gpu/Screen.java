@@ -88,7 +88,7 @@ public class Screen extends JPanel {
 
 	    Graphics2D gfx2d = (Graphics2D) gfx.create();
 
-	    gfx2d.drawImage(display, -(scrollX), -(scrollY) + 75, 256, 256, null);
+	    gfx2d.drawImage(display, -(scrollX), -(scrollY), 256, 256, null);
 
 	    gfx2d.dispose();
 	}
