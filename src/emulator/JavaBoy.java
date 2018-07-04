@@ -64,7 +64,7 @@ public class JavaBoy {
 		
 		Machine machine = new Machine(files[0], files[1]);
 		
-		while(machine.getState() != 0) {
+		while(machine.getState() == Machine.State.STATE_ON) {
 			machine.execute();
 		}
 	}

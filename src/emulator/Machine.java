@@ -45,14 +45,14 @@ public class Machine {
 	
 	private GPU gpu;
 
-	/**
-	 * 0 - Machine is off.
-	 * 1 - Machine is on.
-	 * 2 - Machine is paused.
-	 */
-	private int state = 1;
+	enum State {
+	    STATE_ON,
+	    STATE_OFF
+    }
 
-    int getState() { return state; }
+	private State state = Machine.State.STATE_ON;
+
+    State getState() { return state; }
 
 	/**
 	 * Loads CPU module and sets up GUI
@@ -79,7 +79,7 @@ public class Machine {
 	 */
 	public void execute() {
 		if(cpu.isError()) {
-			state = 0;
+			state = State.STATE_OFF;
 		} else {
 		    cpu.execute();
 		    for(int i = 0; i < 3; i++) {
