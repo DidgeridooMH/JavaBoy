@@ -27,9 +27,11 @@
 package emulator.core.gpu;
 
 import java.awt.Dimension;
+import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.WindowConstants;
 
 /**
  * Creates a window for the program.
@@ -38,6 +40,8 @@ import javax.swing.JFrame;
  *
  */
 public class GUI extends JFrame {
+
+    private static final String IMAGE_256 = "icon_256.png";
 
 	/**
 	 * Initializes window settings and creates
@@ -54,15 +58,19 @@ public class GUI extends JFrame {
 		
 		try {
 		  ClassLoader loader = this.getClass().getClassLoader();
-		  ImageIcon programIcon = new ImageIcon(loader.getResource("icon_256.png"));
-		  setIconImage(programIcon.getImage());
+		  URL iconURL = loader.getResource(IMAGE_256);
+		  if(iconURL != null) {
+              ImageIcon programIcon = new ImageIcon(iconURL);
+              setIconImage(programIcon.getImage());
+          } else {
+              System.out.println("Unable to load image " + IMAGE_256);
+          }
 		} catch (Exception e) {
-		    e.printStackTrace();
-		   System.exit(2);
+            System.out.println("Unable to load image " + IMAGE_256);
 		}
-		
+
 		setTitle("JavaBoy - Gameboy Emulator");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         surface.setPreferredSize(new Dimension(160, 144));
         setResizable(false);
