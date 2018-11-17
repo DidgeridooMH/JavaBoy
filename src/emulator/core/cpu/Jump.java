@@ -28,6 +28,8 @@ package emulator.core.cpu;
 
 import emulator.Utils;
 
+import java.util.Map;
+
 /**
  * Handles jump, jump-to-subroutine,
  * and call instructions.
@@ -37,62 +39,35 @@ import emulator.Utils;
  */
 public class Jump {
 
-    /**
-     * Pushes Program Counter into the stack
-     * jumps to a 16-bit address.
-     * 
-     * @param cpu Reference to CPU object.
-     * @param instruction Instruction opcode.
-     */
-    static void call(CPU cpu, byte instruction) {
-        int address;
-        byte parameters[] = {     cpu.memory.read(cpu.PC.get() + 1),
-                                cpu.memory.read(cpu.PC.get() + 2) };
-        boolean jump;
-        
-        // System.out.print(Utils.hex(cpu.PC.get()) + ": CALL ");
-        
-        switch(instruction) {
-            case (byte) 0xC4:
-                jump = (!cpu.flags.getZero());
-                // System.out.print("NZ, a16");
-                break;
-            case (byte) 0xCC:
-                jump = (cpu.flags.getZero());
-                // System.out.print("Z, a16");
-                break;
-            case (byte) 0xD4:
-                jump = (!cpu.flags.getCarry());
-                // System.out.print("NC, a16");
-                break;
-            case (byte) 0xDC:
-                jump = (cpu.flags.getCarry());
-                // System.out.print("C, a16");
-                break;
-            case (byte) 0xCD:
-                jump = true;
-                break;
-            default:
-                System.err.println("Error parsing CALL instruction: " + 
-                                Utils.hex(instruction & 0xFF) + 
-                                " at " + 
-                                Utils.hex(cpu.PC.get())
-                );
-                cpu.error = true;
-                return;
-        }
-        
-        // System.out.print(Utils.hex(instruction & 0xFF));
-        
-        address = ((short) parameters[1] << 8) | (short) (parameters[0] & 0xFF);
-        
-        // System.out.print(" " + Utils.hex(address) + "\n");
-        
-        if(jump) {
+    public static void buildOpcodes(Map<Byte, Runnable> funcTable, CPU cpu) {
+        funcTable.put((byte)0xC4, () -> Jump.call(cpu, "NZ", !cpu.flags.getZero(), (byte)0xC4));
+        funcTable.put((byte)0xCC, () -> Jump.call(cpu, "Z", cpu.flags.getZero(), (byte)0xCC));
+        funcTable.put((byte)0xD4, () -> Jump.call(cpu, "NC", !cpu.flags.getCarry(), (byte)0xD4));
+        funcTable.put((byte)0xDC, () -> Jump.call(cpu, "C", cpu.flags.getCarry(), (byte)0xDC));
+        funcTable.put((byte)0xCD, () -> Jump.call(cpu, "", true, (byte)0xCD));
+    }
+
+    private static void callLogInstruction(CPU cpu, String condition, int address, byte instruction) {
+        Utils.PrintInstruction("CALL " + condition + address,
+                instruction,
+                cpu.PC.get(),
+                null, 0
+        );
+    }
+
+    private static void call(CPU cpu, String condition, boolean doJump, byte instruction) {
+        if(doJump) {
+            byte parameters[] = { cpu.memory.read(cpu.PC.get() + 1),
+                    cpu.memory.read(cpu.PC.get() + 2) };
+            int address = ((short) parameters[1] << 8) | (short) (parameters[0] & 0xFF);
+
             cpu.push16((short) (cpu.PC.get() + 3));
             cpu.PC.set(address);
+
+            callLogInstruction(cpu, condition, address, instruction);
         } else {
             cpu.PC.set(cpu.PC.get() + 3);
+            callLogInstruction(cpu, condition, 0x0, instruction);
         }
     }
     

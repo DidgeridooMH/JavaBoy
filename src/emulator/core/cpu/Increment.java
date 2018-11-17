@@ -28,6 +28,8 @@ package emulator.core.cpu;
 
 import emulator.Utils;
 
+import java.util.Map;
+
 /**
  * Increments a register or 16-bit
  * combined register.
@@ -36,124 +38,69 @@ import emulator.Utils;
  *
  */
 public class Increment {
-    
-    /**
-     * Increments a register or 16-bit
-     * combined register.
-     * 
-     * @param cpu A reference to the CPU object.
-     * @param instruction Instruction opcode
-     */
-    static void increment(CPU cpu, byte instruction) {
-        int initial = 0;
-        String reg = "";
-        
-        switch(instruction) {
-            case 0x04:
-                initial = cpu.BC.getHighByte();
-                
-                cpu.BC.setHighByte((byte) (initial + 1));
-                cpu.flags.setFlags(initial, cpu.BC.getHighByte(), false, Flags.ZERO | Flags.HALFC);
-                
-                reg = "B";
-                
-                break;
-            case 0x0C:
-                initial = (byte) cpu.BC.getLowByte();
-                cpu.BC.setLowByte((byte) (initial + 1));
-                cpu.flags.setFlags(initial, cpu.BC.getLowByte(), false, Flags.ZERO | Flags.HALFC);
-                
-                reg = "C";
-                
-                break;
-            case 0x14:
-                initial = (byte) cpu.DE.getHighByte();
-                cpu.DE.setHighByte((byte) (initial + 1));
-                cpu.flags.setFlags(initial, cpu.DE.getHighByte(), false, Flags.ZERO | Flags.HALFC);
-                
-                reg = "D";
-                
-                break;
-            case 0x1C:
-                initial = (byte) cpu.DE.getLowByte();
-                cpu.DE.setLowByte((byte) (initial + 1));
-                cpu.flags.setFlags(initial, cpu.DE.getLowByte(), false, Flags.ZERO | Flags.HALFC);
-                
-                reg = "E";
-                
-                break;
-            case 0x24:
-                initial = (byte) cpu.HL.getHighByte();
-                cpu.HL.setHighByte((byte) (initial + 1));
-                cpu.flags.setFlags(initial, cpu.HL.getHighByte(), false, Flags.ZERO | Flags.HALFC);
-                
-                reg = "H";
-                
-                break;
-            case 0x2C:
-                initial = (byte) cpu.HL.getLowByte();
-                cpu.HL.setLowByte((byte) (initial + 1));
-                cpu.flags.setFlags(initial, cpu.HL.getLowByte(), false, Flags.ZERO | Flags.HALFC);
-                
-                reg = "L";
-                
-                break;
-            case 0x34:
-                initial = cpu.memory.read(cpu.HL.get());
-                byte result = (byte) initial++;
-                cpu.flags.setFlags(initial, result, false, Flags.ZERO | Flags.HALFC);
-                
-                reg = "(HL)";
-                
-                break;
-            case 0x3C:
-                initial = (byte) cpu.AF.getHighByte();
-                cpu.AF.setHighByte((byte) (initial + 1));
-                cpu.flags.setFlags(initial, cpu.AF.getHighByte(), false, Flags.ZERO | Flags.HALFC);
-                
-                reg = "A";
-                
-                break;
-            case 0x03:
-                cpu.BC.set(cpu.BC.get() + 1);
-                
-                reg = "BC";
-                
-                break;
-            case 0x13:
-                cpu.DE.set(cpu.DE.get() + 1);
-                
-                reg = "DE";
-                
-                break;
-            case 0x23:
-                cpu.HL.set(cpu.HL.get() + 1);
-                
-                reg = "HL";
-                
-                break;
-            case 0x33:
-                cpu.SP.set(cpu.SP.get() + 1);
-                
-                reg = "SP";
-                
-                break;
-            default:
-                System.err.println("Unknown variant of INC: " +
-                                    Utils.hex(instruction) +
-                                    " at " +
-                                    Utils.hex(cpu.PC.get())
-                );
-                cpu.error = true;
-                return;
-        }
-        
-        Utils.PrintInstruction("INC " + reg, 
-                                instruction, 
-                                cpu.PC.get(), 
-                                null, 0
+
+    public static void buildOpcodes(Map<Byte, Runnable> funcTable, CPU cpu) {
+        funcTable.put((byte)0x03, () -> Increment.increment16Bit(cpu, cpu.BC, "BC", (byte)0x03));
+        funcTable.put((byte)0x13, () -> Increment.increment16Bit(cpu, cpu.DE, "DE", (byte)0x13));
+        funcTable.put((byte)0x23, () -> Increment.increment16Bit(cpu, cpu.HL, "HL", (byte)0x23));
+        funcTable.put((byte)0x33, () -> Increment.increment16Bit(cpu, cpu.SP, "SP", (byte)0x33));
+        funcTable.put((byte)0x04, () ->
+                Increment.increment8Bit(cpu, cpu.BC, true, "B", (byte)0x04));
+        funcTable.put((byte)0x14, () ->
+                Increment.increment8Bit(cpu, cpu.DE, true, "D", (byte)0x14));
+        funcTable.put((byte)0x24, () ->
+                Increment.increment8Bit(cpu, cpu.HL, true, "H", (byte)0x24));
+        funcTable.put((byte)0x34, () -> {
+            Register reg = new Register(cpu.memory.read(cpu.HL.get()), "MEM");
+            Increment.increment8Bit(cpu, reg, false, "MEM", (byte)0x34);
+            cpu.memory.write((byte)(reg.getLowByte()), cpu.HL.get());
+        });
+        funcTable.put((byte)0x0C, () ->
+                Increment.increment8Bit(cpu, cpu.BC, false, "C", (byte)0x0C));
+        funcTable.put((byte)0x1C, () ->
+                Increment.increment8Bit(cpu, cpu.DE, false, "E", (byte)0x1C));
+        funcTable.put((byte)0x2C, () ->
+                Increment.increment8Bit(cpu, cpu.HL, false, "L", (byte)0x2C));
+        funcTable.put((byte)0x3C, () ->
+                Increment.increment8Bit(cpu, cpu.AF, true, "A", (byte)0x3C));
+    }
+
+    private static void incrementLogInstruction(CPU cpu, String input, byte instruction) {
+        Utils.PrintInstruction("INC " + input,
+                instruction,
+                cpu.PC.get(),
+                null, 0
         );
-        
+    }
+
+    private static void increment8Bit(CPU cpu, Register reg, boolean highLow, String inputStr, byte instruction) {
+        int initial;
+        if(highLow) {
+            initial = reg.getHighByte();
+            reg.setHighByte((byte) (initial + 1));
+        } else {
+            initial = reg.getLowByte();
+            reg.setLowByte((byte) (initial + 1));
+        }
+
+        cpu.flags.setFlags(initial, (byte) (initial + 1),
+                false,
+                Flags.HALFC | Flags.ZERO
+        );
+
+        cpu.flags.setSign(false);
+
+        incrementLogInstruction(cpu, inputStr, instruction);
+
+        cpu.PC.set(cpu.PC.get() + 1);
+    }
+
+    private static void increment16Bit(CPU cpu, Register reg, String inputStr, byte instruction) {
+        int initial = reg.get();
+        reg.set(initial + 1);
+
+        incrementLogInstruction(cpu, inputStr, instruction);
+
         cpu.PC.set(cpu.PC.get() + 1);
     }
 }

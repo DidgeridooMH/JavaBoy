@@ -13,6 +13,8 @@ public class Opcodes {
         BitOperation.buildOpcodes(this.funcTable, cpu);
         Compare.buildOpcodes(this.funcTable, cpu);
         Decrement.buildOpcodes(this.funcTable, cpu);
+        Increment.buildOpcodes(this.funcTable, cpu);
+        Jump.buildOpcodes(this.funcTable, cpu);
     }
 
     public void execute(byte instruction) {

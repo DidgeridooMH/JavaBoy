@@ -160,9 +160,6 @@ public class CPU {
                     case "JR":
                         Jump.jumpSubroutine(this, ins);
                         break;
-                    case "CALL":
-                        Jump.call(this, ins);
-                        break;
                     case "PUSH":
                         Stack.push(this, ins);
                         break;
@@ -171,9 +168,6 @@ public class CPU {
                         break;
                     case "RLA":
                         BitOperation.rotate(this, ins, false);
-                        break;
-                    case "INC":
-                        Increment.increment(this, ins);
                         break;
                     case "RET":
                         Jump.returnFromCall(this, ins);
