@@ -30,6 +30,8 @@ import emulator.core.cpu.CPU;
 
 import emulator.core.gpu.GPU;
 
+import emulator.core.gpu.GUI;
+import emulator.core.gpu.Screen;
 import emulator.core.memory.Memory;
 
 /**
@@ -39,20 +41,18 @@ import emulator.core.memory.Memory;
  * @author Daniel Simpkins
  *
  */
-public class Machine {
+public class Machine extends Thread {
 	
 	private CPU cpu;
 	
 	private GPU gpu;
 
+	private GUI gui;
+
 	enum State {
 	    STATE_ON,
 	    STATE_OFF
     }
-
-	private State state = Machine.State.STATE_ON;
-
-    State getState() { return state; }
 
 	/**
 	 * Loads CPU module and sets up GUI
@@ -63,7 +63,7 @@ public class Machine {
 	 */
 	public Machine(String bios, String rom) {
 		System.out.println("Machine Initialized!");
-		
+
 		Memory memory = new Memory(bios, rom);
 
 		gpu = new GPU(memory);
@@ -71,21 +71,18 @@ public class Machine {
         memory.setGPU(gpu);
 
         cpu = new CPU(memory);
+
+        this.gui = new GUI(new Screen(gpu));
+        this.gui.setVisible(true);
 	}
-	
-	
-	/**
-	 * Proceeds one machine cycle.
-	 */
-	public void execute() {
-		if(cpu.isError()) {
-			state = State.STATE_OFF;
-		} else {
-		    cpu.execute();
-		    for(int i = 0; i < 3; i++) {
+
+	@Override
+	public void run() {
+	    while(!this.cpu.isError()) {
+            cpu.execute();
+            for(int i = 0; i < 3; i++) {
                 gpu.execute();
             }
         }
-	}
-	
+    }
 }

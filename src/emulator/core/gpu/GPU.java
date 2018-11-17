@@ -29,6 +29,8 @@ package emulator.core.gpu;
 import emulator.Utils;
 import emulator.core.memory.Memory;
 
+import java.util.Arrays;
+
 /**
  * Handles writing pixels to the main display. Also,
  * handles all the LCD related registers by bypassing
@@ -41,13 +43,12 @@ public class GPU {
 	
     private Memory memory = null;
 
-    private GUI guiWindow = null;
-	
-	private Screen surface = null;
-
 	private int currentPixel = 0;
 
-	private byte lcdc, stat, coordY, lyCompare, windowY, windowX, bgPalette, objPalette0, objPalette1;
+    private int[] backBuffer;
+    private int[] frontBuffer;
+
+	private byte lcdc, stat, coordY, lyCompare, windowY, windowX, bgPalette, objPalette0, objPalette1, scrollY, scrollX;
 	
 	/**
 	 * Initializes a display window as well as
@@ -58,10 +59,29 @@ public class GPU {
 	 */
 	public GPU(Memory memory) {
 	    this.memory = memory;
-		this.surface = new Screen();
-        this.guiWindow = new GUI(surface);
-        this.guiWindow.setVisible(true);
+	    this.frontBuffer = new int[256 * 256];
+	    Arrays.fill(this.frontBuffer, 0xFFFFFF);
+        this.backBuffer = new int[256 * 256];
+        Arrays.fill(this.backBuffer, 0xFFFFFF);
 	}
+
+	private void swapBuffers() {
+	    int[] temp = backBuffer;
+	    this.backBuffer = this.frontBuffer;
+	    this.frontBuffer = temp;
+    }
+
+	public byte getScrollX() {
+	    return this.scrollX;
+    }
+
+    public byte getScrollY() {
+	    return this.scrollY;
+    }
+
+	public int[] getBuffer() {
+	    return this.backBuffer;
+    }
 
 	public void execute() {
 	    drawSliver();
@@ -73,10 +93,17 @@ public class GPU {
 	        currentPixel = 0;
         }
 
-        if (((int)(coordY) & 0xFF) > 144) {
-	        surface.update();
+        if (((int)(coordY) & 0xFF) > 256) {
 	        coordY = 0;
+	        swapBuffers();
         }
+    }
+
+    public void pushPixel(int x, int y, int r, int g, int b) {
+        int rgb = (r & 0xFF) << 16;
+        rgb |= (g & 0xFF) << 8;
+        rgb |= b & 0xFF;
+        backBuffer[x + (y * 256)] = rgb;
     }
 
     private int getBackgroundTile() {
@@ -87,16 +114,16 @@ public class GPU {
     private void drawPixel(int x, int y, int colorID) {
         switch(colorID) {
             case 0:
-                surface.pushPixel(x, y, 0xFF, 0xFF, 0xFF);
+                this.pushPixel(x, y, 0xFF, 0xFF, 0xFF);
                 break;
             case 1:
-                surface.pushPixel(x, y, 0xAA, 0xAA, 0xAA);
+                this.pushPixel(x, y, 0xAA, 0xAA, 0xAA);
                 break;
             case 2:
-                surface.pushPixel(x, y, 0x55, 0x55, 0x55);
+                this.pushPixel(x, y, 0x55, 0x55, 0x55);
                 break;
             case 3:
-                surface.pushPixel(x, y, 0x0, 0x0, 0x0);
+                this.pushPixel(x, y, 0x0, 0x0, 0x0);
                 break;
         }
     }
@@ -132,9 +159,9 @@ public class GPU {
 			case 0xFF41:
 				return stat;
 			case 0xFF42:
-				return (byte)(surface.getScrollY());
+				return this.scrollY;
 			case 0xFF43:
-				return (byte)(surface.getScrollX());
+				return this.scrollX;
 			case 0xFF44:
 				return coordY;
 			case 0xFF45:
@@ -173,10 +200,10 @@ public class GPU {
 				stat = in;
 				break;
 			case 0xFF42:
-				surface.setScrollY(in);
+				this.scrollY = in;
 				break;
 			case 0xFF43:
-				surface.setScrollX(in);
+				this.scrollX = in;
 				break;
             case 0xFF44:
                 coordY = in;

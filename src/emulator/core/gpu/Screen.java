@@ -42,42 +42,16 @@ public class Screen extends JPanel {
 
 	private BufferedImage display;
 
-	private int[] pixelBuffer;
+	private GPU gpu;
 
-	private int scrollX = 0;
-
-	private int scrollY = 0;
-
-	public Screen() {
+	public Screen(GPU gpu) {
+	    this.gpu = gpu;
 	    display = new BufferedImage(256, 256, BufferedImage.TYPE_INT_RGB);
-	    pixelBuffer = new int[256 * 256];
-
-	    for (int y = 0; y < 256; y++){
-	        for (int x = 0; x < 256; x++) {
-	            pushPixel(x, y, 0xFF, 0xFF, 0xFF);
-            }
-        }
-
         update();
 	}
 
-	public void setScrollX(int x) { scrollX = x; }
-
-    public void setScrollY(int y) { scrollY = y; }
-
-    public int getScrollX() { return scrollX; }
-
-    public int getScrollY() { return scrollY; }
-
-	public void pushPixel(int x, int y, int r, int g, int b) {
-	    int rgb = (r & 0xFF) << 16;
-	    rgb |= (g & 0xFF) << 8;
-	    rgb |= b & 0xFF;
-	    pixelBuffer[x + (y * 256)] = rgb;
-    }
-
 	public void update() {
-        display.setRGB(0, 0, 256, 256, pixelBuffer, 0, 256);
+        display.setRGB(0, 0, 256, 256, gpu.getBuffer(), 0, 256);
         validate();
         repaint();
     }
@@ -86,9 +60,11 @@ public class Screen extends JPanel {
 	public void paintComponent(Graphics gfx) {
 	    super.paintComponent(gfx);
 
+	    this.update();
+
 	    Graphics2D gfx2d = (Graphics2D) gfx.create();
 
-	    gfx2d.drawImage(display, -(scrollX), -(scrollY), 256, 256, null);
+	    gfx2d.drawImage(display, -(gpu.getScrollX()), -(gpu.getScrollY()), 256, 256, null);
 
 	    gfx2d.dispose();
 	}
