@@ -53,7 +53,7 @@ public class CPU {
     public Flags flags;
     
     /** Memory with a size of 0xFFFF */
-    Memory memory = null;
+    Memory memory;
     
     /** Decodes opcodes */
     private Parser parser;
@@ -139,8 +139,8 @@ public class CPU {
     /**
      * Executes an instruction.
      * 
-     * @param ins
-     * @param decodedIns
+     * @param ins Instruction code to execute.
+     * @param decodedIns Decoded name of instruction.
      */
     private void step(byte ins, String decodedIns) {
             if(opcodes.isValid(ins)) {
@@ -199,6 +199,7 @@ public class CPU {
                                 Utils.hex(PC.get())
                         );
                         error = true;
+                        break;
                 }
             }
     }
@@ -206,7 +207,7 @@ public class CPU {
     /** 
      * Executes a prefixed instruction.
      */
-    public void stepPrefix() {
+    private void stepPrefix() {
         byte instruction = memory.read(PC.get()+1);
         String decodedPrefix = parser.decodePrefix(instruction);
         
@@ -249,7 +250,7 @@ public class CPU {
      * 
      * @param in Word to store in stack.
      */
-    public void push16(short in) {
+    void push16(short in) {
         push((byte) ((in >> 8) & 0xFF));
         push((byte) (in & 0xFF));
     }
@@ -269,7 +270,7 @@ public class CPU {
      * 
      * @return Word from stack.
      */
-    public short pop16() {
+    short pop16() {
         short lowByte = (short) (pop() & 0xFF);
         short highByte = pop();
         

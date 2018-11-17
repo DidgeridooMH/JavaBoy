@@ -79,19 +79,18 @@ public class JavaBoy {
     private static String[] parseArguments(String args[]) {
         String files[] = {"", ""};
         
-        for(int i = 0; i < args.length; i++) {
+        for(int i = 0; i < args.length; i += 2) {
             switch(args[i]) {
                 case "-b":
                     files[0] = args[i+1];
-                    i++;
                     break;
                 case "-r":
                     files[1] = args[i+1];
-                    i++;
                     break;
                 default:
                     System.err.println("Try: JavaBoy [-r RomName] [-b Biosfile]");
                     System.exit(1);
+                    break;
             }
         }
         

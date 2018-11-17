@@ -39,31 +39,31 @@ import java.util.Map;
 public class Addition {
 
     public static void buildOpcodes(Map<Byte, Runnable> funcTable, CPU cpu) {
-        funcTable.put((byte)0x09, () -> Addition.addition_16(cpu, cpu.BC.get(), "BC", (byte)0x09));
-        funcTable.put((byte)0x19, () -> Addition.addition_16(cpu, cpu.DE.get(), "DE", (byte)0x19));
-        funcTable.put((byte)0x29, () -> Addition.addition_16(cpu, cpu.HL.get(), "HL", (byte)0x29));
-        funcTable.put((byte)0x39, () -> Addition.addition_16(cpu, cpu.SP.get(), "SP", (byte)0x39));
+        funcTable.put((byte)0x09, () -> Addition.addition16Bit(cpu, cpu.BC.get(), "BC", (byte)0x09));
+        funcTable.put((byte)0x19, () -> Addition.addition16Bit(cpu, cpu.DE.get(), "DE", (byte)0x19));
+        funcTable.put((byte)0x29, () -> Addition.addition16Bit(cpu, cpu.HL.get(), "HL", (byte)0x29));
+        funcTable.put((byte)0x39, () -> Addition.addition16Bit(cpu, cpu.SP.get(), "SP", (byte)0x39));
         funcTable.put((byte)0x80, () ->
-                Addition.addition_8(cpu, cpu.BC.getHighByte(), "B", (byte)0x80));
+                Addition.addition8Bit(cpu, cpu.BC.getHighByte(), "B", (byte)0x80));
         funcTable.put((byte)0x81, () ->
-                Addition.addition_8(cpu, cpu.BC.getLowByte(), "C", (byte)0x81));
+                Addition.addition8Bit(cpu, cpu.BC.getLowByte(), "C", (byte)0x81));
         funcTable.put((byte)0x82, () ->
-                Addition.addition_8(cpu, cpu.DE.getHighByte(), "D", (byte)0x82));
+                Addition.addition8Bit(cpu, cpu.DE.getHighByte(), "D", (byte)0x82));
         funcTable.put((byte)0x83, () ->
-                Addition.addition_8(cpu, cpu.DE.getLowByte(), "E", (byte)0x83));
+                Addition.addition8Bit(cpu, cpu.DE.getLowByte(), "E", (byte)0x83));
         funcTable.put((byte)0x84, () ->
-                Addition.addition_8(cpu, cpu.HL.getHighByte(), "H", (byte)0x84));
+                Addition.addition8Bit(cpu, cpu.HL.getHighByte(), "H", (byte)0x84));
         funcTable.put((byte)0x85, () ->
-                Addition.addition_8(cpu, cpu.HL.getLowByte(), "L", (byte)0x85));
+                Addition.addition8Bit(cpu, cpu.HL.getLowByte(), "L", (byte)0x85));
         funcTable.put((byte)0x86, () -> {
             int memValue = cpu.memory.read(cpu.HL.get());
-            Addition.addition_8(cpu, memValue, "MEM", (byte)0x86);
+            Addition.addition8Bit(cpu, memValue, "MEM", (byte)0x86);
         });
         funcTable.put((byte)0x87, () ->
-                Addition.addition_8(cpu, cpu.AF.getHighByte(), "A", (byte)0x87));
+                Addition.addition8Bit(cpu, cpu.AF.getHighByte(), "A", (byte)0x87));
         funcTable.put((byte)0xC6, () -> {
             int memValue = cpu.memory.read(cpu.PC.get() + 1);
-            Addition.addition_8(cpu, memValue, "MEM", (byte)0xC6);
+            Addition.addition8Bit(cpu, memValue, "MEM", (byte)0xC6);
             cpu.PC.set(cpu.PC.get() + 1);
         });
     }
@@ -76,7 +76,7 @@ public class Addition {
         );
     }
 
-    private static void addition_8(CPU cpu, int input, String inputStr, byte instruction) {
+    private static void addition8Bit(CPU cpu, int input, String inputStr, byte instruction) {
         int initial = cpu.AF.getHighByte();
         int result = initial + input;
         cpu.AF.setHighByte((byte)result);
@@ -93,7 +93,7 @@ public class Addition {
         cpu.PC.set(cpu.PC.get() + 1);
     }
 
-    private static void addition_16(CPU cpu, int input, String inputStr, byte instruction) {
+    private static void addition16Bit(CPU cpu, int input, String inputStr, byte instruction) {
         int initial = cpu.HL.get();
         int result = initial + input;
         cpu.HL.set(result);
