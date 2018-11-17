@@ -83,7 +83,7 @@ public class Decrement {
             reg.setLowByte((byte) (initial - 1));
         }
 
-        cpu.flags.setFlags(	initial, (byte) (initial - 1),
+        cpu.flags.setFlags(    initial, (byte) (initial - 1),
                 false,
                 Flags.HALFC | Flags.ZERO
         );

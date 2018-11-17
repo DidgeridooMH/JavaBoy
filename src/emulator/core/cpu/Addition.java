@@ -81,7 +81,7 @@ public class Addition {
         int result = initial + input;
         cpu.AF.setHighByte((byte)result);
 
-        cpu.flags.setFlags(	initial, result,
+        cpu.flags.setFlags(    initial, result,
                 false,
                 Flags.HALFC | Flags.CARRY | Flags.ZERO
         );
@@ -98,7 +98,7 @@ public class Addition {
         int result = initial + input;
         cpu.HL.set(result);
 
-        cpu.flags.setFlags(	initial, result,
+        cpu.flags.setFlags(    initial, result,
                 true,
                 Flags.HALFC | Flags.CARRY | Flags.ZERO
         );

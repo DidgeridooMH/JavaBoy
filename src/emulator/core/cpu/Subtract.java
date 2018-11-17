@@ -35,97 +35,97 @@ import emulator.Utils;
  *
  */
 public class Subtract {
-	
-	/**
-	 * Subtracts registers and byte of memory.
-	 * 
-	 * @param cpu Reference to CPU object.
-	 * @param instruction Instruction opcode.
-	 */
-	static void subtract(CPU cpu, byte instruction) {
-		int value = 0x0;
-		int initial = cpu.AF.getHighByte();
-		String register = "";
-		
-		switch(instruction) {
-			case (byte) 0x90:
-				value = cpu.BC.getHighByte();
-			
-				register = "B";
-				
-				break;
-			case (byte) 0x91:
-				value = cpu.BC.getLowByte();
-			
-				register = "C";
-			
-				break;
-			case (byte) 0x92:
-				value = cpu.DE.getHighByte();
-			
-				register = "D";
-			
-				break;
-			case (byte) 0x93:
-				value = cpu.DE.getLowByte();
-			
-				register = "E";
-			
-				break;
-			case (byte) 0x94:
-				value = cpu.HL.getHighByte();
-			
-				register = "H";
-			
-				break;
-			case (byte) 0x95:
-				value = cpu.HL.getLowByte();
-			
-				register = "L";
-			
-				break;
-			case (byte) 0x96:
-				value = cpu.memory.read(cpu.PC.get() + 1);
-			
-				register = "d8";
-			
-				break;
-			case (byte) 0x97:
-				value = cpu.AF.getHighByte();
-			
-				register = "A";
-			
-				break;
-			default:
-				System.err.println("Error parsing SUB instruction: " + 
-									Utils.hex(instruction) + 
-									" at " + 
-									Utils.hex(cpu.PC.get())
-				);
-				cpu.error = true;
-				return;
-		}
-		
-		Utils.PrintInstruction("SUB " + register, 
-								instruction, 
-								cpu.PC.get(), 
-								null, 0
-		);
-		
-		cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() - value));
-		cpu.flags.setFlags(initial, 
-							cpu.AF.getHighByte(), 
-							false, 
-							Flags.ZERO | 
-							Flags.HALFC | 
-							Flags.CARRY
-		);
-		cpu.flags.setSubtract(true);
-		
-		if(instruction == 0x96) {
-			cpu.PC.set(cpu.PC.get() + 2);
-		} else {
-			cpu.PC.set(cpu.PC.get() + 1);
-		}
-	}
+    
+    /**
+     * Subtracts registers and byte of memory.
+     * 
+     * @param cpu Reference to CPU object.
+     * @param instruction Instruction opcode.
+     */
+    static void subtract(CPU cpu, byte instruction) {
+        int value = 0x0;
+        int initial = cpu.AF.getHighByte();
+        String register = "";
+        
+        switch(instruction) {
+            case (byte) 0x90:
+                value = cpu.BC.getHighByte();
+            
+                register = "B";
+                
+                break;
+            case (byte) 0x91:
+                value = cpu.BC.getLowByte();
+            
+                register = "C";
+            
+                break;
+            case (byte) 0x92:
+                value = cpu.DE.getHighByte();
+            
+                register = "D";
+            
+                break;
+            case (byte) 0x93:
+                value = cpu.DE.getLowByte();
+            
+                register = "E";
+            
+                break;
+            case (byte) 0x94:
+                value = cpu.HL.getHighByte();
+            
+                register = "H";
+            
+                break;
+            case (byte) 0x95:
+                value = cpu.HL.getLowByte();
+            
+                register = "L";
+            
+                break;
+            case (byte) 0x96:
+                value = cpu.memory.read(cpu.PC.get() + 1);
+            
+                register = "d8";
+            
+                break;
+            case (byte) 0x97:
+                value = cpu.AF.getHighByte();
+            
+                register = "A";
+            
+                break;
+            default:
+                System.err.println("Error parsing SUB instruction: " + 
+                                    Utils.hex(instruction) + 
+                                    " at " + 
+                                    Utils.hex(cpu.PC.get())
+                );
+                cpu.error = true;
+                return;
+        }
+        
+        Utils.PrintInstruction("SUB " + register, 
+                                instruction, 
+                                cpu.PC.get(), 
+                                null, 0
+        );
+        
+        cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() - value));
+        cpu.flags.setFlags(initial, 
+                            cpu.AF.getHighByte(), 
+                            false, 
+                            Flags.ZERO | 
+                            Flags.HALFC | 
+                            Flags.CARRY
+        );
+        cpu.flags.setSubtract(true);
+        
+        if(instruction == 0x96) {
+            cpu.PC.set(cpu.PC.get() + 2);
+        } else {
+            cpu.PC.set(cpu.PC.get() + 1);
+        }
+    }
 }

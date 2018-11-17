@@ -44,58 +44,58 @@ package emulator;
  *
  */
 public class JavaBoy {
-	/**
-	 * Parses commandline arguments and begins
-	 * the machine loop.
-	 * 
-	 * @param args Path to ROM file and BIOS file.
-	 */
-	public static void main(String[] args) {
-		String files[];
-		
-		if(args.length > 2) {
-			files = parseArguments(args);
-		} else {
-			System.out.println("Invalid arugements! " + 
-								"Try: \"JavaBoy [-r RomName] [-b Biosfile]\""
-			);
-			return;
-		}
-		
-		Machine machine = new Machine(files[0], files[1]);
+    /**
+     * Parses commandline arguments and begins
+     * the machine loop.
+     * 
+     * @param args Path to ROM file and BIOS file.
+     */
+    public static void main(String[] args) {
+        String files[];
+        
+        if(args.length > 2) {
+            files = parseArguments(args);
+        } else {
+            System.out.println("Invalid arugements! " + 
+                                "Try: \"JavaBoy [-r RomName] [-b Biosfile]\""
+            );
+            return;
+        }
+        
+        Machine machine = new Machine(files[0], files[1]);
 
         machine.start();
-	}
-	
-	
+    }
+    
+    
 
-	/**
-	 * Looks for the ROM and BIOS flags and paths
-	 * in the commandline arguments.
-	 * 
-	 * @param args Commandline arguments.
-	 * @return Array of rom and bios paths.
-	 */
-	private static String[] parseArguments(String args[]) {
-		String files[] = {"", ""};
-		
-		for(int i = 0; i < args.length; i++) {
-			switch(args[i]) {
-				case "-b":
-					files[0] = args[i+1];
-					i++;
-					break;
-				case "-r":
-					files[1] = args[i+1];
-					i++;
-					break;
-				default:
-					System.err.println("Try: JavaBoy [-r RomName] [-b Biosfile]");
-					System.exit(1);
-			}
-		}
-		
-		return files;
-	}
+    /**
+     * Looks for the ROM and BIOS flags and paths
+     * in the commandline arguments.
+     * 
+     * @param args Commandline arguments.
+     * @return Array of rom and bios paths.
+     */
+    private static String[] parseArguments(String args[]) {
+        String files[] = {"", ""};
+        
+        for(int i = 0; i < args.length; i++) {
+            switch(args[i]) {
+                case "-b":
+                    files[0] = args[i+1];
+                    i++;
+                    break;
+                case "-r":
+                    files[1] = args[i+1];
+                    i++;
+                    break;
+                default:
+                    System.err.println("Try: JavaBoy [-r RomName] [-b Biosfile]");
+                    System.exit(1);
+            }
+        }
+        
+        return files;
+    }
 
 }

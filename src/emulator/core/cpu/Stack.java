@@ -37,99 +37,99 @@ import emulator.Utils;
  *
  */
 public class Stack {
-	
-	/**
-	 * Stores a 16-bit register in
-	 * the stack.
-	 * 
-	 * @param cpu Reference to CPU object.
-	 * @param instruction Instruction opcode.
-	 */
-	static void push(CPU cpu, byte instruction) {
-		String register = "";
-		
-		switch(instruction) {
-			case (byte) 0xC5:
-				cpu.push16((short) cpu.BC.get());
-				register = "BC";
-				break;
-			case (byte) 0xD5:
-				cpu.push16((short) cpu.DE.get());
-				register = "DE";
-				break;
-			case (byte) 0xE5:
-				cpu.push16((short) cpu.HL.get());
-				register = "HL";
-				break;
-			case (byte) 0xF5:
-				cpu.push((byte) cpu.AF.getHighByte());
-				cpu.push(cpu.flags.generateReg());
-				register = "AF";
-				break;
-			default:
-				System.err.println("Error parsing push instruction: " +
-									Utils.hex(instruction) + 
-									" at " + 
-									Utils.hex(cpu.PC.get())
-				);
-				cpu.error = true;
-				return;
-		}
-		
-		Utils.PrintInstruction("push " + register, 
-								instruction, 
-								cpu.PC.get(), 
-								null, 0
-		);
-		
-		cpu.PC.set(cpu.PC.get() + 1);
-	}
-	
-	/**
-	 * Retrieves a 16-bit value from
-	 * the stack and stores it in a
-	 * register.
-	 * 
-	 * @param cpu Reference to CPU object.
-	 * @param instruction Instruction opcode.
-	 */
-	static void pop(CPU cpu, byte instruction) {
-		String register = "";
-		
-		switch(instruction) {
-			case (byte) 0xC1:
-				cpu.BC.set(cpu.pop16());
-				register = "BC";
-				break;
-			case (byte) 0xD1:
-				cpu.DE.set(cpu.pop16());
-				register = "DE";
-				break;
-			case (byte) 0xE1:
-				cpu.HL.set(cpu.pop16());
-				register = "HL";
-				break;
-			case (byte) 0xF1:
-				cpu.flags.byteToFlags(cpu.pop());
-				cpu.AF.setHighByte(cpu.pop());
-				register = "AF";
-				break;
-			default:
-				System.err.println("Error parsing pop instruction: " +
-									Utils.hex(instruction) + 
-									" at " + 
-									Utils.hex(cpu.PC.get())
-				);
-				cpu.error = true;
-				return;
-		}
-		
-		Utils.PrintInstruction("pop " + register, 
-								instruction, 
-								cpu.PC.get(), 
-								null, 0
-		);
-		
-		cpu.PC.set(cpu.PC.get() + 1);
-	}
+    
+    /**
+     * Stores a 16-bit register in
+     * the stack.
+     * 
+     * @param cpu Reference to CPU object.
+     * @param instruction Instruction opcode.
+     */
+    static void push(CPU cpu, byte instruction) {
+        String register = "";
+        
+        switch(instruction) {
+            case (byte) 0xC5:
+                cpu.push16((short) cpu.BC.get());
+                register = "BC";
+                break;
+            case (byte) 0xD5:
+                cpu.push16((short) cpu.DE.get());
+                register = "DE";
+                break;
+            case (byte) 0xE5:
+                cpu.push16((short) cpu.HL.get());
+                register = "HL";
+                break;
+            case (byte) 0xF5:
+                cpu.push((byte) cpu.AF.getHighByte());
+                cpu.push(cpu.flags.generateReg());
+                register = "AF";
+                break;
+            default:
+                System.err.println("Error parsing push instruction: " +
+                                    Utils.hex(instruction) + 
+                                    " at " + 
+                                    Utils.hex(cpu.PC.get())
+                );
+                cpu.error = true;
+                return;
+        }
+        
+        Utils.PrintInstruction("push " + register, 
+                                instruction, 
+                                cpu.PC.get(), 
+                                null, 0
+        );
+        
+        cpu.PC.set(cpu.PC.get() + 1);
+    }
+    
+    /**
+     * Retrieves a 16-bit value from
+     * the stack and stores it in a
+     * register.
+     * 
+     * @param cpu Reference to CPU object.
+     * @param instruction Instruction opcode.
+     */
+    static void pop(CPU cpu, byte instruction) {
+        String register = "";
+        
+        switch(instruction) {
+            case (byte) 0xC1:
+                cpu.BC.set(cpu.pop16());
+                register = "BC";
+                break;
+            case (byte) 0xD1:
+                cpu.DE.set(cpu.pop16());
+                register = "DE";
+                break;
+            case (byte) 0xE1:
+                cpu.HL.set(cpu.pop16());
+                register = "HL";
+                break;
+            case (byte) 0xF1:
+                cpu.flags.byteToFlags(cpu.pop());
+                cpu.AF.setHighByte(cpu.pop());
+                register = "AF";
+                break;
+            default:
+                System.err.println("Error parsing pop instruction: " +
+                                    Utils.hex(instruction) + 
+                                    " at " + 
+                                    Utils.hex(cpu.PC.get())
+                );
+                cpu.error = true;
+                return;
+        }
+        
+        Utils.PrintInstruction("pop " + register, 
+                                instruction, 
+                                cpu.PC.get(), 
+                                null, 0
+        );
+        
+        cpu.PC.set(cpu.PC.get() + 1);
+    }
 }

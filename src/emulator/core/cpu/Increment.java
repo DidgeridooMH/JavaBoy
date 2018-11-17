@@ -36,124 +36,124 @@ import emulator.Utils;
  *
  */
 public class Increment {
-	
-	/**
-	 * Increments a register or 16-bit
-	 * combined register.
-	 * 
-	 * @param cpu A reference to the CPU object.
-	 * @param instruction Instruction opcode
-	 */
-	static void increment(CPU cpu, byte instruction) {
-		int initial = 0;
-		String reg = "";
-		
-		switch(instruction) {
-			case 0x04:
-				initial = cpu.BC.getHighByte();
-				
-				cpu.BC.setHighByte((byte) (initial + 1));
-				cpu.flags.setFlags(initial, cpu.BC.getHighByte(), false, Flags.ZERO | Flags.HALFC);
-				
-				reg = "B";
-				
-				break;
-			case 0x0C:
-				initial = (byte) cpu.BC.getLowByte();
-				cpu.BC.setLowByte((byte) (initial + 1));
-				cpu.flags.setFlags(initial, cpu.BC.getLowByte(), false, Flags.ZERO | Flags.HALFC);
-				
-				reg = "C";
-				
-				break;
-			case 0x14:
-				initial = (byte) cpu.DE.getHighByte();
-				cpu.DE.setHighByte((byte) (initial + 1));
-				cpu.flags.setFlags(initial, cpu.DE.getHighByte(), false, Flags.ZERO | Flags.HALFC);
-				
-				reg = "D";
-				
-				break;
-			case 0x1C:
-				initial = (byte) cpu.DE.getLowByte();
-				cpu.DE.setLowByte((byte) (initial + 1));
-				cpu.flags.setFlags(initial, cpu.DE.getLowByte(), false, Flags.ZERO | Flags.HALFC);
-				
-				reg = "E";
-				
-				break;
-			case 0x24:
-				initial = (byte) cpu.HL.getHighByte();
-				cpu.HL.setHighByte((byte) (initial + 1));
-				cpu.flags.setFlags(initial, cpu.HL.getHighByte(), false, Flags.ZERO | Flags.HALFC);
-				
-				reg = "H";
-				
-				break;
-			case 0x2C:
-				initial = (byte) cpu.HL.getLowByte();
-				cpu.HL.setLowByte((byte) (initial + 1));
-				cpu.flags.setFlags(initial, cpu.HL.getLowByte(), false, Flags.ZERO | Flags.HALFC);
-				
-				reg = "L";
-				
-				break;
-			case 0x34:
-				initial = cpu.memory.read(cpu.HL.get());
-				byte result = (byte) initial++;
-				cpu.flags.setFlags(initial, result, false, Flags.ZERO | Flags.HALFC);
-				
-				reg = "(HL)";
-				
-				break;
-			case 0x3C:
-				initial = (byte) cpu.AF.getHighByte();
-				cpu.AF.setHighByte((byte) (initial + 1));
-				cpu.flags.setFlags(initial, cpu.AF.getHighByte(), false, Flags.ZERO | Flags.HALFC);
-				
-				reg = "A";
-				
-				break;
-			case 0x03:
-				cpu.BC.set(cpu.BC.get() + 1);
-				
-				reg = "BC";
-				
-				break;
-			case 0x13:
-				cpu.DE.set(cpu.DE.get() + 1);
-				
-				reg = "DE";
-				
-				break;
-			case 0x23:
-				cpu.HL.set(cpu.HL.get() + 1);
-				
-				reg = "HL";
-				
-				break;
-			case 0x33:
-				cpu.SP.set(cpu.SP.get() + 1);
-				
-				reg = "SP";
-				
-				break;
-			default:
-				System.err.println("Unknown variant of INC: " +
-									Utils.hex(instruction) +
-									" at " +
-									Utils.hex(cpu.PC.get())
-				);
-				cpu.error = true;
-				return;
-		}
-		
-		Utils.PrintInstruction("INC " + reg, 
-								instruction, 
-								cpu.PC.get(), 
-								null, 0
-		);
-		
-		cpu.PC.set(cpu.PC.get() + 1);
-	}
+    
+    /**
+     * Increments a register or 16-bit
+     * combined register.
+     * 
+     * @param cpu A reference to the CPU object.
+     * @param instruction Instruction opcode
+     */
+    static void increment(CPU cpu, byte instruction) {
+        int initial = 0;
+        String reg = "";
+        
+        switch(instruction) {
+            case 0x04:
+                initial = cpu.BC.getHighByte();
+                
+                cpu.BC.setHighByte((byte) (initial + 1));
+                cpu.flags.setFlags(initial, cpu.BC.getHighByte(), false, Flags.ZERO | Flags.HALFC);
+                
+                reg = "B";
+                
+                break;
+            case 0x0C:
+                initial = (byte) cpu.BC.getLowByte();
+                cpu.BC.setLowByte((byte) (initial + 1));
+                cpu.flags.setFlags(initial, cpu.BC.getLowByte(), false, Flags.ZERO | Flags.HALFC);
+                
+                reg = "C";
+                
+                break;
+            case 0x14:
+                initial = (byte) cpu.DE.getHighByte();
+                cpu.DE.setHighByte((byte) (initial + 1));
+                cpu.flags.setFlags(initial, cpu.DE.getHighByte(), false, Flags.ZERO | Flags.HALFC);
+                
+                reg = "D";
+                
+                break;
+            case 0x1C:
+                initial = (byte) cpu.DE.getLowByte();
+                cpu.DE.setLowByte((byte) (initial + 1));
+                cpu.flags.setFlags(initial, cpu.DE.getLowByte(), false, Flags.ZERO | Flags.HALFC);
+                
+                reg = "E";
+                
+                break;
+            case 0x24:
+                initial = (byte) cpu.HL.getHighByte();
+                cpu.HL.setHighByte((byte) (initial + 1));
+                cpu.flags.setFlags(initial, cpu.HL.getHighByte(), false, Flags.ZERO | Flags.HALFC);
+                
+                reg = "H";
+                
+                break;
+            case 0x2C:
+                initial = (byte) cpu.HL.getLowByte();
+                cpu.HL.setLowByte((byte) (initial + 1));
+                cpu.flags.setFlags(initial, cpu.HL.getLowByte(), false, Flags.ZERO | Flags.HALFC);
+                
+                reg = "L";
+                
+                break;
+            case 0x34:
+                initial = cpu.memory.read(cpu.HL.get());
+                byte result = (byte) initial++;
+                cpu.flags.setFlags(initial, result, false, Flags.ZERO | Flags.HALFC);
+                
+                reg = "(HL)";
+                
+                break;
+            case 0x3C:
+                initial = (byte) cpu.AF.getHighByte();
+                cpu.AF.setHighByte((byte) (initial + 1));
+                cpu.flags.setFlags(initial, cpu.AF.getHighByte(), false, Flags.ZERO | Flags.HALFC);
+                
+                reg = "A";
+                
+                break;
+            case 0x03:
+                cpu.BC.set(cpu.BC.get() + 1);
+                
+                reg = "BC";
+                
+                break;
+            case 0x13:
+                cpu.DE.set(cpu.DE.get() + 1);
+                
+                reg = "DE";
+                
+                break;
+            case 0x23:
+                cpu.HL.set(cpu.HL.get() + 1);
+                
+                reg = "HL";
+                
+                break;
+            case 0x33:
+                cpu.SP.set(cpu.SP.get() + 1);
+                
+                reg = "SP";
+                
+                break;
+            default:
+                System.err.println("Unknown variant of INC: " +
+                                    Utils.hex(instruction) +
+                                    " at " +
+                                    Utils.hex(cpu.PC.get())
+                );
+                cpu.error = true;
+                return;
+        }
+        
+        Utils.PrintInstruction("INC " + reg, 
+                                instruction, 
+                                cpu.PC.get(), 
+                                null, 0
+        );
+        
+        cpu.PC.set(cpu.PC.get() + 1);
+    }
 }

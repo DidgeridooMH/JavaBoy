@@ -42,26 +42,26 @@ import emulator.core.memory.Memory;
  *
  */
 public class Machine extends Thread {
-	
-	private CPU cpu;
-	
-	private GPU gpu;
+    
+    private CPU cpu;
+    
+    private GPU gpu;
 
-	private GUI gui;
+    private GUI gui;
 
-	/**
-	 * Loads CPU module and sets up GUI
-	 * window.
-	 * 
-	 * @param bios Path to BIOS file.
-	 * @param rom Path to ROM file.
-	 */
-	public Machine(String bios, String rom) {
-		System.out.println("Machine Initialized!");
+    /**
+     * Loads CPU module and sets up GUI
+     * window.
+     * 
+     * @param bios Path to BIOS file.
+     * @param rom Path to ROM file.
+     */
+    public Machine(String bios, String rom) {
+        System.out.println("Machine Initialized!");
 
-		Memory memory = new Memory(bios, rom);
+        Memory memory = new Memory(bios, rom);
 
-		gpu = new GPU(memory);
+        gpu = new GPU(memory);
 
         memory.setGPU(gpu);
 
@@ -69,11 +69,11 @@ public class Machine extends Thread {
 
         this.gui = new GUI(new Screen(gpu));
         this.gui.setVisible(true);
-	}
+    }
 
-	@Override
-	public void run() {
-	    while(!this.cpu.isError()) {
+    @Override
+    public void run() {
+        while(!this.cpu.isError()) {
             cpu.execute();
             for(int i = 0; i < 3; i++) {
                 gpu.execute();
