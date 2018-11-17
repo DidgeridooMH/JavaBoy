@@ -28,6 +28,8 @@ package emulator.core.cpu;
 
 import emulator.Utils;
 
+import java.util.Map;
+
 /**
  * Compares register or byte in memory.
  * 
@@ -36,90 +38,44 @@ import emulator.Utils;
  */
 public class Compare {
 
-	/**
-	 * Subtracts a register or byte in memory from register A
-	 * then sets the flags accordingly. Does not affect A.
-	 * 
-	 * @param cpu Reference to the CPU object.
-	 * @param instruction Instruction opcode
-	 */
-	static void compare(CPU cpu, byte instruction) {
-		byte value = 0x0;
-		byte initial = (byte) cpu.AF.getHighByte();
-		byte result = 0x0;
-		
-		String reg = "";
-		
-		switch(instruction) {
-			case (byte) 0xB8:
-				value = (byte) cpu.BC.getHighByte();
-				reg = "B";
-				break;
-			case (byte) 0xB9:
-				value = (byte) cpu.BC.getLowByte();
-				reg = "C";
-				break;
-			case (byte) 0xBA:
-				value = (byte) cpu.DE.getHighByte();
-				reg = "D";
-				break;
-			case (byte) 0xBB:
-				value = (byte) cpu.DE.getLowByte();
-				reg = "E";
-				break;
-			case (byte) 0xBC:
-				value = (byte) cpu.HL.getHighByte();
-				reg = "H";
-				break;
-			case (byte) 0xBD:
-				value = (byte) cpu.HL.getLowByte();
-				reg = "L";
-				break;
-			case (byte) 0xBE:
-				value = cpu.memory.read(cpu.HL.get());
-				reg = "(HL)";
-				break;
-			case (byte) 0xBF:
-				value = (byte) cpu.AF.getHighByte();
-				reg = "A";
-				break;
-			case (byte) 0xFE:
-				value = cpu.memory.read(cpu.PC.get() + 1);
-				reg = "d8";
-				break;
-			default:
-				System.err.println("Error while parsing CP command: " + 
-									Utils.hex(instruction) + 
-									" at " +
-									Utils.hex(cpu.PC.get())
-				);
-				cpu.error = true;
-				return;
-		}
-		
-		result = (byte) (initial - value);
-		
-		cpu.flags.setFlags(initial, result, 
-							false, 
-							Flags.CARRY | 
-							Flags.ZERO | 
-							Flags.HALFC | 
-							Flags.SUBTRACT
-		);
-		
-		Utils.PrintInstruction("CP " + reg, 
-								instruction, 
-								cpu.PC.get(), 
-								null, 0
-		);
-		
-		if(instruction == (byte) 0xFE) {
-			cpu.PC.set(cpu.PC.get() + 2);
-		} else {
-			cpu.PC.set(cpu.PC.get() + 1);
-		}
-		
-		return;
-	}
-	
+    public static void buildOpcodes(Map<Byte, Runnable> funcTable, CPU cpu) {
+        funcTable.put((byte)0xB8, () -> Compare.compare(cpu, cpu.BC.getHighByte(), "B", (byte)0xB8));
+        funcTable.put((byte)0xB9, () -> Compare.compare(cpu, cpu.BC.getLowByte(), "C", (byte)0xB9));
+        funcTable.put((byte)0xBA, () -> Compare.compare(cpu, cpu.DE.getHighByte(), "D", (byte)0xBA));
+        funcTable.put((byte)0xBB, () -> Compare.compare(cpu, cpu.DE.getLowByte(), "E", (byte)0xBB));
+        funcTable.put((byte)0xBC, () -> Compare.compare(cpu, cpu.HL.getHighByte(), "H", (byte)0xBC));
+        funcTable.put((byte)0xBD, () -> Compare.compare(cpu, cpu.HL.getLowByte(), "L", (byte)0xBD));
+        funcTable.put((byte)0xBF, () -> Compare.compare(cpu, cpu.AF.getHighByte(), "A", (byte)0xBF));
+        funcTable.put((byte)0xBE, () -> {
+            int memValue = cpu.memory.read(cpu.HL.get());
+            Compare.compare(cpu, memValue, "MEM", (byte)0xBE);
+        });
+        funcTable.put((byte)0xFE, () -> {
+            int memValue = cpu.memory.read(cpu.PC.get() + 1);
+            Compare.compare(cpu, memValue, "d8", (byte)0xFE);
+            cpu.PC.set(cpu.PC.get() + 1);
+        });
+    }
+
+    private static void compare(CPU cpu, int input, String inputStr, byte instruction) {
+        byte initial = (byte) cpu.AF.getHighByte();
+        byte result = (byte) (initial - ((byte) input));
+
+
+        cpu.flags.setFlags(initial, result,
+                false,
+                Flags.CARRY |
+                        Flags.ZERO |
+                        Flags.HALFC |
+                        Flags.SUBTRACT
+        );
+
+        Utils.PrintInstruction("CP " + inputStr,
+                instruction,
+                cpu.PC.get(),
+                null, 0
+        );
+
+        cpu.PC.set(cpu.PC.get() + 1);
+    }
 }

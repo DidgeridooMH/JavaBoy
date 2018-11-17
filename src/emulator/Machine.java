@@ -49,11 +49,6 @@ public class Machine extends Thread {
 
 	private GUI gui;
 
-	enum State {
-	    STATE_ON,
-	    STATE_OFF
-    }
-
 	/**
 	 * Loads CPU module and sets up GUI
 	 * window.

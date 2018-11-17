@@ -151,12 +151,6 @@ public class CPU {
                     case "LDH":
                         Load.load(this, ins);
                         break;
-                    case "XOR":
-                        BitOperation.exclusiveOR(this, ins);
-                        break;
-                    case "OR":
-                        BitOperation.or(this, ins);
-                        break;
                     case "SUB":
                         Subtract.subtract(this, ins);
                         break;
@@ -178,17 +172,11 @@ public class CPU {
                     case "RLA":
                         BitOperation.rotate(this, ins, false);
                         break;
-                    case "DEC":
-                        Decrement.decrement(this, ins);
-                        break;
                     case "INC":
                         Increment.increment(this, ins);
                         break;
                     case "RET":
                         Jump.returnFromCall(this, ins);
-                        break;
-                    case "CP":
-                        Compare.compare(this, ins);
                         break;
                     case "NOP":
                         // No Operation
@@ -202,9 +190,6 @@ public class CPU {
                         flags.disableInterrupts();
                         Utils.PrintInstruction("DI", ins, PC.get(), null, 0);
                         PC.set(PC.get() + 1);
-                        break;
-                    case "AND":
-                        BitOperation.and(this, ins);
                         break;
                     default:
                         System.err.println("Unknown opcode: " +

@@ -66,19 +66,19 @@ public interface Utils {
 									byte parameters[], 
 									int paramSize) {
 		
-		System.out.print(hex(location) +
-							": " +
-							decodedIns + 
-							"(" + 
-							hex(ins & 0xFF) + 
-							") "
-		);
-		
-		for(int i = 0; i < paramSize; i++) {
-			System.out.print(hex(parameters[i] & 0xFF) + " ");
-		}
-		
-		System.out.print("\n");
+//		System.out.print(hex(location) +
+//							": " +
+//							decodedIns +
+//							"(" +
+//							hex(ins & 0xFF) +
+//							") "
+//		);
+//
+//		for(int i = 0; i < paramSize; i++) {
+//			System.out.print(hex(parameters[i] & 0xFF) + " ");
+//		}
+//
+//		System.out.print("\n");
 	}
 	
 	/**

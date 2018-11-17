@@ -45,29 +45,29 @@ public class Jump {
 	 * @param instruction Instruction opcode.
 	 */
 	static void call(CPU cpu, byte instruction) {
-		int address = 0x0;
+		int address;
 		byte parameters[] = { 	cpu.memory.read(cpu.PC.get() + 1),
 								cpu.memory.read(cpu.PC.get() + 2) };
-		boolean jump = false;
+		boolean jump;
 		
-		System.out.print(Utils.hex(cpu.PC.get()) + ": CALL ");
+		// System.out.print(Utils.hex(cpu.PC.get()) + ": CALL ");
 		
 		switch(instruction) {
 			case (byte) 0xC4:
 				jump = (!cpu.flags.getZero());
-				System.out.print("NZ, a16");
+				// System.out.print("NZ, a16");
 				break;
 			case (byte) 0xCC:
 				jump = (cpu.flags.getZero());
-				System.out.print("Z, a16");
+				// System.out.print("Z, a16");
 				break;
 			case (byte) 0xD4:
 				jump = (!cpu.flags.getCarry());
-				System.out.print("NC, a16");
+				// System.out.print("NC, a16");
 				break;
 			case (byte) 0xDC:
 				jump = (cpu.flags.getCarry());
-				System.out.print("C, a16");
+				// System.out.print("C, a16");
 				break;
 			case (byte) 0xCD:
 				jump = true;
@@ -82,11 +82,11 @@ public class Jump {
 				return;
 		}
 		
-		System.out.print(Utils.hex(instruction & 0xFF));
+		// System.out.print(Utils.hex(instruction & 0xFF));
 		
 		address = ((short) parameters[1] << 8) | (short) (parameters[0] & 0xFF);
 		
-		System.out.print(" " + Utils.hex(address) + "\n");
+		// System.out.print(" " + Utils.hex(address) + "\n");
 		
 		if(jump) {
 			cpu.push16((short) (cpu.PC.get() + 3));
@@ -107,7 +107,7 @@ public class Jump {
 		byte parameter[] = { cpu.memory.read(cpu.PC.get() + 1) };
 		boolean jump = false;
 		
-		System.out.print(Utils.hex(cpu.PC.get()) + ": JR ");
+		//System.out.print(Utils.hex(cpu.PC.get()) + ": JR ");
 		
 		switch(instruction) {
 			case 0x18:
@@ -115,19 +115,19 @@ public class Jump {
 				break;
 			case 0x20:
 				jump = (!cpu.flags.getZero());
-				System.out.print("NZ ");
+				//System.out.print("NZ ");
 				break;
 			case 0x28:
 				jump = (cpu.flags.getZero());
-				System.out.print("Z ");
+				//System.out.print("Z ");
 				break;
 			case 0x30:
 				jump = (!cpu.flags.getCarry());
-				System.out.print("NC ");
+				//System.out.print("NC ");
 				break;
 			case 0x38:
 				jump = (cpu.flags.getCarry());
-				System.out.print("C ");
+				//System.out.print("C ");
 				break;
 			default:
 				System.err.println("Unknown variant of JR: " + 
@@ -138,7 +138,7 @@ public class Jump {
 				return;
 		}
 		
-		System.out.print(Utils.hex(cpu.PC.get() + parameter[0] + 2) + "(" + Utils.hex(instruction) + ")\n");
+		//System.out.print(Utils.hex(cpu.PC.get() + parameter[0] + 2) + "(" + Utils.hex(instruction) + ")\n");
 		
 		// Add 2 to account for the JR instruction size
 		if(jump) {
@@ -230,7 +230,7 @@ public class Jump {
 								cpu.memory.read(cpu.PC.get() + 2) };
 		boolean jump = false;
 		
-		System.out.print(Utils.hex(cpu.PC.get()) + ": JP ");
+		// System.out.print(Utils.hex(cpu.PC.get()) + ": JP ");
 		
 		switch(instruction) {
 			case (byte) 0xC3:
@@ -238,22 +238,22 @@ public class Jump {
 				break;
 			case (byte) 0xC2:
 				jump = (!cpu.flags.getZero());
-				System.out.print("NZ ");
+				// System.out.print("NZ ");
 				break;
 			case (byte) 0xCA:
 				jump = (cpu.flags.getZero());
-				System.out.print("Z ");
+				// System.out.print("Z ");
 				break;
 			case (byte) 0xD2:
 				jump = (!cpu.flags.getCarry());
-				System.out.print("NC ");
+				// System.out.print("NC ");
 				break;
 			case (byte) 0xDA:
 				jump = (cpu.flags.getCarry());
-				System.out.print("C ");
+				// System.out.print("C ");
 				break;
 			default:
-				System.err.println("Unknown variant of JP: " + 
+                System.err.println("Unknown variant of JP: " +
 									Utils.hex(instruction & 0xFF) + 
 									" at " + 
 									Utils.hex(cpu.PC.get()));
@@ -261,7 +261,7 @@ public class Jump {
 				return;
 		}
 		
-		System.out.print(Utils.hex(((parameter[1] << 8) & 0xFF00) | parameter[0]) + "(" + Utils.hex(instruction & 0xFF) + ")\n");
+		// System.out.print(Utils.hex(((parameter[1] << 8) & 0xFF00) | parameter[0]) + "(" + Utils.hex(instruction & 0xFF) + ")\n");
 		
 		if(jump) {
 		    int highByte = (parameter[1] << 8) & 0xFF00;

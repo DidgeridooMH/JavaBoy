@@ -28,6 +28,8 @@ package emulator.core.cpu;
 
 import emulator.Utils;
 
+import java.util.Map;
+
 /**
  * Decrements a register or 16-bit
  * combined register.
@@ -37,147 +39,68 @@ import emulator.Utils;
  */
 public class Decrement {
 
-	/**
-	 * Decrements a register or 16-bit
-	 * combined register.
-	 * 
-	 * @param cpu Reference to CPU object
-	 * @param instruction Instruction opcode
-	 */
-	static void decrement(CPU cpu, byte instruction) {
-		int initial = 0;
-		String register = "";
-	 
-		switch(instruction) {
-			case 0x05:
-				initial = cpu.BC.getHighByte();
-				
-				cpu.BC.setHighByte((byte) (initial - 1));
-				cpu.flags.setFlags(initial, 
-									cpu.BC.getHighByte(), 
-									false, 
-									Flags.ZERO | 
-									Flags.SUBTRACT | 
-									Flags.HALFC
-				);
-				register = "B";
-				break;
-			case 0x0D:
-				initial = (byte) cpu.BC.getLowByte();
-				cpu.BC.setLowByte((byte) (initial - 1));
-				cpu.flags.setFlags(initial, 
-									cpu.BC.getLowByte(), 
-									false, 
-									Flags.ZERO | 
-									Flags.SUBTRACT | 
-									Flags.HALFC
-				);
-				register = "C";			
-				break;
-			case 0x15:
-				initial = (byte) cpu.DE.getHighByte();
-				cpu.DE.setHighByte((byte) (initial - 1));
-				cpu.flags.setFlags(initial, 
-									cpu.DE.getHighByte(), 
-									false, 
-									Flags.ZERO | 
-									Flags.SUBTRACT | 
-									Flags.HALFC
-				);
-				register = "D";
-				break;
-			case 0x1D:
-				initial = (byte) cpu.DE.getLowByte();
-				cpu.DE.setLowByte((byte) (initial - 1));
-				cpu.flags.setFlags(initial, 
-									cpu.DE.getLowByte(), 
-									false, 
-									Flags.ZERO | 
-									Flags.SUBTRACT | 
-									Flags.HALFC
-				);
-				register = "E";
-				break;
-			case 0x25:
-				initial = (byte) cpu.HL.getHighByte();
-				cpu.HL.setHighByte((byte) (initial - 1));
-				cpu.flags.setFlags(initial, 
-									cpu.HL.getHighByte(), 
-									false, 
-									Flags.ZERO | 
-									Flags.SUBTRACT | 
-									Flags.HALFC
-				);
-				register = "H";
-				break;
-			case 0x2D:
-				initial = (byte) cpu.HL.getLowByte();
-				cpu.HL.setLowByte((byte) (initial - 1));
-				cpu.flags.setFlags(initial, 
-									cpu.HL.getLowByte(), 
-									false, 
-									Flags.ZERO | 
-									Flags.SUBTRACT | 
-									Flags.HALFC
-				);
-				register = "L";
-				break;
-			case 0x35:
-				initial = cpu.memory.read(cpu.HL.get());
-				byte result = (byte) initial--;
-				cpu.flags.setFlags(initial, 
-									result, 
-									false, 
-									Flags.ZERO | 
-									Flags.SUBTRACT | 
-									Flags.HALFC
-				);
-				register = "(HL)";
-				break;
-			case 0x3D:
-				initial = (byte) cpu.AF.getHighByte();
-				cpu.AF.setHighByte((byte) (initial - 1));
-				cpu.flags.setFlags(initial, 
-									cpu.AF.getHighByte(), 
-									false, 
-									Flags.ZERO | 
-									Flags.SUBTRACT | 
-									Flags.HALFC
-				);
-				register = "A";
-				break;
-			case 0x0B:
-				cpu.BC.set(cpu.BC.get() - 1);
-				register = "BC";
-				break;
-			case 0x1B:
-				cpu.DE.set(cpu.DE.get() - 1);
-				register = "DE";
-				break;
-			case 0x2B:
-				cpu.HL.set(cpu.HL.get() - 1);
-				register = "HL";
-				break;
-			case 0x3B:
-				cpu.SP.set(cpu.SP.get() - 1);
-				register = "SP";
-				break;
-			default:
-				System.err.println("Unknown variant of DEC: " +
-									Utils.hex(instruction) + 
-									" at " +
-									Utils.hex(cpu.PC.get())
-				);
-				cpu.error = true;
-				return;
-		}
+    public static void buildOpcodes(Map<Byte, Runnable> funcTable, CPU cpu) {
+        funcTable.put((byte)0x0B, () -> Decrement.decrement_16(cpu, cpu.BC, "BC", (byte)0x0B));
+        funcTable.put((byte)0x1B, () -> Decrement.decrement_16(cpu, cpu.DE, "DE", (byte)0x1B));
+        funcTable.put((byte)0x2B, () -> Decrement.decrement_16(cpu, cpu.HL, "HL", (byte)0x2B));
+        funcTable.put((byte)0x3B, () -> Decrement.decrement_16(cpu, cpu.SP, "SP", (byte)0x3B));
+        funcTable.put((byte)0x05, () ->
+                Decrement.decrement_8(cpu, cpu.BC, true, "B", (byte)0x05));
+        funcTable.put((byte)0x15, () ->
+                Decrement.decrement_8(cpu, cpu.DE, true, "D", (byte)0x15));
+        funcTable.put((byte)0x25, () ->
+                Decrement.decrement_8(cpu, cpu.HL, true, "H", (byte)0x25));
+        funcTable.put((byte)0x35, () -> {
+                Register reg = new Register(cpu.memory.read(cpu.HL.get()), "MEM");
+                Decrement.decrement_8(cpu, reg, false, "MEM", (byte)0x35);
+                cpu.memory.write((byte)(reg.getLowByte()), cpu.HL.get());
+                });
+        funcTable.put((byte)0x0D, () ->
+                Decrement.decrement_8(cpu, cpu.BC, false, "C", (byte)0x0D));
+        funcTable.put((byte)0x1D, () ->
+                Decrement.decrement_8(cpu, cpu.DE, false, "E", (byte)0x1D));
+        funcTable.put((byte)0x2D, () ->
+                Decrement.decrement_8(cpu, cpu.HL, false, "L", (byte)0x2D));
+        funcTable.put((byte)0x3D, () ->
+                Decrement.decrement_8(cpu, cpu.AF, true, "A", (byte)0x3D));
+    }
 
-		Utils.PrintInstruction("DEC " + register, 
-								instruction, 
-								cpu.PC.get(), 
-								null, 0
-		);
-		cpu.PC.set(cpu.PC.get() + 1);
-	}
-	
+    private static void decrementLogInstruction(CPU cpu, String input, byte instruction) {
+        Utils.PrintInstruction("DEC " + input,
+                instruction,
+                cpu.PC.get(),
+                null, 0
+        );
+    }
+
+    private static void decrement_8(CPU cpu, Register reg, boolean highLow, String inputStr, byte instruction) {
+        int initial;
+        if(highLow) {
+            initial = reg.getHighByte();
+            reg.setHighByte((byte) (initial - 1));
+        } else {
+            initial = reg.getLowByte();
+            reg.setLowByte((byte) (initial - 1));
+        }
+
+        cpu.flags.setFlags(	initial, (byte) (initial - 1),
+                false,
+                Flags.HALFC | Flags.ZERO
+        );
+
+        cpu.flags.setSign(true);
+
+        decrementLogInstruction(cpu, inputStr, instruction);
+
+        cpu.PC.set(cpu.PC.get() + 1);
+    }
+
+    private static void decrement_16(CPU cpu, Register reg, String inputStr, byte instruction) {
+        int initial = reg.get();
+        reg.set(initial - 1);
+
+        decrementLogInstruction(cpu, inputStr, instruction);
+
+        cpu.PC.set(cpu.PC.get() + 1);
+    }
 }

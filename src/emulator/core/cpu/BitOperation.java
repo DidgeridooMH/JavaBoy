@@ -28,6 +28,8 @@ package emulator.core.cpu;
 
 import emulator.Utils;
 
+import java.util.Map;
+
 /**
  * Bitwise operation OPCodes
  * 
@@ -36,348 +38,120 @@ import emulator.Utils;
  */
 public class BitOperation {
 
-    static void and(CPU cpu, byte instruction) {
-        byte parameter[] = { 0x0 };
+    public static void buildOpcodes(Map<Byte, Runnable> funcTable, CPU cpu) {
+        /*
+         * AND opcodes
+         */
+        funcTable.put((byte)0xA0, () -> BitOperation.and(cpu, cpu.BC.getHighByte(), "B", (byte)0xA0));
+        funcTable.put((byte)0xA1, () -> BitOperation.and(cpu, cpu.BC.getLowByte(), "C", (byte)0xA1));
+        funcTable.put((byte)0xA2, () -> BitOperation.and(cpu, cpu.DE.getHighByte(), "D", (byte)0xA2));
+        funcTable.put((byte)0xA3, () -> BitOperation.and(cpu, cpu.DE.getLowByte(), "E", (byte)0xA3));
+        funcTable.put((byte)0xA4, () -> BitOperation.and(cpu, cpu.HL.getHighByte(), "H", (byte)0xA4));
+        funcTable.put((byte)0xA5, () -> BitOperation.and(cpu, cpu.HL.getLowByte(), "L", (byte)0xA5));
+        funcTable.put((byte)0xA7, () -> BitOperation.and(cpu, cpu.AF.getHighByte(), "A", (byte)0xA7));
+        funcTable.put((byte)0xA6, () -> {
+            int memValue = cpu.memory.read(cpu.HL.get());
+            BitOperation.and(cpu, memValue, "MEM", (byte)0xA6);
+        });
+        funcTable.put((byte)0xE6, () -> {
+            int memValue = cpu.memory.read(cpu.PC.get() + 1);
+            BitOperation.and(cpu, memValue, "d8", (byte)0xE6);
+            cpu.PC.set(cpu.PC.get() + 1);
+        });
 
-        switch(instruction) {
-            case (byte) 0xA0:
-                cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() & cpu.BC.getHighByte()));
-                cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
-                cpu.flags.setCarry(false);
-                cpu.flags.setHalfCarry(false);
-                cpu.flags.setSubtract(false);
+        /*
+         * OR opcodes
+         */
+        funcTable.put((byte)0xB0, () -> BitOperation.or(cpu, cpu.BC.getHighByte(), "B", (byte)0xB0));
+        funcTable.put((byte)0xB1, () -> BitOperation.or(cpu, cpu.BC.getLowByte(), "C", (byte)0xB1));
+        funcTable.put((byte)0xB2, () -> BitOperation.or(cpu, cpu.DE.getHighByte(), "D", (byte)0xB2));
+        funcTable.put((byte)0xB3, () -> BitOperation.or(cpu, cpu.DE.getLowByte(), "E", (byte)0xB3));
+        funcTable.put((byte)0xB4, () -> BitOperation.or(cpu, cpu.HL.getHighByte(), "H", (byte)0xB4));
+        funcTable.put((byte)0xB5, () -> BitOperation.or(cpu, cpu.HL.getLowByte(), "L", (byte)0xB5));
+        funcTable.put((byte)0xB7, () -> BitOperation.or(cpu, cpu.AF.getHighByte(), "A", (byte)0xB7));
+        funcTable.put((byte)0xB6, () -> {
+            int memValue = cpu.memory.read(cpu.HL.get());
+            BitOperation.or(cpu, memValue, "MEM", (byte)0xB6);
+        });
+        funcTable.put((byte)0xF6, () -> {
+            int memValue = cpu.memory.read(cpu.PC.get() + 1);
+            BitOperation.or(cpu, memValue, "d8", (byte)0xF6);
+            cpu.PC.set(cpu.PC.get() + 1);
+        });
 
-                Utils.PrintInstruction("AND B", instruction, cpu.PC.get(), null, 0);
-
-                cpu.PC.set(cpu.PC.get() + 1);
-
-                break;
-            case (byte) 0xA1:
-                cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() & cpu.BC.getLowByte()));
-                cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
-                cpu.flags.setCarry(false);
-                cpu.flags.setHalfCarry(false);
-                cpu.flags.setSubtract(false);
-
-                Utils.PrintInstruction("AND C", instruction, cpu.PC.get(), null, 0);
-
-                cpu.PC.set(cpu.PC.get() + 1);
-
-                break;
-            case (byte) 0xA2:
-                cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() & cpu.DE.getHighByte()));
-                cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
-                cpu.flags.setCarry(false);
-                cpu.flags.setHalfCarry(false);
-                cpu.flags.setSubtract(false);
-
-                Utils.PrintInstruction("AND D", instruction, cpu.PC.get(), null, 0);
-
-                cpu.PC.set(cpu.PC.get() + 1);
-
-                break;
-            case (byte) 0xA3:
-                cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() & cpu.DE.getLowByte()));
-                cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
-                cpu.flags.setCarry(false);
-                cpu.flags.setHalfCarry(false);
-                cpu.flags.setSubtract(false);
-
-                Utils.PrintInstruction("AND E", instruction, cpu.PC.get(), null, 0);
-
-                cpu.PC.set(cpu.PC.get() + 1);
-
-                break;
-            case (byte) 0xA4:
-                cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() & cpu.HL.getHighByte()));
-                cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
-                cpu.flags.setCarry(false);
-                cpu.flags.setHalfCarry(false);
-                cpu.flags.setSubtract(false);
-
-                Utils.PrintInstruction("AND H", instruction, cpu.PC.get(), null, 0);
-
-                cpu.PC.set(cpu.PC.get() + 1);
-
-                break;
-            case (byte) 0xA5:
-                cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() & cpu.HL.getLowByte()));
-                cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
-                cpu.flags.setCarry(false);
-                cpu.flags.setHalfCarry(false);
-                cpu.flags.setSubtract(false);
-
-                Utils.PrintInstruction("AND L", instruction, cpu.PC.get(), null, 0);
-
-                cpu.PC.set(cpu.PC.get() + 1);
-
-                break;
-            case (byte) 0xA6:
-                parameter[0] = cpu.memory.read(cpu.HL.get());
-
-                cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() & parameter[0]));
-                cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
-                cpu.flags.setCarry(false);
-                cpu.flags.setHalfCarry(false);
-                cpu.flags.setSubtract(false);
-
-                Utils.PrintInstruction("AND (HL)", instruction, cpu.PC.get(), parameter, 1);
-
-                cpu.PC.set(cpu.PC.get() + 1);
-
-                break;
-            case (byte) 0xA7:
-                cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() & cpu.AF.getHighByte()));
-                cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
-                cpu.flags.setCarry(false);
-                cpu.flags.setHalfCarry(false);
-                cpu.flags.setSubtract(false);
-
-                Utils.PrintInstruction("AND A", instruction, cpu.PC.get(), null, 0);
-
-                cpu.PC.set(cpu.PC.get() + 1);
-
-                break;
-            case (byte) 0xE6:
-                cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() & cpu.memory.read(cpu.PC.get() + 1)));
-                cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
-                cpu.flags.setCarry(false);
-                cpu.flags.setHalfCarry(false);
-                cpu.flags.setSubtract(false);
-
-                Utils.PrintInstruction("AND d8", instruction, cpu.PC.get(), null, 0);
-
-                cpu.PC.set(cpu.PC.get() + 1);
-
-                break;
-            default:
-                System.err.println("Unknown variant of AND: " + Utils.hex(instruction & 0xFF));
-                cpu.error = true;
-        }
+        /*
+         * XOR opcodes
+         */
+        funcTable.put((byte)0xA8, () -> BitOperation.xor(cpu, cpu.BC.getHighByte(), "B", (byte)0xA8));
+        funcTable.put((byte)0xA9, () -> BitOperation.xor(cpu, cpu.BC.getLowByte(), "C", (byte)0xA9));
+        funcTable.put((byte)0xAA, () -> BitOperation.xor(cpu, cpu.DE.getHighByte(), "D", (byte)0xAA));
+        funcTable.put((byte)0xAB, () -> BitOperation.xor(cpu, cpu.DE.getLowByte(), "E", (byte)0xAB));
+        funcTable.put((byte)0xAC, () -> BitOperation.xor(cpu, cpu.HL.getHighByte(), "H", (byte)0xAC));
+        funcTable.put((byte)0xAD, () -> BitOperation.xor(cpu, cpu.HL.getLowByte(), "L", (byte)0xAD));
+        funcTable.put((byte)0xAF, () -> BitOperation.xor(cpu, cpu.AF.getHighByte(), "A", (byte)0xAF));
+        funcTable.put((byte)0xAE, () -> {
+            int memValue = cpu.memory.read(cpu.HL.get());
+            BitOperation.xor(cpu, memValue, "MEM", (byte)0xAE);
+        });
+        funcTable.put((byte)0xEE, () -> {
+            int memValue = cpu.memory.read(cpu.PC.get() + 1);
+            BitOperation.xor(cpu, memValue, "d8", (byte)0xEE);
+            cpu.PC.set(cpu.PC.get() + 1);
+        });
     }
 
-	static void or(CPU cpu, byte instruction) {
-		byte parameter[] = { 0x0 };
-		
-		switch(instruction) {
-			case (byte) 0xB0:
-				cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() | cpu.BC.getHighByte()));
-				cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
-				cpu.flags.setCarry(false);
-				cpu.flags.setHalfCarry(false);
-				cpu.flags.setSubtract(false);
-				
-				Utils.PrintInstruction("OR B", instruction, cpu.PC.get(), null, 0);
-				
-				cpu.PC.set(cpu.PC.get() + 1);
-				
-				break;
-			case (byte) 0xB1:
-				cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() | cpu.BC.getLowByte()));
-				cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
-				cpu.flags.setCarry(false);
-				cpu.flags.setHalfCarry(false);
-				cpu.flags.setSubtract(false);
-				
-				Utils.PrintInstruction("OR C", instruction, cpu.PC.get(), null, 0);
-				
-				cpu.PC.set(cpu.PC.get() + 1);
-				
-				break;
-			case (byte) 0xB2:
-				cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() | cpu.DE.getHighByte()));
-				cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
-				cpu.flags.setCarry(false);
-				cpu.flags.setHalfCarry(false);
-				cpu.flags.setSubtract(false);
-				
-				Utils.PrintInstruction("OR D", instruction, cpu.PC.get(), null, 0);
-				
-				cpu.PC.set(cpu.PC.get() + 1);
-				
-				break;
-			case (byte) 0xB3:
-				cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() | cpu.DE.getLowByte()));
-				cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
-				cpu.flags.setCarry(false);
-				cpu.flags.setHalfCarry(false);
-				cpu.flags.setSubtract(false);
-				
-				Utils.PrintInstruction("OR E", instruction, cpu.PC.get(), null, 0);
-				
-				cpu.PC.set(cpu.PC.get() + 1);
-				
-				break;
-			case (byte) 0xB4:
-				cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() | cpu.HL.getHighByte()));
-				cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
-				cpu.flags.setCarry(false);
-				cpu.flags.setHalfCarry(false);
-				cpu.flags.setSubtract(false);
-				
-				Utils.PrintInstruction("OR H", instruction, cpu.PC.get(), null, 0);
-				
-				cpu.PC.set(cpu.PC.get() + 1);
-				
-				break;
-			case (byte) 0xB5:
-				cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() | cpu.HL.getLowByte()));
-				cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
-				cpu.flags.setCarry(false);
-				cpu.flags.setHalfCarry(false);
-				cpu.flags.setSubtract(false);
-				
-				Utils.PrintInstruction("OR L", instruction, cpu.PC.get(), null, 0);
-				
-				cpu.PC.set(cpu.PC.get() + 1);
-				
-				break;
-			case (byte) 0xB6:
-				parameter[0] = cpu.memory.read(cpu.HL.get());
-				
-				cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() | parameter[0]));
-				cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
-				cpu.flags.setCarry(false);
-				cpu.flags.setHalfCarry(false);
-				cpu.flags.setSubtract(false);
-				
-				Utils.PrintInstruction("OR (HL)", instruction, cpu.PC.get(), parameter, 1);
-				
-				cpu.PC.set(cpu.PC.get() + 1);
-				
-				break;
-			case (byte) 0xB7:
-				cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() | cpu.AF.getHighByte()));
-				cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
-				cpu.flags.setCarry(false);
-				cpu.flags.setHalfCarry(false);
-				cpu.flags.setSubtract(false);
-				
-				Utils.PrintInstruction("OR A", instruction, cpu.PC.get(), null, 0);
-				
-				cpu.PC.set(cpu.PC.get() + 1);
-				
-				break;
-			default:
-				System.err.println("Unknown variant of OR: " + Utils.hex(instruction & 0xFF));
-				cpu.error = true;
-		}
-	}
-	
-	/**
-	 * Performs a bitwise Exclusive OR operation
-	 * on a register or byte in memory.
-	 * 
-	 * @param cpu Reference to CPU object.
-	 * @param instruction Instruction opcode.
-	 */
-	static void exclusiveOR(CPU cpu, byte instruction) {
-		byte parameter[] = { 0x0 };
-		
-		switch(instruction) {
-			case (byte) 0xA8:
-				cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() ^ cpu.BC.getHighByte()));
-				cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
-				cpu.flags.setCarry(false);
-				cpu.flags.setHalfCarry(false);
-				cpu.flags.setSubtract(false);
-				
-				Utils.PrintInstruction("XOR B", instruction, cpu.PC.get(), null, 0);
-				
-				cpu.PC.set(cpu.PC.get() + 1);
-				
-				break;
-			case (byte) 0xA9:
-				cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() ^ cpu.BC.getLowByte()));
-				cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
-				cpu.flags.setCarry(false);
-				cpu.flags.setHalfCarry(false);
-				cpu.flags.setSubtract(false);
-				
-				Utils.PrintInstruction("XOR C", instruction, cpu.PC.get(), null, 0);
-				
-				cpu.PC.set(cpu.PC.get() + 1);
-				
-				break;
-			case (byte) 0xAA:
-				cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() ^ cpu.DE.getHighByte()));
-				cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
-				cpu.flags.setCarry(false);
-				cpu.flags.setHalfCarry(false);
-				cpu.flags.setSubtract(false);
-				
-				Utils.PrintInstruction("XOR D", instruction, cpu.PC.get(), null, 0);
-				
-				cpu.PC.set(cpu.PC.get() + 1);
-				
-				break;
-			case (byte) 0xAB:
-				cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() ^ cpu.DE.getLowByte()));
-				cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
-				cpu.flags.setCarry(false);
-				cpu.flags.setHalfCarry(false);
-				cpu.flags.setSubtract(false);
-				
-				Utils.PrintInstruction("XOR E", instruction, cpu.PC.get(), null, 0);
-				
-				cpu.PC.set(cpu.PC.get() + 1);
-				
-				break;
-			case (byte) 0xAC:
-				cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() ^ cpu.HL.getHighByte()));
-				cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
-				cpu.flags.setCarry(false);
-				cpu.flags.setHalfCarry(false);
-				cpu.flags.setSubtract(false);
-				
-				Utils.PrintInstruction("XOR H", instruction, cpu.PC.get(), null, 0);
-				
-				cpu.PC.set(cpu.PC.get() + 1);
-				
-				break;
-			case (byte) 0xAD:
-				cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() ^ cpu.HL.getLowByte()));
-				cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
-				cpu.flags.setCarry(false);
-				cpu.flags.setHalfCarry(false);
-				cpu.flags.setSubtract(false);
-				
-				Utils.PrintInstruction("XOR L", instruction, cpu.PC.get(), null, 0);
-				
-				cpu.PC.set(cpu.PC.get() + 1);
-				
-				break;
-			case (byte) 0xAE:
-				parameter[0] = cpu.memory.read(cpu.HL.get());
-				
-				cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() ^ parameter[0]));
-				cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
-				cpu.flags.setCarry(false);
-				cpu.flags.setHalfCarry(false);
-				cpu.flags.setSubtract(false);
-				
-				Utils.PrintInstruction("XOR (HL)", instruction, cpu.PC.get(), parameter, 1);
-				
-				cpu.PC.set(cpu.PC.get() + 1);
-				
-				break;
-			case (byte) 0xAF:
-				cpu.AF.setHighByte((byte) (cpu.AF.getHighByte() ^ cpu.AF.getHighByte()));
-				cpu.flags.setFlags(0, cpu.AF.getHighByte(), false, Flags.ZERO);
-				cpu.flags.setCarry(false);
-				cpu.flags.setHalfCarry(false);
-				cpu.flags.setSubtract(false);
-				
-				Utils.PrintInstruction("XOR A", instruction, cpu.PC.get(), null, 0);
-				
-				cpu.PC.set(cpu.PC.get() + 1);
-				
-				break;
-			default:
-				System.err.println("Unknown variant of XOR: " + Utils.hex(instruction & 0xFF));
-				cpu.error = true;
-		}
-	}
+    private static void bitLogInstruction(CPU cpu, String insName, String input, String operand, byte instruction) {
+        Utils.PrintInstruction(insName + " " + input + ", " + operand,
+                instruction,
+                cpu.PC.get(),
+                null, 0
+        );
+    }
+
+    private static void and(CPU cpu, int input, String inputStr, byte instruction) {
+        int initial = cpu.AF.getHighByte();
+        int result = initial & input;
+        cpu.AF.setHighByte((byte)result);
+
+        cpu.flags.setFlags(initial, result, false, Flags.ZERO);
+        cpu.flags.setSign(false);
+        cpu.flags.setHalfCarry(true);
+        cpu.flags.setCarry(false);
+
+        bitLogInstruction(cpu, "AND", "A", inputStr, instruction);
+
+        cpu.PC.set(cpu.PC.get() + 1);
+    }
+
+    private static void or(CPU cpu, int input, String inputStr, byte instruction) {
+        int initial = cpu.AF.getHighByte();
+        int result = initial | input;
+        cpu.AF.setHighByte((byte)result);
+
+        cpu.flags.setFlags(initial, result, false, Flags.ZERO);
+        cpu.flags.setSign(false);
+        cpu.flags.setHalfCarry(false);
+        cpu.flags.setCarry(false);
+
+        bitLogInstruction(cpu, "OR", "A", inputStr, instruction);
+
+        cpu.PC.set(cpu.PC.get() + 1);
+    }
+
+    private static void xor(CPU cpu, int input, String inputStr, byte instruction) {
+        int initial = cpu.AF.getHighByte();
+        int result = initial ^ input;
+        cpu.AF.setHighByte((byte)result);
+
+        cpu.flags.setFlags(initial, result, false, Flags.ZERO);
+        cpu.flags.setSign(false);
+        cpu.flags.setHalfCarry(false);
+        cpu.flags.setCarry(false);
+
+        bitLogInstruction(cpu, "XOR", "A", inputStr, instruction);
+
+        cpu.PC.set(cpu.PC.get() + 1);
+    }
 
 	/**
 	 * Parses instruction and rotates/shifts register or memory.

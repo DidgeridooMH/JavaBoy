@@ -144,8 +144,7 @@ public class Flags
 		
 		// More testing needed on testing half-carry
 		if((flagbit & HALFC) > 0) {
-			this.setHalfCarry((initial & 0x10) == 0
-						&& (result & 0x10) > 0);
+			this.setHalfCarry((((initial & 0xF) + (result & 0xF)) & 0x10) > 0);
 		}
 		
 		if((flagbit & SUBTRACT) > 0) {
