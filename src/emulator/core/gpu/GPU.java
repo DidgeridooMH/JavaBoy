@@ -29,6 +29,7 @@ package emulator.core.gpu;
 import emulator.Utils;
 import emulator.core.memory.Memory;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
 
 /**
@@ -81,8 +82,9 @@ public class GPU {
             long currentTime = System.nanoTime();
             double secTime = (currentTime - lastTime) / 100000000.0;
             double fps = 1.0 / secTime;
+            DecimalFormat fpsFormat = new DecimalFormat("##.00");
             if(frameUpdateDelay > 100) {
-                this.gui.setTitle(Double.toString(fps));
+                this.gui.setTitle("JavaBoy " + fpsFormat.format(fps) + "fps");
                 frameUpdateDelay = 0;
             } else {
                 frameUpdateDelay++;
