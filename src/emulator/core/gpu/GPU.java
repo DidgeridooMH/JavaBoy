@@ -41,7 +41,9 @@ import java.util.Arrays;
  */
 public class GPU {
     
-    private Memory memory = null;
+    private Memory memory;
+
+    private GUI gui;
 
     private int currentPixel = 0;
 
@@ -49,7 +51,11 @@ public class GPU {
     private int[] frontBuffer;
 
     private byte lcdc, stat, coordY, lyCompare, windowY, windowX, bgPalette, objPalette0, objPalette1, scrollY, scrollX;
-    
+
+    private long lastTime;
+
+    private int frameUpdateDelay = 0;
+
     /**
      * Initializes a display window as well as
      * sets the video related registers to default
@@ -63,6 +69,26 @@ public class GPU {
         Arrays.fill(this.frontBuffer, 0xFFFFFF);
         this.backBuffer = new int[256 * 256];
         Arrays.fill(this.backBuffer, 0xFFFFFF);
+        this.lastTime = System.nanoTime();
+    }
+
+    public void bindGUI(GUI gui) {
+        this.gui = gui;
+    }
+
+    private void updateFPS() {
+        if(this.gui != null) {
+            long currentTime = System.nanoTime();
+            double secTime = (currentTime - lastTime) / 100000000.0;
+            double fps = 1.0 / secTime;
+            if(frameUpdateDelay > 100) {
+                this.gui.setTitle(Double.toString(fps));
+                frameUpdateDelay = 0;
+            } else {
+                frameUpdateDelay++;
+            }
+            lastTime = currentTime;
+        }
     }
 
     private void swapBuffers() {
@@ -80,7 +106,7 @@ public class GPU {
     }
 
     public int[] getBuffer() {
-        return this.backBuffer;
+        return this.frontBuffer;
     }
 
     public void execute() {
@@ -89,13 +115,12 @@ public class GPU {
         currentPixel += 8;
 
         if(currentPixel >= 256) {
-            coordY++;
             currentPixel = 0;
-        }
-
-        if (((int)(coordY) & 0xFF) > 256) {
-            coordY = 0;
-            swapBuffers();
+            if (((int)(coordY) & 0xFF) == 0xFF) {
+                swapBuffers();
+                updateFPS();
+            }
+            coordY++;
         }
     }
 

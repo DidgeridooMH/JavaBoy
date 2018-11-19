@@ -147,10 +147,6 @@ public class CPU {
                 opcodes.execute(ins);
             } else {
                 switch (decodedIns) {
-                    case "LD":
-                    case "LDH":
-                        Load.load(this, ins);
-                        break;
                     case "SUB":
                         Subtract.subtract(this, ins);
                         break;
@@ -174,6 +170,11 @@ public class CPU {
                     case "DI":
                         flags.disableInterrupts();
                         Utils.PrintInstruction("DI", ins, PC.get(), null, 0);
+                        PC.set(PC.get() + 1);
+                        break;
+                    case "EI":
+                        flags.enableInterrupts();
+                        Utils.PrintInstruction("EI", ins, PC.get(), null, 0);
                         PC.set(PC.get() + 1);
                         break;
                     default:

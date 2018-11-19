@@ -69,10 +69,11 @@ public class GUI extends JFrame {
             System.out.println("Unable to load image " + IMAGE_256);
         }
 
-        setTitle("JavaBoy - Gameboy Emulator");
+        setTitle("JavaBoy - ");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        surface.setPreferredSize(new Dimension(160, 144));
+//        surface.setPreferredSize(new Dimension(160, 144));
+        surface.setPreferredSize(new Dimension(256, 256));
         setResizable(false);
         setLocationRelativeTo(null);
 

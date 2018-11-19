@@ -34,6 +34,10 @@ import emulator.core.gpu.GUI;
 import emulator.core.gpu.Screen;
 import emulator.core.memory.Memory;
 
+import javax.swing.Timer;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 /**
  * Handles interactions between the emulation
  * components.
@@ -61,21 +65,23 @@ public class Machine extends Thread {
 
         Memory memory = new Memory(bios, rom);
 
-        gpu = new GPU(memory);
+        this.gpu = new GPU(memory);
 
         memory.setGPU(gpu);
 
-        cpu = new CPU(memory);
+        this.cpu = new CPU(memory);
 
         this.gui = new GUI(new Screen(gpu));
         this.gui.setVisible(true);
+
+        this.gpu.bindGUI(this.gui);
     }
 
     @Override
     public void run() {
         while(!this.cpu.isError()) {
             cpu.execute();
-            for(int i = 0; i < 3; i++) {
+            for (int i = 0; i < 3; i++) {
                 gpu.execute();
             }
         }

@@ -26,11 +26,10 @@
 
 package emulator.core.gpu;
 
-import java.awt.*;
+import javax.swing.JPanel;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import javax.swing.*;
-
-import emulator.core.memory.Memory;
 
 /**
  * Draws to the window.
