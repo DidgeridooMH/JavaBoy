@@ -64,6 +64,7 @@ public class Memory {
             romBank = Files.readAllBytes(romPath);
         } catch(IOException e) {
             System.err.println("Caught exception while loading bios: " + e);
+            System.exit(2);
         }
         
         try {
@@ -71,6 +72,7 @@ public class Memory {
             biosBank = Files.readAllBytes(biosPath);
         } catch(IOException e) {
             System.err.println("Caught exception while loading rom: " + e);
+            System.exit(2);
         }
         
         internalMemory = new byte[0x10000];
@@ -79,7 +81,6 @@ public class Memory {
         for(int i = 0; i < 0xFF; i++) {
             // TODO: clean code to eliminate DMG rom
             write(biosBank[i], i);
-            // internalMemory[i] = romBank[i];
         }
         
         // Load home bank

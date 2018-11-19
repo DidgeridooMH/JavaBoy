@@ -114,16 +114,16 @@ public class GPU {
     private void drawPixel(int x, int y, int colorID) {
         switch(colorID) {
             case 0:
-                this.pushPixel(x, y, 0xFF, 0xFF, 0xFF);
+                this.pushPixel(x, y, 0x9b, 0xbc, 0x0f);
                 break;
             case 1:
-                this.pushPixel(x, y, 0xAA, 0xAA, 0xAA);
+                this.pushPixel(x, y, 0x8b, 0xac, 0x0f);
                 break;
             case 2:
-                this.pushPixel(x, y, 0x55, 0x55, 0x55);
+                this.pushPixel(x, y, 0x30, 0x62, 0x30);
                 break;
             case 3:
-                this.pushPixel(x, y, 0x0, 0x0, 0x0);
+                this.pushPixel(x, y, 0x0f, 0x38, 0x0f);
                 break;
         }
     }

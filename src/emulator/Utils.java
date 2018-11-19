@@ -33,7 +33,7 @@ package emulator;
  * @author Daniel Simpkins
  *
  */
-public interface Utils {
+public class Utils {
 
     /**
      * Converts a decimal value into printable
@@ -42,7 +42,7 @@ public interface Utils {
      * @param num Decimal value number.
      * @return Printable hex value.
      */
-    static String hex(int num) {    
+    public static String hex(int num) {
         return ("$" + 
                 Integer.
                 toHexString(0x10000 | num).
@@ -60,18 +60,18 @@ public interface Utils {
      * @param parameters All parameters the instruction used.
      * @param paramSize Number parameters the instruction used.
      */
-    static void PrintInstruction(String decodedIns, 
+    public static void PrintInstruction(String decodedIns,
                                     byte ins, 
                                     int location, 
                                     byte parameters[], 
                                     int paramSize) {
         
 //        System.out.print(hex(location) +
-//                            ": " +
-//                            decodedIns +
-//                            "(" +
-//                            hex(ins & 0xFF) +
-//                            ") "
+//                ": " +
+//                decodedIns +
+//                "(" +
+//                hex(ins & 0xFF) +
+//                ") "
 //        );
 //
 //        for(int i = 0; i < paramSize; i++) {
@@ -88,7 +88,7 @@ public interface Utils {
      * @param bitNum Bit position to return
      * @return State of bitNum in in.
      */
-    static boolean getBit(byte in, int bitNum) {
+    public static boolean getBit(byte in, int bitNum) {
         return (((in >> bitNum) & 0x01) > 0);
     }
 }

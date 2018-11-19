@@ -157,9 +157,6 @@ public class CPU {
                     case "PREFIX":
                         stepPrefix();
                         break;
-                    case "JR":
-                        Jump.jumpSubroutine(this, ins);
-                        break;
                     case "PUSH":
                         Stack.push(this, ins);
                         break;
@@ -169,16 +166,10 @@ public class CPU {
                     case "RLA":
                         BitOperation.rotate(this, ins, false);
                         break;
-                    case "RET":
-                        Jump.returnFromCall(this, ins);
-                        break;
                     case "NOP":
                         // No Operation
                         Utils.PrintInstruction("NOP", ins, PC.get(), null, 0);
                         PC.set(PC.get() + 1);
-                        break;
-                    case "JP":
-                        Jump.jump(this, ins);
                         break;
                     case "DI":
                         flags.disableInterrupts();
