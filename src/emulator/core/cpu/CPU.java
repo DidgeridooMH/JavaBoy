@@ -147,17 +147,8 @@ public class CPU {
                 opcodes.execute(ins);
             } else {
                 switch (decodedIns) {
-                    case "SUB":
-                        Subtract.subtract(this, ins);
-                        break;
                     case "PREFIX":
                         stepPrefix();
-                        break;
-                    case "PUSH":
-                        Stack.push(this, ins);
-                        break;
-                    case "POP":
-                        Stack.pop(this, ins);
                         break;
                     case "RLA":
                         BitOperation.rotate(this, ins, false);

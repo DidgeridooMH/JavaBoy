@@ -16,6 +16,8 @@ public class Opcodes {
         Increment.buildOpcodes(this.funcTable, cpu);
         Jump.buildOpcodes(this.funcTable, cpu);
         Load.buildOpcodes(this.funcTable, cpu);
+        Subtract.buildOpcodes(this.funcTable, cpu);
+        Stack.buildOpcodes(this.funcTable, cpu);
     }
 
     public void execute(byte instruction) {
