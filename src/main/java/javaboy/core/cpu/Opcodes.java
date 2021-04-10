@@ -1,4 +1,4 @@
-package emulator.core.cpu;
+package javaboy.core.cpu;
 
 import java.util.HashMap;
 import java.util.Map;

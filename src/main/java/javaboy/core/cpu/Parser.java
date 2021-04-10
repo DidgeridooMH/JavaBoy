@@ -1,57 +1,24 @@
-/*
- * 
- * MIT License
- * 
- * Copyright (c) 2017 Daniel Simpkins
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- * 
- */
-
-package emulator.core.cpu;
+package javaboy.core.cpu;
 
 import java.util.HashMap;
 
 public class Parser {
 
-    /*
-     *
-     * TODO:
-     *     - Add timing table
-     * 
-     * Reference - http://pastraiser.com/cpu/gameboy/gameboy_opcodes.html
-     * 
-     */
+    // TODO: Add timing table
+    // Reference - http://pastraiser.com/cpu/gameboy/gameboy_opcodes.html
 
     private HashMap<Byte, String> opcodes;
     private HashMap<Byte, String> prefix;
-    
+
     public Parser() {
         opcodes = new HashMap<Byte, String>();
         prefix = new HashMap<Byte, String>();
-        
+
         setHashMap();
     }
-    
+
     /*
-     * Set up a search table that contains all
-     * the opcodes for the gameboy.
+     * Set up a search table that contains all the opcodes for the gameboy.
      */
     private void setHashMap() {
         // 0x00
@@ -125,7 +92,7 @@ public class Parser {
         opcodes.put((byte) 0x3d, "DEC");
         opcodes.put((byte) 0x3e, "LD");
         opcodes.put((byte) 0x3f, "CCF");
-    
+
         // 0x40
         opcodes.put((byte) 0x40, "LD");
         opcodes.put((byte) 0x41, "LD");
@@ -342,7 +309,7 @@ public class Parser {
         opcodes.put((byte) 0xfe, "CP");
         opcodes.put((byte) 0xff, "RST");
 
-        //0x00
+        // 0x00
         prefix.put((byte) 0x00, "RLC");
         prefix.put((byte) 0x01, "RLC");
         prefix.put((byte) 0x02, "RLC");
@@ -359,8 +326,8 @@ public class Parser {
         prefix.put((byte) 0x0D, "RRC");
         prefix.put((byte) 0x0E, "RRC");
         prefix.put((byte) 0x0F, "RRC");
-        
-        //0x10
+
+        // 0x10
         prefix.put((byte) 0x10, "RL");
         prefix.put((byte) 0x11, "RL");
         prefix.put((byte) 0x12, "RL");
@@ -378,7 +345,7 @@ public class Parser {
         prefix.put((byte) 0x1E, "RR");
         prefix.put((byte) 0x1F, "RR");
 
-        //0x20
+        // 0x20
         prefix.put((byte) 0x20, "SLA");
         prefix.put((byte) 0x21, "SLA");
         prefix.put((byte) 0x22, "SLA");
@@ -396,7 +363,7 @@ public class Parser {
         prefix.put((byte) 0x2E, "SRA");
         prefix.put((byte) 0x2F, "SRA");
 
-        //0x30
+        // 0x30
         prefix.put((byte) 0x30, "SWAP");
         prefix.put((byte) 0x31, "SWAP");
         prefix.put((byte) 0x32, "SWAP");
@@ -414,7 +381,7 @@ public class Parser {
         prefix.put((byte) 0x3E, "SRL");
         prefix.put((byte) 0x3F, "SRL");
 
-        //0x40
+        // 0x40
         prefix.put((byte) 0x40, "BIT");
         prefix.put((byte) 0x41, "BIT");
         prefix.put((byte) 0x42, "BIT");
@@ -432,7 +399,7 @@ public class Parser {
         prefix.put((byte) 0x4E, "BIT");
         prefix.put((byte) 0x4F, "BIT");
 
-        //0x50
+        // 0x50
         prefix.put((byte) 0x50, "BIT");
         prefix.put((byte) 0x51, "BIT");
         prefix.put((byte) 0x52, "BIT");
@@ -450,7 +417,7 @@ public class Parser {
         prefix.put((byte) 0x5E, "BIT");
         prefix.put((byte) 0x5F, "BIT");
 
-        //0x60
+        // 0x60
         prefix.put((byte) 0x60, "BIT");
         prefix.put((byte) 0x61, "BIT");
         prefix.put((byte) 0x62, "BIT");
@@ -468,7 +435,7 @@ public class Parser {
         prefix.put((byte) 0x6E, "BIT");
         prefix.put((byte) 0x6F, "BIT");
 
-        //0x70
+        // 0x70
         prefix.put((byte) 0x70, "BIT");
         prefix.put((byte) 0x71, "BIT");
         prefix.put((byte) 0x72, "BIT");
@@ -486,7 +453,7 @@ public class Parser {
         prefix.put((byte) 0x7E, "BIT");
         prefix.put((byte) 0x7F, "BIT");
 
-        //0x80
+        // 0x80
         prefix.put((byte) 0x80, "RES");
         prefix.put((byte) 0x81, "RES");
         prefix.put((byte) 0x82, "RES");
@@ -504,7 +471,7 @@ public class Parser {
         prefix.put((byte) 0x8E, "RES");
         prefix.put((byte) 0x8F, "RES");
 
-        //0x90
+        // 0x90
         prefix.put((byte) 0x90, "RES");
         prefix.put((byte) 0x91, "RES");
         prefix.put((byte) 0x92, "RES");
@@ -521,8 +488,8 @@ public class Parser {
         prefix.put((byte) 0x9D, "RES");
         prefix.put((byte) 0x9E, "RES");
         prefix.put((byte) 0x9F, "RES");
-        
-        //0xA0
+
+        // 0xA0
         prefix.put((byte) 0xA0, "RES");
         prefix.put((byte) 0xA1, "RES");
         prefix.put((byte) 0xA2, "RES");
@@ -539,8 +506,8 @@ public class Parser {
         prefix.put((byte) 0xAD, "RES");
         prefix.put((byte) 0xAE, "RES");
         prefix.put((byte) 0xAF, "RES");
-        
-        //0xB0
+
+        // 0xB0
         prefix.put((byte) 0xB0, "RES");
         prefix.put((byte) 0xB1, "RES");
         prefix.put((byte) 0xB2, "RES");
@@ -558,7 +525,7 @@ public class Parser {
         prefix.put((byte) 0xBE, "RES");
         prefix.put((byte) 0xBF, "RES");
 
-        //0xC0
+        // 0xC0
         prefix.put((byte) 0xC0, "SET");
         prefix.put((byte) 0xC1, "SET");
         prefix.put((byte) 0xC2, "SET");
@@ -576,7 +543,7 @@ public class Parser {
         prefix.put((byte) 0xCE, "SET");
         prefix.put((byte) 0xCF, "SET");
 
-        //0xD0
+        // 0xD0
         prefix.put((byte) 0xD0, "SET");
         prefix.put((byte) 0xD1, "SET");
         prefix.put((byte) 0xD2, "SET");
@@ -594,7 +561,7 @@ public class Parser {
         prefix.put((byte) 0xDE, "SET");
         prefix.put((byte) 0xDF, "SET");
 
-        //0xE0
+        // 0xE0
         prefix.put((byte) 0xE0, "SET");
         prefix.put((byte) 0xE1, "SET");
         prefix.put((byte) 0xE2, "SET");
@@ -612,7 +579,7 @@ public class Parser {
         prefix.put((byte) 0xEE, "SET");
         prefix.put((byte) 0xEF, "SET");
 
-        //0xF0
+        // 0xF0
         prefix.put((byte) 0xF0, "SET");
         prefix.put((byte) 0xF1, "SET");
         prefix.put((byte) 0xF2, "SET");
@@ -630,7 +597,7 @@ public class Parser {
         prefix.put((byte) 0xFE, "SET");
         prefix.put((byte) 0xFF, "SET");
     }
-    
+
     /**
      * Decodes an opcode into an instruction.
      * 
@@ -640,7 +607,7 @@ public class Parser {
     public String decodeIns(int instruction) {
         return opcodes.get((byte) instruction);
     }
-    
+
     /**
      * Decodes a prefix opcode into an instruction.
      * 
@@ -650,5 +617,5 @@ public class Parser {
     public String decodePrefix(byte instruction) {
         return prefix.get(instruction);
     }
-    
+
 }
